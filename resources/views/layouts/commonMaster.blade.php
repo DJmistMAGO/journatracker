@@ -20,6 +20,7 @@
 
   <!-- Include Styles -->
   @include('layouts/sections/styles')
+  @stack('styles')
 
   <!-- Include Scripts for customizer, helper, analytics, config -->
   @include('layouts/sections/scriptsIncludes')
@@ -36,6 +37,7 @@
 
   <!-- Include Scripts -->
   @include('layouts/sections/scripts')
+  @stack('scripts')
 
 </body>
 

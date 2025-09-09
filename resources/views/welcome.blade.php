@@ -1,6 +1,13 @@
 @extends('layouts/commonMaster')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
+@endpush
+
 @section('layoutContent')
+
+<!-- Loading Overlay -->
+    @include('_partials.loader')
 
 <!-- Content -->
 <!-- Materio Compliant Header -->
@@ -44,7 +51,6 @@
 
   </div>
 </nav>
-
 
 <!-- Hero Section -->
 <section class="container my-5">
@@ -155,5 +161,9 @@
 
 <!-- Footer -->
 @include('layouts.sections.footer.footer')
+
+@push('scripts')
+  <script src="{{ asset('assets/js/loader.js') }}"></script>
+@endpush
 
 @endsection
