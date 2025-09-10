@@ -72,7 +72,7 @@
 @include('_partials.loader')
 
 <div class="landing-page">
-    <div class="mb-4 sticky-top shadow-sm" style="background-color: #f6bb26; z-index: 1030;">
+    <div class="mb-4 sticky-top shadow-sm" style="background-color: #f9ce61; z-index: 1030;">
       <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
         <div class="container-xxl d-flex align-items-center justify-content-center">
           <div class="app-brand demo d-flex align-items-center mt-3">
