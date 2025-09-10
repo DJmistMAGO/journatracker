@@ -1,4 +1,3 @@
-<!-- Loading Overlay -->
 <div id="loading-overlay">
   <div class="loading-spinner">
     <svg xmlns="http://www.w3.org/2000/svg" height="200px" width="200px" viewBox="0 0 200 200" class="pencil">
