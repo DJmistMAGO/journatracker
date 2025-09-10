@@ -4,156 +4,253 @@
 
 <!-- Content -->
 <!-- Materio Compliant Header -->
-<nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
-  <div class="container-xxl d-flex align-items-center justify-content-between">
+<div class="mb-4 sticky-top shadow-sm" style="background-color: white; z-index: 1030;">
 
-    <!-- Brand -->
-    <div class="app-brand demo d-flex align-items-center">
-      <a href="#" class="app-brand-link gap-2">
-        <img src="{{ asset('assets/img/spj/schl_logo.png') }}" alt="School Logo" height="40" class="ms-2">
-        <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="SPJ Logo" height="35" class="me-2">
-        <span class="app-brand-text fw-bold ms-1">SPJ</span>
-      </a>
+  <!-- Row 1: Brand -->
+  <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme mt-2" id="layout-navbar">
+    <div class="container-xxl d-flex align-items-center justify-content-center">
+      <div class="app-brand demo d-flex align-items-center mt-3">
+        <a href="#" class="app-brand-link gap-2">
+          <img src="{{ asset('assets/img/spj/schl_logo.png') }}" alt="School Logo" height="50" class="me-2">
+          <span class="app-brand-text display-5 fw-bold" style="color: #16610e">Special Program in Journalism</span>
+          <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="SPJ Logo" height="45" class="ms-2">
+        </a>
+      </div>
     </div>
+  </nav>
 
-    <!-- Nav Links -->
-    {{-- <div class="collapse navbar-collapse" id="navbar-collapse">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item"><a class="nav-link fw-semibold" href="#">Home</a></li>
-        <li class="nav-item"><a class="nav-link fw-semibold" href="#">Categories</a></li>
-        <li class="nav-item"><a class="nav-link fw-semibold" href="#">About</a></li>
-        <li class="nav-item"><a class="nav-link fw-semibold" href="#">Contact</a></li>
-      </ul>
-    </div> --}}
+  <!-- Row 2: Nav Links -->
+  <nav class="navbar navbar-expand-xl mt-2">
+    <div class="container-xxl d-flex align-items-center justify-content-center">
 
-    <!-- Right Section -->
-    <ul class="navbar-nav flex-row align-items-center ms-auto">
-      <!-- Login -->
-      <li class="nav-item me-3">
-        <a class="nav-link d-flex align-items-center" href="{{ url('auth/login-basic') }}">
-          <i class="ti ti-user me-1"></i> Login
-        </a>
-      </li>
-      <!-- Search -->
-      <li class="nav-item">
-        <a class="nav-link d-flex align-items-center" href="#">
-          <i class="ti ti-search"></i>
-        </a>
-      </li>
-    </ul>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-ex-2">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-  </div>
-</nav>
+      <div class="collapse navbar-collapse" id="navbar-ex-2">
+        <div class="navbar-nav me-auto">
+          <a class="nav-item nav-link" href="#">Home</a>
+          <a class="nav-item nav-link" href="#">News</a>
+          <a class="nav-item nav-link" href="#">Features</a>
+          <a class="nav-item nav-link" href="#">Editorial</a>
+          <a class="nav-item nav-link" href="#">Column</a>
+          <a class="nav-item nav-link" href="#">Sci-Tech</a>
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Media</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Editorial Cartooning</a>
+                <a class="dropdown-item" href="#">Photojournalism</a>
+                <a class="dropdown-item" href="#">Radio Broadcasting</a>
+                <a class="dropdown-item" href="#">TV Broadcasting</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <span class="navbar-text">
+          <div id="datetime" style="color: black;"></div>
+        </span>
+      </div>
+    </div>
+  </nav>
+</div>
+
+
+
 
 
 <!-- Hero Section -->
-<section class="container my-5">
+<section class="container mt-2 mb-5">
   <div class="card border-0 shadow-sm">
-    <img src="https://picsum.photos/1200/400" class="card-img-top rounded-3" alt="Hero Image">
-    <div class="card-body py-4 px-4">
-      <h1 class="display-4 fw-bold mb-3">The Future of Green Technology</h1>
-      <p class="lead text-muted mb-4">How innovations in renewable energy are reshaping the world we live in.</p>
+    <img src="https://picsum.photos/1200/400" class="card-img-top rounded-3" alt="Hero Image" height="280">
+    <a href="">
+<div class="card-body py-4 px-4">
+      <h1 class="display-6 fw-bold mb-3">The Future of Green Technology</h1>
+      {{-- <p class="lead text-muted mb-4">How innovations in renewable energy are reshaping the world we live in.</p> --}}
       <div class="d-flex align-items-center mb-4">
         <img src="https://picsum.photos/50" alt="Author" class="rounded-circle me-2" width="40" />
         <small class="text-muted">By Jane Doe • Sept 8, 2025</small>
       </div>
-      <a href="#content" class="btn btn-primary">Continue Reading</a>
+      {{-- <a href="#content" class="btn btn-primary">Continue Reading</a> --}}
     </div>
+    </a>
+
   </div>
 </section>
 
 <!-- Main Content + Sidebar -->
 <main class="container mb-5" id="content">
   <div class="row">
-    <article class="col-lg-8">
-      <h2 class="fw-bold">Why Green Technology Matters</h2>
-      <p>
-        As climate change accelerates, the need for sustainable solutions has never been greater. Green
-        technology is no longer just a buzzword—it’s a global movement. From solar energy to electric vehicles,
-        the innovations emerging today will define the quality of life for future generations.
-      </p>
-
-      <blockquote class="blockquote px-3 py-2 bg-light border-start">
-        “Investing in renewable energy is not just about the planet, it’s about creating sustainable
-        opportunities for the future.”  
-      </blockquote>
-
-      <h3 class="fw-bold mt-4">Solar Energy: Powering Homes and Cities</h3>
-      <p>
-        One of the most impactful innovations in green technology is solar energy. Modern photovoltaic panels
-        are more efficient and cost-effective than ever before. Cities across the globe are integrating solar
-        farms to reduce dependency on fossil fuels.
-      </p>
-      <figure class="figure">
-        <img src="https://picsum.photos/800/400" class="figure-img img-fluid rounded"
-             alt="Solar panels in the field" />
-        <figcaption class="figure-caption text-muted">Solar panels in a sustainable energy farm.</figcaption>
-      </figure>
-
-      <h3 class="fw-bold mt-4">Electric Vehicles on the Rise</h3>
-      <p>
-        Transportation is one of the largest contributors to global emissions. The rise of electric vehicles
-        (EVs) is a direct response to this challenge. Companies like Tesla, Rivian, and even traditional automakers
-        are investing heavily in EV technology.
-      </p>
-
-      <figure class="figure">
-        <img src="https://picsum.photos/900/400" class="figure-img img-fluid rounded"
-             alt="Electric car charging" />
-        <figcaption class="figure-caption text-muted">An electric car charging at a city station.</figcaption>
-      </figure>
-
-      <p>
-        With charging infrastructure expanding rapidly, EVs are becoming a viable choice for everyday drivers.
-        Experts predict that by 2035, more than half of all vehicles sold will be electric.
-      </p>
-    </article>
-
-    <!-- Sidebar -->
-    <aside class="col-lg-4">
-      <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-          <h5 class="fw-bold">Related Posts</h5>
-          <ul class="list-unstyled mb-0">
-            <li><a href="#">10 Breakthroughs in Renewable Energy</a></li>
-            <li><a href="#">How Smart Cities Save Energy</a></li>
-            <li><a href="#">The Rise of Eco-Friendly Startups</a></li>
-          </ul>
+    <div class="col-lg-12">
+      <h2 class="fw-bold display-6">Latest Articles</h2>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Israel launches strike on target in Qatar</h5></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Kanlaon Volcano emits ash; Alert Level 2 remains</h5></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Jinggoy Estrada, Joel Villanueva in flood control</h5></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Jinggoy Estrada denies links to flood control projects</h5></a>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-          <h5 class="fw-bold">Tags</h5>
-          <span class="badge bg-label-secondary me-1">Technology</span>
-          <span class="badge bg-label-secondary me-1">Environment</span>
-          <span class="badge bg-label-secondary me-1">Innovation</span>
+      <div class="row">
+        <div class="col-md-12">
+          <a href="" class="btn btn-sm mt-3" style="background-color: #1f4920; color: white;">VIEW MORE ➤ </a>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div class="card mb-4 shadow-sm">
-        <div class="card-body text-center">
-          <h5 class="fw-bold">Share this</h5>
-          <a href="#" class="me-2"><i class="ti ti-brand-facebook"></i></a>
-          <a href="#" class="me-2"><i class="ti ti-brand-twitter"></i></a>
-          <a href="#"><i class="ti ti-brand-linkedin"></i></a>
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <h2 class="fw-bold display-6">Top News</h2>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Israel launches strike on target in Qatar</h5></a>
+              {{-- <p class="card-text">Some quick example text to build on.</p> --}}
+              {{-- <a href="#" class="btn btn-primary">Read More</a> --}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Kanlaon Volcano emits ash; Alert Level 2 remains</h5></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Jinggoy Estrada, Joel Villanueva in flood control</h5></a>
+              {{-- <p class="card-text">Some quick example text to build on.</p> --}}
+              {{-- <a href="#" class="btn btn-primary">Read More</a> --}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Jinggoy Estrada denies links to flood control projects</h5></a>
+              {{-- <p class="card-text">Some quick example text to build on.</p> --}}
+              {{-- <a href="#" class="btn btn-primary">Read More</a> --}}
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="card mb-4 shadow-sm">
-        <div class="card-body text-center">
-          <h5 class="fw-bold">Subscribe to our newsletter</h5>
-          <form>
-            <input type="email" class="form-control mb-2" placeholder="Your email" />
-            <button type="submit" class="btn btn-primary w-100">Subscribe</button>
-          </form>
+      <div class="row">
+        <div class="col-md-12">
+          <a href="" class="btn btn-sm mt-3" style="background-color: #1f4920; color: white;">VIEW MORE ➤ </a>
         </div>
       </div>
-    </aside>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-lg-12">
+      <h2 class="fw-bold display-6">Gallery of the Month</h2>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Israel launches strike on target in Qatar</h5></a>
+              {{-- <p class="card-text">Some quick example text to build on.</p> --}}
+              {{-- <a href="#" class="btn btn-primary">Read More</a> --}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Kanlaon Volcano emits ash; Alert Level 2 remains</h5></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Jinggoy Estrada, Joel Villanueva in flood control</h5></a>
+              {{-- <p class="card-text">Some quick example text to build on.</p> --}}
+              {{-- <a href="#" class="btn btn-primary">Read More</a> --}}
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="card">
+            <img src="https://picsum.photos/1200/400" class="card-img-top" alt="..." height="150">
+            <div class="card-body">
+              <a href="#"><h5 class="card-title">Jinggoy Estrada denies links to flood control projects</h5></a>
+              {{-- <p class="card-text">Some quick example text to build on.</p> --}}
+              {{-- <a href="#" class="btn btn-primary">Read More</a> --}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <a href="" class="btn btn-sm mt-3" style="background-color: #1f4920; color: white;">VIEW MORE ➤ </a>
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 
 <!-- Footer -->
 @include('layouts.sections.footer.footer')
 
+<script>
+    function updateDateTime() {
+      const options = {
+        timeZone: 'Asia/Manila',
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const now = new Date().toLocaleString('en-PH', options);
+      document.getElementById('datetime').textContent = now;
+    }
+
+    // Update every second
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  </script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 @endsection
