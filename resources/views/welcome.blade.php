@@ -234,26 +234,7 @@
 
     @push('scripts')
         <script src="{{ asset('assets/js/loader.js') }}"></script>
-        <script>
-            function updateDateTime() {
-            const options = {
-                timeZone: 'Asia/Manila',
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            };
-            const now = new Date().toLocaleString('en-PH', options);
-            document.getElementById('datetime').textContent = now;
-            }
-
-            // Update every second
-            setInterval(updateDateTime, 1000);
-            updateDateTime();
-        </script>
+        <script src="{{ asset('assets/js/updateTime.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     @endpush
 
