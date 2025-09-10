@@ -23,10 +23,7 @@
 
 <body>
 
-
     @yield('layoutContent')
-
-
 
     @include('layouts/sections/scripts')
     @stack('scripts')
