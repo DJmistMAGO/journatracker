@@ -4,10 +4,11 @@
 
 <!-- Content -->
 <!-- Materio Compliant Header -->
-<div clas style="background-color: white">
+<div class="mb-4 sticky-top shadow-sm" style="background-color: white; z-index: 1030;">
+
+  <!-- Row 1: Brand -->
   <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme mt-2" id="layout-navbar">
     <div class="container-xxl d-flex align-items-center justify-content-center">
-      <!-- Brand -->
       <div class="app-brand demo d-flex align-items-center mt-3">
         <a href="#" class="app-brand-link gap-2">
           <img src="{{ asset('assets/img/spj/schl_logo.png') }}" alt="School Logo" height="50" class="me-2">
@@ -18,7 +19,8 @@
     </div>
   </nav>
 
-  <nav class="navbar navbar-expand-xl mt-4">
+  <!-- Row 2: Nav Links -->
+  <nav class="navbar navbar-expand-xl mt-2">
     <div class="container-xxl d-flex align-items-center justify-content-center">
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-ex-2">
@@ -27,23 +29,23 @@
 
       <div class="collapse navbar-collapse" id="navbar-ex-2">
         <div class="navbar-nav me-auto">
-          <a class="nav-item nav-link" href="javascript:void(0)">Home</a>
-          <a class="nav-item nav-link" href="javascript:void(0)">News</a>
-          <a class="nav-item nav-link" href="javascript:void(0)">Features</a>
-          <a class="nav-item nav-link" href="javascript:void(0)">Editorial</a>
-          <a class="nav-item nav-link" href="javascript:void(0)">Column</a>
-          <a class="nav-item nav-link" href="javascript:void(0)">Sci-Tech</a>
+          <a class="nav-item nav-link" href="#">Home</a>
+          <a class="nav-item nav-link" href="#">News</a>
+          <a class="nav-item nav-link" href="#">Features</a>
+          <a class="nav-item nav-link" href="#">Editorial</a>
+          <a class="nav-item nav-link" href="#">Column</a>
+          <a class="nav-item nav-link" href="#">Sci-Tech</a>
           <ul class="navbar-nav me-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-bs-toggle="dropdown" data-trigger="hover">Media</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="javascript:void(0)">Editorial Cartooning</a>
-              <a class="dropdown-item" href="javascript:void(0)">Photojournalism</a>
-              <a class="dropdown-item" href="javascript:void(0)">Radio Broadcasting</a>
-              <a class="dropdown-item" href="javascript:void(0)">TV Broadcasting</a>
-            </div>
-          </li>
-        </ul>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Media</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Editorial Cartooning</a>
+                <a class="dropdown-item" href="#">Photojournalism</a>
+                <a class="dropdown-item" href="#">Radio Broadcasting</a>
+                <a class="dropdown-item" href="#">TV Broadcasting</a>
+              </div>
+            </li>
+          </ul>
         </div>
 
         <span class="navbar-text">
@@ -53,6 +55,7 @@
     </div>
   </nav>
 </div>
+
 
 
 
