@@ -18,8 +18,8 @@
 
 <div class="layout-page">
 
-        
-        
+
+
 
         <!-- BEGIN: Navbar-->
                   <!-- Navbar -->
@@ -44,9 +44,9 @@
     </div>
   </div>
   <!-- /Search -->
-  
+
   <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-    
+
     <!-- Language -->
     <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
       <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -102,7 +102,7 @@
       </ul>
     </li>
     <!-- / Style Switcher-->
-    
+
     <!-- Quick links  -->
     <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-sm-2 me-xl-0">
       <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill waves-effect" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -457,7 +457,7 @@
 
           <!-- Content -->
                         <div class="container-xxl flex-grow-1 container-p-y">
-          
+
           <div class="row g-6 mb-6">
   <div class="col-sm-6 col-xl-3">
     <div class="card">
@@ -688,4 +688,4 @@
       <!--/ Content wrapper -->
     </div>
 
-    @endsection 
+    @endsection

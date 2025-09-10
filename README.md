@@ -59,6 +59,7 @@ Follow these steps to set up the system:
    ```
 
 8. **Compile frontend assets**
+
    ```sh
    npm run dev
    ```
@@ -74,6 +75,7 @@ If you are using Laragon, follow these steps:
 1. Place the cloned `journatracker` folder inside your Laragon `www` directory (e.g., `C:\laragon\www\journatracker`).
 2. Start Laragon and ensure Apache/Nginx and MySQL are running.
 3. Open a terminal in the project directory and run:
+
    ```sh
    composer install
    npm install
@@ -82,4 +84,5 @@ If you are using Laragon, follow these steps:
    php artisan migrate
    npm run dev
    ```
+
 4. Visit your project in the browser at `http://journatracker.test` (or the domain Laragon assigns).

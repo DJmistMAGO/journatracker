@@ -1,6 +1,51 @@
 @extends('layouts/commonMaster')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
+@endpush
+
 @section('layoutContent')
+    {{-- loading animation --}}
+    @include('_partials.loader')
+
+    <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+        <div class="container-xxl d-flex align-items-center justify-content-between">
+
+            <!-- Brand -->
+            <div class="app-brand demo d-flex align-items-center">
+            <a href="#" class="app-brand-link gap-2">
+                <img src="{{ asset('assets/img/spj/schl_logo.png') }}" alt="School Logo" height="40" class="ms-2">
+                <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="SPJ Logo" height="35" class="me-2">
+                <span class="app-brand-text fw-bold ms-1">SPJ</span>
+            </a>
+            </div>
+
+            <!-- Nav Links -->
+            {{-- <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">Categories</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">About</a></li>
+                <li class="nav-item"><a class="nav-link fw-semibold" href="#">Contact</a></li>
+            </ul>
+            </div> --}}
+
+            <!-- Right Section -->
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+            <!-- Login -->
+            <li class="nav-item me-3">
+                <a class="nav-link d-flex align-items-center" href="{{ url('auth/login-basic') }}">
+                <i class="ti ti-user me-1"></i> Login
+                </a>
+            </li>
+            <!-- Search -->
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" href="#">
+                <i class="ti ti-search"></i>
+                </a>
+            </li>
+            </ul>
+
 
 <!-- Content -->
 <!-- Materio Compliant Header -->
@@ -229,8 +274,14 @@
   </div>
 </main>
 
+
 <!-- Footer -->
-@include('layouts.sections.footer.footer')
+    @include('layouts.sections.footer.footer')
+
+
+    @push('scripts')
+        <script src="{{ asset('assets/js/loader.js') }}"></script>
+    @endpush
 
 <script>
     function updateDateTime() {

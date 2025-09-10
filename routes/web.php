@@ -46,7 +46,7 @@ use App\Http\Controllers\tables\Basic as TablesBasic;
 
 // Route to welcome page
 Route::get('/welcome', function () {
-    return view('welcome');
+  return view('welcome');
 });
 
 // Main Page Route
@@ -60,11 +60,19 @@ Route::get('/layouts/container', [Container::class, 'index'])->name('layouts-con
 Route::get('/layouts/blank', [Blank::class, 'index'])->name('layouts-blank');
 
 // pages
-Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
-Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
-Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
+Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name(
+  'pages-account-settings-account'
+);
+Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name(
+  'pages-account-settings-notifications'
+);
+Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name(
+  'pages-account-settings-connections'
+);
 Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-error');
-Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
+Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name(
+  'pages-misc-under-maintenance'
+);
 
 // authentication
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
