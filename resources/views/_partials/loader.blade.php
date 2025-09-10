@@ -44,5 +44,9 @@
     <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="Logo"
       class="loader-logo"/>
   </div>
-  <div class="loader-text">Loading, please wait...</div>
+  <div class="loader-text">Loading, please wait...
+    <div class="spinner-border spinner-border-sm text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+  </div>
 </div>
