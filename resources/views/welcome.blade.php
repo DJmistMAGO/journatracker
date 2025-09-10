@@ -77,7 +77,7 @@
 
 @section('layoutContent')
 
-{{-- @include('_partials.loader') --}}
+@include('_partials.loader')
 
 <div class="landing-page">
     <div class="mb-4 sticky-top shadow-sm navtop" >
