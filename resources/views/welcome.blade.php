@@ -57,23 +57,31 @@
   }
 
   .landing-page {
-     background-image: linear-gradient(rgba(22, 97, 14, 0.8), rgba(22, 97, 14, 0.8)), url('{{ asset('assets/img/spj/snhs bg.jpg') }}');
+     background-image: linear-gradient(rgba(22, 97, 14, 0.8), rgba(124, 220, 113, 0.8)), url('{{ asset('assets/img/spj/snhs bg.jpg') }}');
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-position: center;
 "
   }
+
+  .navtop{
+    background-image: url('{{ asset('assets/img/spj/bgnav.jpg') }}');
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 </style>
 @endpush
 
 @section('layoutContent')
 
-@include('_partials.loader')
+{{-- @include('_partials.loader') --}}
 
 <div class="landing-page">
-    <div class="mb-4 sticky-top shadow-sm" style="background-color: #f9ce61; z-index: 1030;">
-      <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+    <div class="mb-4 sticky-top shadow-sm navtop" >
+      <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar" style="backdrop-filter: none !important;">
         <div class="container-xxl d-flex align-items-center justify-content-center">
           <div class="app-brand demo d-flex align-items-center mt-3">
             <a href="#" class="app-brand-link gap-2">
@@ -122,7 +130,7 @@
     <div class="row g-5">
         <article class="col-lg-8">
             <div class="card w-100">
-            <img src="https://picsum.photos/600/400?random=1" class="card-img-top h-20" alt="..." style="height: 300px;" >
+            <img src="https://picsum.photos/600/400?random=1" class="card-img-top h-20" alt="..." style="height: 250px;" >
                 <div class="card-body">
                     <h1 class="fw-bold display-6 mb-2">The Future of Green Technology</h1>
                             <div class="d-flex align-items-center mb-2">
@@ -187,11 +195,11 @@
           <!-- Related Articles -->
           <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
-              <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Related Articles</h5>
+              <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
               <ul class="list-unstyled">
-                <li><a href="#" class="text-decoration-none">Sustainable Homes of the Future</a></li>
-                <li><a href="#" class="text-decoration-none">Electric Cars: Beyond 2030</a></li>
-                <li><a href="#" class="text-decoration-none">How Schools Go Green</a></li>
+                <li><a href="#" class="text-black">Sustainable Homes of the Future</a></li>
+                <li><a href="#" class="text-black">Electric Cars: Beyond 2030</a></li>
+                <li><a href="#" class="text-black">How Schools Go Green</a></li>
               </ul>
             </div>
           </div>
