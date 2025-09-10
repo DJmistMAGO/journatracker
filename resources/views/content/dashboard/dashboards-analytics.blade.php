@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}">
 @endsection
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
+@endpush
+
 @section('vendor-script')
 <script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
 @endsection
@@ -15,6 +19,7 @@
 @endsection
 
 @section('content')
+@include('_partials/loader')
 <div class="row gy-4">
   <!-- Congratulations card -->
   <div class="col-md-12 col-lg-4">
@@ -758,4 +763,8 @@
   </div>
   <!--/ Data Tables -->
 </div>
+
+@push('scripts')
+    <script src="{{ asset('assets/js/loader.js') }}"></script>
+@endpush
 @endsection
