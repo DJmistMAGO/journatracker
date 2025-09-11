@@ -4,14 +4,13 @@ $navbarDetached = ($navbarDetached ?? '');
 
 @endphp
 
-<!-- Navbar -->
 @if(isset($navbarDetached) && $navbarDetached == 'navbar-detached')
-<nav class="layout-navbar {{$containerNav}} navbar navbar-expand-xl {{$navbarDetached}} align-items-center bg-navbar-theme" id="layout-navbar">
-  @endif
-  @if(isset($navbarDetached) && $navbarDetached == '')
-  <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
-    <div class="{{$containerNav}}">
-      @endif
+    <nav class="layout-navbar {{$containerNav}} navbar navbar-expand-xl {{$navbarDetached}} align-items-center bg-navbar-theme" id="layout-navbar">
+    @endif
+    @if(isset($navbarDetached) && $navbarDetached == '')
+    <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+        <div class="{{$containerNav}}">
+        @endif
 
       <!--  Brand demo (display only for navbar-full and hide on below xl) -->
       @if(isset($navbarFull))
@@ -38,14 +37,12 @@ $navbarDetached = ($navbarDetached ?? '');
       @endif
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-        <!-- Search -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item d-flex align-items-center">
             <i class="mdi mdi-magnify mdi-24px lh-0"></i>
             <input type="text" class="form-control border-0 shadow-none bg-body" placeholder="Search..." aria-label="Search...">
-          </div>
+            </div>
         </div>
-        <!-- /Search -->
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
           <!-- Place this tag where you want the button to render. -->
@@ -53,10 +50,9 @@ $navbarDetached = ($navbarDetached ?? '');
             <a class="github-button" href="https://github.com/themeselection/materio-bootstrap-html-laravel-admin-template-free" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star themeselection/materio-bootstrap-html-laravel-admin-template-free on GitHub">Star</a>
           </li> --}}
 
-          {{-- out logged in username --}}
           <li class="nav-item me-3">
             <a class="nav-link d-flex align-items-center" href="javascript:void(0);">
-              <i class="ti ti-user me-1"></i> John Doe
+              <i class="ti ti-user me-1"></i> {{ Auth::user()->name }}
             </a>
           </li>
 
@@ -77,8 +73,8 @@ $navbarDetached = ($navbarDetached ?? '');
                       </div>
                     </div>
                     <div class="flex-grow-1">
-                      <h6 class="mb-0">John Doe</h6>
-                      <small class="text-muted">Admin</small>
+                      <h6 class="mb-0">{{ Auth::user()->name }}</h6>
+                      <small class="text-muted">{{ Auth::user()->roles->first()->name ?? '' }}</small>
                     </div>
                   </div>
                 </a>
@@ -111,14 +107,18 @@ $navbarDetached = ($navbarDetached ?? '');
                 <div class="dropdown-divider my-1"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
+                <a class="dropdown-item" href="#"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class='mdi mdi-power me-1 mdi-20px'></i>
                   <span class="align-middle">Log Out</span>
                 </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                  @csrf
+                </form>
               </li>
             </ul>
           </li>
-          <!--/ User -->
         </ul>
       </div>
 
@@ -126,4 +126,3 @@ $navbarDetached = ($navbarDetached ?? '');
     </div>
     @endif
   </nav>
-  <!-- / Navbar -->
