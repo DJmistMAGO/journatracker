@@ -44,13 +44,17 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
-// Route to welcome page
-Route::get('/welcome', function () {
+Route::get('/', function () {
   return view('welcome');
+})->name('welcome');
+
+// Main Page Route (protected by auth)
+Route::middleware(['auth'])->group(function () {
+  Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
 });
 
-// Main Page Route
-Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+// Authentication routes
+require __DIR__ . '/auth.php';
 
 // layout
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
