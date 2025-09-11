@@ -12,10 +12,12 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "spatie/laravel-permission": "^6.21"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "laravel/breeze": "^2.3",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.25",
         "mockery/mockery": "^1.4.4",
