@@ -6,53 +6,54 @@
 
 
 <style>
-  :root {
-    --theme-color: #00A23F;
-  }
+    :root {
+        --theme-color: #00A23F;
+    }
 
-  .btn-theme { background-color: var(--theme-color); border: none; color: #fff; }
-  .btn-theme:hover { background-color: #008a36; color: #fff; }
-  .btn-outline-theme { border: 1px solid var(--theme-color); color: var(--theme-color); }
-  .btn-outline-theme:hover { background-color: var(--theme-color); color: #fff; }
+    .btn-theme { background-color: var(--theme-color); border: none; color: #fff; }
+    .btn-theme:hover { background-color: #008a36; color: #fff; }
+    .btn-outline-theme { border: 1px solid var(--theme-color); color: var(--theme-color); }
+    .btn-outline-theme:hover { background-color: var(--theme-color); color: #fff; }
 
-  h2.section-title {
-    border-left: 6px solid var(--theme-color);
-    padding-left: 12px;
-    color: #222;
-  }
+    h2.section-title {
+        border-left: 6px solid var(--theme-color);
+        padding-left: 12px;
+        color: #222;
+    }
 
-  .card {
-    display: block;
-    background-color: #fff;
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
-  .card .card-body {
-    padding: 1rem;
-  }
+    .card {
+        display: block;
+        background-color: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    .card .card-body {
+        padding: 1rem;
+    }
 
-  .hero-img {
-    height: 400px;
-    width: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .card-img-top {
-    height: 200px;
-    width: 100%;
-    object-fit: cover;
-    display: block;
-  }
+    .hero-img {
+        height: 400px;
+        width: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .card-img-top {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
-  @media (max-width: 575.98px) {
-    .hero-img { height: 220px; }
-    .card-img-top { height: 140px; }
-  }
+    @media (max-width: 575.98px) {
+        .hero-img { height: 220px; }
+        .card-img-top { height: 140px; }
+    }
 
-  @media (min-width: 992px) {
-    aside.col-lg-4 {
-      position: sticky;
-      top: 100px;
+    @media (min-width: 992px) {
+        aside.col-lg-4 {
+        position: sticky;
+        top: 100px;
+        }
     }
   }
 
@@ -73,11 +74,11 @@
     background-position: center;
   }
 </style>
-@endpush
+    @endpush
 
-@section('layoutContent')
+    @section('layoutContent')
 
-@include('_partials.loader')
+    @include('_partials.loader')
 
 <div class="landing-page">
     <div class="mb-4 sticky-top shadow-sm navtop" >

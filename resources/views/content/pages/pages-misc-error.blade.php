@@ -21,9 +21,9 @@
     <h4 class="fw-semibold mb-3">Breaking News: Page Not Found</h4>
 
     <p class="text-muted mb-4" style="max-width: 520px;">
-        The article you’re trying to read may have been <strong>misplaced in the newsroom</strong>,
+        The article you're trying to read may have been <strong>misplaced in the newsroom</strong>,
         or the link was typed incorrectly.
-        Let’s get you back to where the headlines are.
+        Let's get you back to where the headlines are.
     </p>
 
     <div class="d-flex gap-3">

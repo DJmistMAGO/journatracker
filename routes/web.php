@@ -44,13 +44,25 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
-// Route to welcome page
-Route::get('/welcome', function () {
+Route::get('/', function () {
   return view('welcome');
+})->name('welcome');
+
+Route::middleware('guest')->group(function () {
+  Route::get('/login', [LoginBasic::class, 'index'])->name('login');
+  Route::post('/login', [LoginBasic::class, 'authenticate'])->name('login.post');
+
+  Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
+  Route::post('/register', [RegisterBasic::class, 'store'])->name('register.post');
+
+  Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('forgot-password');
+  Route::post('/forgot-password', [ForgotPasswordBasic::class, 'sendResetLink'])->name('forgot-password.post');
 });
 
-// Main Page Route
-Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+Route::middleware('auth')->group(function () {
+  Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
+  Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
+});
 
 // layout
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
@@ -75,9 +87,9 @@ Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index
 );
 
 // authentication
-Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
-Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
-Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+// Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
+// Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+// Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 
 // cards
 Route::get('/cards/basic', [CardBasic::class, 'index'])->name('cards-basic');
