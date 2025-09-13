@@ -1,17 +1,17 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Cards basic   - UI elements')
+@section('title', 'SPJ | Editorial Scheduling')
 
 @section('vendor-script')
 <script src="{{asset('assets/vendor/libs/masonry/masonry.js')}}"></script>
 @endsection
 
 @section('content')
-<h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Publication Management</h4>
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Incident Report</h4>
 {{-- content --}}
 
 <div class="card">
-  <h5 class="card-header">Table within card</h5>
+  <h5 class="card-header">Incident Report List</h5>
   <div class="table-responsive">
     <table class="table">
       <thead>

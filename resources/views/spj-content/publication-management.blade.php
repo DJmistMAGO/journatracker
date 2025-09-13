@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Cards basic   - UI elements')
+@section('title', 'SPJ | Publication Management')
 
 @section('vendor-script')
 <script src="{{asset('assets/vendor/libs/masonry/masonry.js')}}"></script>
@@ -11,7 +11,7 @@
 {{-- content --}}
 
 <div class="card">
-  <h5 class="card-header">Table within card</h5>
+  <h5 class="card-header">Publication List</h5>
   <div class="table-responsive">
     <table class="table">
       <thead>

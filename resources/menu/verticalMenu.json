@@ -13,26 +13,26 @@
         {
             "name": "Publication Management",
             "icon": "menu-icon tf-icons mdi mdi-bookshelf",
-            "slug": "cards-basic",
-            "url": "cards/basic"
+            "slug": "publication-management",
+            "url": "publication-management"
         },
         {
             "name": "Article Management",
             "icon": "menu-icon tf-icons mdi mdi-book-edit-outline",
-            "slug": "cards-basic",
-            "url": "cards/basic"
+            "slug": "article-management",
+            "url": "article-management"
         },
         {
             "name": "Editorial Scheduling",
             "icon": "menu-icon tf-icons mdi mdi-book-clock-outline",
-            "slug": "cards-basic",
-            "url": "cards/basic"
+            "slug": "editorial-scheduling",
+            "url": "editorial-scheduling"
         },
         {
             "name": "Incident Report",
             "icon": "menu-icon tf-icons mdi mdi-sticker-alert-outline",
-            "slug": "cards-basic",
-            "url": "cards/basic"
+            "slug": "incident-report",
+            "url": "incident-report"
         }
         ,
         {

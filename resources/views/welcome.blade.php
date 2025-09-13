@@ -216,7 +216,36 @@
             </div>
           </div>
 
-          <!-- Share Buttons -->
+
+
+          <!-- Newsletter Subscription -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body ">
+              <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Incident Report</h5>
+              <form>
+                <div class="mb-2">
+                    <label for="formFile" class="form-label">Name of Reporter</label>
+                    <input type="text" class="form-control mb-2" placeholder="Name of Reporter" />
+                </div>
+                <div class="mb-2">
+                    <label for="formFile" class="form-label">Upload Your Student I.D.</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
+                <div class="mb-2">
+                    <label for="formFile" class="form-label">Incident Description</label>
+                    <textarea class="form-control h-px-75" aria-label="With textarea" placeholder="Type here..."></textarea>
+                </div>
+                 <div class="mb-3">
+                    <label for="formFile" class="form-label">Upload Proof of the Incident</label>
+                    <input class="form-control" type="file" id="formFile">
+                </div>
+
+                <button type="submit" class="btn btn-theme w-100">Submit Report</button>
+              </form>
+            </div>
+          </div>
+
+            <!-- Share Buttons -->
           <div class="card border-0 shadow-sm mb-4">
             <div class="card-body text-center">
               <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
@@ -226,16 +255,6 @@
             </div>
           </div>
 
-          <!-- Newsletter Subscription -->
-          <div class="card border-0 shadow-sm">
-            <div class="card-body text-center">
-              <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Subscribe</h5>
-              <form>
-                <input type="email" class="form-control mb-2" placeholder="Your email" />
-                <button type="submit" class="btn btn-theme w-100">Subscribe</button>
-              </form>
-            </div>
-          </div>
         </aside>
       </div>
     </main>
