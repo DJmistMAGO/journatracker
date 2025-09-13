@@ -44,6 +44,13 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
+// spj routes below!!!!
+use App\Http\Controllers\PublicationMgmtController;
+
+
+
+
+use App\Http\Controllers\users\User;
 Route::get('/', function () {
   return view('welcome');
 })->name('welcome');
@@ -132,3 +139,10 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 
 // tables
 Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
+
+
+
+//spj routes hereee!!!
+
+//Publication Management Controller
+Route::get('/publication-management', [PublicationMgmtController::class, 'index'])->name('publication-management');

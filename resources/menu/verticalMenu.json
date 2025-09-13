@@ -13,8 +13,8 @@
         {
             "name": "Publication Management",
             "icon": "menu-icon tf-icons mdi mdi-bookshelf",
-            "slug": "cards-basic",
-            "url": "cards/basic"
+            "slug": "publication-management",
+            "url": "publication-management"
         },
         {
             "name": "Article Management",
