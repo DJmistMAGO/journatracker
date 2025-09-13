@@ -6,5 +6,8 @@ use Illuminate\Http\Request;
 
 class ArticleManagementController extends Controller
 {
-    //
+     public function index()
+  {
+    return view('spj-content.article-management');
+  }
 }

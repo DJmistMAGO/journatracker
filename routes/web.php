@@ -46,6 +46,9 @@ use App\Http\Controllers\tables\Basic as TablesBasic;
 
 // spj routes below!!!!
 use App\Http\Controllers\PublicationMgmtController;
+use App\Http\Controllers\ArticleManagementController;
+use App\Http\Controllers\EditorialSchedulingController;
+use App\Http\Controllers\IncidentReportController;
 
 
 
@@ -146,3 +149,12 @@ Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic')
 
 //Publication Management Controller
 Route::get('/publication-management', [PublicationMgmtController::class, 'index'])->name('publication-management');
+
+//Article Management Controller
+Route::get('/article-management', [ArticleManagementController::class, 'index'])->name('article-management');
+
+//Editorial Scheduling Controller
+Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
+
+//Incident Report Controller
+Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');
