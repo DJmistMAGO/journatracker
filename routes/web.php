@@ -44,7 +44,7 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
-// spj routes below!!!!
+// spj routes here!!!!
 use App\Http\Controllers\PublicationMgmtController;
 use App\Http\Controllers\ArticleManagementController;
 use App\Http\Controllers\EditorialSchedulingController;
