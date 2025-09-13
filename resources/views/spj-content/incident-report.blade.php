@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Cards basic   - UI elements')
+@section('title', 'SPJ | Editorial Scheduling')
 
 @section('vendor-script')
 <script src="{{asset('assets/vendor/libs/masonry/masonry.js')}}"></script>
