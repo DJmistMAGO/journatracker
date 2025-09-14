@@ -8,6 +8,6 @@ class EditorialSchedulingController extends Controller
 {
      public function index()
   {
-    return view('spj-content.editorial-scheduling');
+    return view('spj-content.editorial-scheduling.index');
   }
 }

@@ -16,9 +16,9 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Project</th>
-          <th>Client</th>
-          <th>Users</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>DATE CREATED</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>

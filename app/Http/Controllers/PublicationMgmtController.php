@@ -8,6 +8,6 @@ class PublicationMgmtController extends Controller
 {
     public function index()
   {
-    return view('spj-content.publication-management');
+    return view('spj-content.publication-management.index');
   }
 }
