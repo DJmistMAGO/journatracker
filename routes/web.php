@@ -151,7 +151,10 @@ Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic')
 Route::get('/publication-management', [PublicationMgmtController::class, 'index'])->name('publication-management');
 
 //Article Management Controller
-Route::get('/article-management', [ArticleManagementController::class, 'index'])->name('article-management');
+// Article Management Routes
+Route::resource('article-management', ArticleManagementController::class);
+
+
 
 //Editorial Scheduling Controller
 Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
