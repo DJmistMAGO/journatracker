@@ -8,12 +8,13 @@
 
 @section('content')
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Article Management</h4>
-    {{-- content --}}
 
     <div class="card">
         <div class="card-title d-flex justify-content-between align-items-center ps-0 p-3">
             <h5 class="card-header mb-0">Article List</h5>
-            <a href="{{ route('article-management.create') }}" class="btn btn-success btn-md"><i class="mdi mdi-text-box-plus-outline me-1"></i>Write Article</a>
+            <a href="{{ route('article-management.create') }}" class="btn btn-success btn-md">
+                <i class="mdi mdi-text-box-plus-outline me-1"></i>Write Article
+            </a>
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -27,40 +28,46 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    <tr>
-                        <td>
-                            <span>Tours Project</span>
-                        </td>
-                        <td>Albert Cook</td>
-                        <td>
-                            August 8, 2023
-                        </td>
-                        <td><span class="badge bg-label-primary me-1">Active</span></td>
-                        <td class="">
-                            <div class="d-flex gap-2">
-                                <!-- View Button -->
-                                <button type="button" class="btn btn-sm btn-info">
-                                    <i class="mdi mdi-file-eye"></i>
-                                </button>
+                    @forelse($articles as $article)
+                        <tr>
+                            <td>{{ $article->title_article }}</td>
+                            <td>{{ $article->user->name ?? 'Unknown' }}</td>
+                            <td>{{ $article->date_written->format('F d, Y') }}</td>
+                            <td>
+                                <span class="badge {{ $article->status == 'published' ? 'bg-label-success' : 'bg-label-secondary' }}">
+                                    {{ ucfirst($article->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <!-- View Button -->
+                                    <a href="{{ route('article-management.show', $article->id) }}" class="btn btn-sm btn-info">
+                                        <i class="mdi mdi-file-eye"></i>
+                                    </a>
 
-                                <!-- Edit -->
-                                <button type="button" class="btn btn-sm btn-warning">
-                                    <i class="mdi mdi-file-edit"></i>
-                                </button>
+                                    <!-- Edit -->
+                                    <a href="{{ route('article-management.edit', $article->id) }}" class="btn btn-sm btn-warning">
+                                        <i class="mdi mdi-file-edit"></i>
+                                    </a>
 
-                                <!-- Delete -->
-                                <button type="button" class="btn btn-sm btn-danger">
-                                    <i class="mdi mdi-delete"></i>
-                                </button>
-                            </div>
-                        </td>
-
-                    </tr>
+                                    <!-- Delete -->
+                                    <form action="{{ route('article-management.destroy', $article->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this article?')">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No articles found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-
-    {{-- content end --}}
-
 @endsection

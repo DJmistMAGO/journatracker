@@ -16,8 +16,17 @@ class Article extends Model
         'article_content',
         'date_written',
         'status',
+        'category',
+        'tags',
     ];
 
+      // Cast tags to array automatically
+    protected $casts = [
+        'tags' => 'array',
+        'date_written' => 'date',
+    ];
+
+    // Each article belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
