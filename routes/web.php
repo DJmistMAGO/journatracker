@@ -42,6 +42,7 @@ use App\Http\Controllers\form_elements\BasicInput;
 use App\Http\Controllers\form_elements\InputGroups;
 use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
+use App\Http\Controllers\PubManagementController;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 // spj routes here!!!!
@@ -49,9 +50,6 @@ use App\Http\Controllers\PublicationMgmtController;
 use App\Http\Controllers\ArticleManagementController;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\IncidentReportController;
-
-
-
 
 use App\Http\Controllers\users\User;
 Route::get('/', function () {
@@ -72,6 +70,30 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
   Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
   Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
+
+  Route::controller(PubManagementController::class)
+    ->prefix('publication')
+    ->group(function () {
+      Route::get('/', 'index')->name('publication-management');
+      Route::get('/create', 'create')->name('publication.create');
+    });
+
+  Route::controller(ArticleManagementController::class)
+    ->prefix('article-management')
+    ->group(function () {
+      Route::get('/', 'index')->name('article-management');
+      Route::get('/create', 'create')->name('article-management.create');
+      Route::post('/', 'store')->name('article-management.store');
+      Route::get('/{id}/edit', 'edit')->name('article-management.edit');
+      Route::put('/{id}', 'update')->name('article-management.update');
+      Route::delete('/{id}', 'destroy')->name('article-management.destroy');
+    });
+
+  //Editorial Scheduling Controller
+  Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
+
+  //Incident Report Controller
+  Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');
 });
 
 // layout
@@ -95,11 +117,6 @@ Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-e
 Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name(
   'pages-misc-under-maintenance'
 );
-
-// authentication
-// Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
-// Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
-// Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 
 // cards
 Route::get('/cards/basic', [CardBasic::class, 'index'])->name('cards-basic');
@@ -143,21 +160,6 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 // tables
 Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
 
-
-
 //spj routes hereee!!!
 
 //Publication Management Controller
-Route::get('/publication-management', [PublicationMgmtController::class, 'index'])->name('publication-management');
-
-//Article Management Controller
-// Article Management Routes
-Route::resource('article-management', ArticleManagementController::class);
-
-
-
-//Editorial Scheduling Controller
-Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
-
-//Incident Report Controller
-Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');
