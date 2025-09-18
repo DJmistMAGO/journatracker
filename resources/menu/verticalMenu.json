@@ -4,17 +4,16 @@
             "menuHeader": "Special Program in Journalism"
         },
         {
-            "url": "/",
+            "url": "/dashboard",
             "name": "Dashboards",
             "icon": "menu-icon tf-icons mdi mdi-home-outline",
             "slug": "dashboard-analytics"
         },
-
         {
+            "url": "/pub-management",
             "name": "Publication Management",
             "icon": "menu-icon tf-icons mdi mdi-bookshelf",
-            "slug": "cards-basic",
-            "url": "cards/basic"
+            "slug": "pub-management"
         },
         {
             "name": "Article Management",
@@ -33,14 +32,12 @@
             "icon": "menu-icon tf-icons mdi mdi-sticker-alert-outline",
             "slug": "cards-basic",
             "url": "cards/basic"
-        }
-        ,
+        },
         {
             "name": "User Management",
             "icon": "menu-icon tf-icons mdi mdi-account-edit",
             "slug": "cards-basic",
             "url": "cards/basic"
         }
-
     ]
 }
