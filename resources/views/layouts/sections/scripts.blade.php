@@ -13,7 +13,7 @@
 
 <!-- END: Theme JS-->
 <!-- Pricing Modal JS-->
-@stack('pricing-script')
+{{-- @stack('pricing-script') --}}
 <!-- END: Pricing Modal JS-->
 <!-- BEGIN: Page JS-->
 @yield('page-script')

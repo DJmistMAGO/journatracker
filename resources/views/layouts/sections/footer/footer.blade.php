@@ -3,7 +3,7 @@
   <div class="container p-4 a">
     <div class="row">
         <div class="col-md-3">
-            <a href="http://journatracker.test/login" class="btn btn-success text-white" >Member Portal</a>
+            <a href="{{ route('login') }}" class="btn btn-success text-white" >Member Portal</a>
         </div>
         {{-- <div class="col-md-3">
             <img src="{{ asset('assets/img/spj/schl_logo.png') }}" alt="School Logo" height="120" class="me-2">
