@@ -17,7 +17,6 @@ class ArticleManagementController extends Controller
     return view('spj-content.article-management.index', compact('articles'));
   }
 
-  //add resources
   public function create()
   {
     return view('spj-content.article-management.create');
@@ -64,7 +63,7 @@ class ArticleManagementController extends Controller
 
     // 6️⃣ Redirect with success message
     return redirect()
-      ->route('article-management.index')
+      ->route('article-management')
       ->with('success', 'Article created successfully!');
   }
 
@@ -72,6 +71,7 @@ class ArticleManagementController extends Controller
   public function show($id)
   {
     $article = Article::with('user')->findOrFail($id);
+    // dd($article);
     return view('spj-content.article-management.show', compact('article'));
   }
 
