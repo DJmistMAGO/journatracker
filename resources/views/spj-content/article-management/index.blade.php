@@ -9,6 +9,9 @@
 @section('content')
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Article Management</h4>
 
+	@include('_partials.errors')
+	@include('_partials.success')
+
     <div class="card">
         <div class="card-title d-flex justify-content-between align-items-center ps-0 p-3">
             <h5 class="card-header mb-0">Article List</h5>

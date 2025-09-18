@@ -24,7 +24,7 @@
     <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row g-6 mb-6">
-                <div class="col-sm-6 col-xl-3">
+                {{-- <div class="col-sm-6 col-xl-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -106,10 +106,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
+
             <div class="card mt-4">
+				@include('_partials.errors')
+				@include('_partials.success')
+
                 <div class="card-header border-bottom d-flex justify-content-between align-items-center">
 					<h5 class="card-title mb-0">Users List</h5>
 					<div class="d-flex align-items-center gap-3">
@@ -133,6 +137,7 @@
 									<th>User</th>
 									<th>Email</th>
 									<th>Default Password</th>
+									<th>Password Status</th>
 									<th>Actions </th>
 								</tr>
 								</thead>
@@ -160,8 +165,20 @@
 											</div>
 										</td>
 										<td>{{ $user->email }}</td>
-										{{-- default dapat dd, dire an hashed (add column sa db) --}}
-										<td>default_pass here</td>
+										<td>
+											<span class="password-text d-none">{{ $user->default_password }}</span>
+											<span class="password-hidden">••••••••</span>
+											<button type="button" class="ms-2 btn btn-sm btn-link toggle-password">
+												<i class="mdi mdi-eye"></i>
+												</button>
+											</td>
+										<td>
+											@if ($user->has_changed_password)
+												<span class="badge bg-label-success">Changed</span>
+											@else
+												<span class="badge bg-label-warning">Not Changed</span>
+											@endif
+										</td>
 										<td>
 											<div class="d-flex align-items-center gap-2">
 												<a href="{{ route('user-management.edit', $user->id) }}" class="btn btn-sm btn-secondary">
@@ -172,11 +189,11 @@
 													<i class="mdi mdi-lock-reset"></i>
 												</a>
 
-												<form action="#" method="POST" class="d-inline">
+												<form action="{{ route('user-management.destroy', $user->id) }}" method="POST" class="d-inline">
 													@csrf
 													@method('DELETE')
-													<button type="submit" class="btn btn-sm btn-icon btn-text-secondary rounded-pill delete-record">
-														<i class="mdi mdi-delete-outline text-danger"></i>
+													<button type="submit" class="btn btn-sm btn-icon btn-danger delete-record">
+														<i class="mdi mdi-delete-outline"></i>
 													</button>
 												</form>
 
@@ -186,7 +203,7 @@
 													<i class="mdi mdi-dots-vertical"></i>
 													</button>
 													<div class="dropdown-menu dropdown-menu-end">
-														<a href="{{ url('app/user/view/' . $user->id) }}" class="dropdown-item">
+														<a href="{{ url('user-management/show/' . $user->id) }}" class="dropdown-item">
 															<i class="mdi mdi-eye-outline me-2"></i> View
 														</a>
 														<a href="javascript:;" class="dropdown-item">
@@ -207,5 +224,27 @@
     </div>
 @push('scripts')
     <script src="{{ asset('assets/js/loader.js') }}"></script>
+	<script>
+		document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function () {
+        const td = this.closest('td');
+        const hidden = td.querySelector('.password-hidden');
+        const text = td.querySelector('.password-text');
+        const icon = this.querySelector('i');
+
+        hidden.classList.toggle('d-none');
+        text.classList.toggle('d-none');
+
+        if (icon.classList.contains('mdi-eye')) {
+            icon.classList.remove('mdi-eye');
+            icon.classList.add('mdi-eye-off');
+        } else {
+            icon.classList.remove('mdi-eye-off');
+            icon.classList.add('mdi-eye');
+        }
+    });
+});
+
+	</script>
 @endpush
 @endsection

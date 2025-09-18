@@ -21,12 +21,12 @@ class UserController extends Controller
                 ->get();
         }
 
-        return view('content.user-management.user-management', compact('users'));
+        return view('spj-content.user-management.user-management', compact('users'));
     }
 
     public function create()
     {
-        return view('content.user-management.user-create');
+        return view('spj-content.user-management.user-create');
     }
 
     public function store(Request $request)
@@ -35,8 +35,13 @@ class UserController extends Controller
         $user = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
         ]);
+
+        // create a random password
+        $randomPassword = bin2hex(random_bytes(4)); // 8 characters
+        $user['password'] = $randomPassword;
+        $user['default_password'] = $randomPassword;
+        $user['has_changed_password'] = false;
 
         // dd($user);
 
@@ -44,6 +49,8 @@ class UserController extends Controller
             'name' => $user['name'],
             'email' => $user['email'],
             'password' => bcrypt($user['password']),
+            'default_password' => $user['default_password'],
+            'has_changed_password' => $user['has_changed_password'],
         ])->assignRole('student');
 
         return redirect()
@@ -54,6 +61,57 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('content.user-management.user-edit', compact('user'));
+        return view('spj-content.user-management.user-edit', compact('user'));
+    }
+
+    public function resetPassword($id)
+    {
+        $user = User::findOrFail($id);
+        $defaultPassword = 'P@ssw0rd'; // Set your default password here
+        $user->password = bcrypt($defaultPassword);
+        $user->save();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'Password reset successfully to default password.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        if (!empty($data['password'])) {
+            $user->password = bcrypt($data['password']);
+        }
+        $user->save();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'User updated successfully.');
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        dd($user);
+        return view('spj-content.user-managament.show', compact('user'));
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'User deleted successfully.');
     }
 }
