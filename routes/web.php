@@ -44,6 +44,16 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
+// spj routes here!!!!
+use App\Http\Controllers\PublicationMgmtController;
+use App\Http\Controllers\ArticleManagementController;
+use App\Http\Controllers\EditorialSchedulingController;
+use App\Http\Controllers\IncidentReportController;
+
+
+
+
+use App\Http\Controllers\users\User;
 Route::get('/', function () {
   return view('welcome');
 })->name('welcome');
@@ -132,3 +142,22 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 
 // tables
 Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
+
+
+
+//spj routes hereee!!!
+
+//Publication Management Controller
+Route::get('/publication-management', [PublicationMgmtController::class, 'index'])->name('publication-management');
+
+//Article Management Controller
+// Article Management Routes
+Route::resource('article-management', ArticleManagementController::class);
+
+
+
+//Editorial Scheduling Controller
+Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
+
+//Incident Report Controller
+Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');
