@@ -85,14 +85,13 @@ Route::middleware('auth')->group(function () {
       Route::get('/create', 'create')->name('article-management.create');
       Route::post('/', 'store')->name('article-management.store');
       Route::get('/{id}/edit', 'edit')->name('article-management.edit');
+      Route::get('/{id}', 'show')->name('article-management.show');
       Route::put('/{id}', 'update')->name('article-management.update');
       Route::delete('/{id}', 'destroy')->name('article-management.destroy');
     });
 
-  //Editorial Scheduling Controller
   Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
 
-  //Incident Report Controller
   Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');
 });
 
