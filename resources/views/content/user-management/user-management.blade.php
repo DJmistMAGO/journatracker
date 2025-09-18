@@ -24,7 +24,7 @@
     <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
             <div class="row g-6 mb-6">
-                <div class="col-sm-6 col-xl-3">
+                {{-- <div class="col-sm-6 col-xl-3">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -106,10 +106,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
+
             <div class="card mt-4">
+				@include('_partials.errors')
+				@include('_partials.success')
+
                 <div class="card-header border-bottom d-flex justify-content-between align-items-center">
 					<h5 class="card-title mb-0">Users List</h5>
 					<div class="d-flex align-items-center gap-3">
@@ -172,7 +176,7 @@
 													<i class="mdi mdi-lock-reset"></i>
 												</a>
 
-												<form action="#" method="POST" class="d-inline">
+												<form action="{{ route('user-management.destroy', $user->id) }}" method="POST" class="d-inline">
 													@csrf
 													@method('DELETE')
 													<button type="submit" class="btn btn-sm btn-icon btn-text-secondary rounded-pill delete-record">
@@ -186,7 +190,7 @@
 													<i class="mdi mdi-dots-vertical"></i>
 													</button>
 													<div class="dropdown-menu dropdown-menu-end">
-														<a href="{{ url('app/user/view/' . $user->id) }}" class="dropdown-item">
+														<a href="{{ url('user-management/show/' . $user->id) }}" class="dropdown-item">
 															<i class="mdi mdi-eye-outline me-2"></i> View
 														</a>
 														<a href="javascript:;" class="dropdown-item">

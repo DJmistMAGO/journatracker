@@ -20,7 +20,7 @@ class Article extends Model
         'tags',
     ];
 
-      // Cast tags to array automatically
+    // Cast tags to array automatically
     protected $casts = [
         'tags' => 'array',
         'date_written' => 'date',

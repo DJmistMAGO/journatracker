@@ -56,4 +56,55 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return view('content.user-management.user-edit', compact('user'));
     }
+
+    public function resetPassword($id)
+    {
+        $user = User::findOrFail($id);
+        $defaultPassword = 'P@ssw0rd'; // Set your default password here
+        $user->password = bcrypt($defaultPassword);
+        $user->save();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'Password reset successfully to default password.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        if (!empty($data['password'])) {
+            $user->password = bcrypt($data['password']);
+        }
+        $user->save();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'User updated successfully.');
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        dd($user);
+        return view('content.user-management.user-view', compact('user'));
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'User deleted successfully.');
+    }
 }
