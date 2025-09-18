@@ -51,9 +51,6 @@ use App\Http\Controllers\ArticleManagementController;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\IncidentReportController;
 
-
-
-
 use App\Http\Controllers\users\User;
 Route::get('/', function () {
   return view('welcome');
@@ -74,8 +71,29 @@ Route::middleware('auth')->group(function () {
   Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
   Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
 
-  //   pub management
-  Route::get('/pub-management', [PubManagementController::class, 'index'])->name('pub-management');
+  Route::controller(PubManagementController::class)
+    ->prefix('publication')
+    ->group(function () {
+      Route::get('/', 'index')->name('publication-management');
+      Route::get('/create', 'create')->name('publication.create');
+    });
+
+  Route::controller(ArticleManagementController::class)
+    ->prefix('article-management')
+    ->group(function () {
+      Route::get('/', 'index')->name('article-management');
+      Route::get('/create', 'create')->name('article-management.create');
+      Route::post('/', 'store')->name('article-management.store');
+      Route::get('/{id}/edit', 'edit')->name('article-management.edit');
+      Route::put('/{id}', 'update')->name('article-management.update');
+      Route::delete('/{id}', 'destroy')->name('article-management.destroy');
+    });
+
+  //Editorial Scheduling Controller
+  Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
+
+  //Incident Report Controller
+  Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');
 });
 
 // layout
@@ -142,21 +160,6 @@ Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('
 // tables
 Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
 
-
-
 //spj routes hereee!!!
 
 //Publication Management Controller
-Route::get('/publication-management', [PublicationMgmtController::class, 'index'])->name('publication-management');
-
-//Article Management Controller
-// Article Management Routes
-Route::resource('article-management', ArticleManagementController::class);
-
-
-
-//Editorial Scheduling Controller
-Route::get('/editorial-scheduling', [EditorialSchedulingController::class, 'index'])->name('editorial-scheduling');
-
-//Incident Report Controller
-Route::get('/incident-report', [IncidentReportController::class, 'index'])->name('incident-report');

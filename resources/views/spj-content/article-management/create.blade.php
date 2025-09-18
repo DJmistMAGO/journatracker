@@ -80,7 +80,7 @@
       <!-- Submit Button -->
       <div class="text-end">
         <button type="submit" class="btn btn-primary">Submit Article</button>
-        <a href="{{ route('article-management.index') }}" class="btn btn-danger">Cancel</a>
+        <a href="{{ route('article-management') }}" class="btn btn-danger">Cancel</a>
       </div>
     </form>
   </div>

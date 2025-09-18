@@ -8,6 +8,11 @@ class PubManagementController extends Controller
 {
   public function index()
   {
-    return view('content.article.pub-management');
+    return view('spj-content.publication-management.index');
+  }
+
+  public function create()
+  {
+    return view('spj-content.publication-management.create');
   }
 }
