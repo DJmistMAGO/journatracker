@@ -137,6 +137,7 @@
 									<th>User</th>
 									<th>Email</th>
 									<th>Default Password</th>
+									<th>Password Status</th>
 									<th>Actions </th>
 								</tr>
 								</thead>
@@ -164,8 +165,20 @@
 											</div>
 										</td>
 										<td>{{ $user->email }}</td>
-										{{-- default dapat dd, dire an hashed (add column sa db) --}}
-										<td>default_pass here</td>
+										<td>
+											<span class="password-text d-none">{{ $user->default_password }}</span>
+											<span class="password-hidden">••••••••</span>
+											<button type="button" class="ms-2 btn btn-sm btn-link toggle-password">
+												<i class="mdi mdi-eye"></i>
+												</button>
+											</td>
+										<td>
+											@if ($user->has_changed_password)
+												<span class="badge bg-label-success">Changed</span>
+											@else
+												<span class="badge bg-label-warning">Not Changed</span>
+											@endif
+										</td>
 										<td>
 											<div class="d-flex align-items-center gap-2">
 												<a href="{{ route('user-management.edit', $user->id) }}" class="btn btn-sm btn-secondary">
@@ -179,8 +192,8 @@
 												<form action="{{ route('user-management.destroy', $user->id) }}" method="POST" class="d-inline">
 													@csrf
 													@method('DELETE')
-													<button type="submit" class="btn btn-sm btn-icon btn-text-secondary rounded-pill delete-record">
-														<i class="mdi mdi-delete-outline text-danger"></i>
+													<button type="submit" class="btn btn-sm btn-icon btn-danger delete-record">
+														<i class="mdi mdi-delete-outline"></i>
 													</button>
 												</form>
 
@@ -211,5 +224,27 @@
     </div>
 @push('scripts')
     <script src="{{ asset('assets/js/loader.js') }}"></script>
+	<script>
+		document.querySelectorAll('.toggle-password').forEach(button => {
+    button.addEventListener('click', function () {
+        const td = this.closest('td');
+        const hidden = td.querySelector('.password-hidden');
+        const text = td.querySelector('.password-text');
+        const icon = this.querySelector('i');
+
+        hidden.classList.toggle('d-none');
+        text.classList.toggle('d-none');
+
+        if (icon.classList.contains('mdi-eye')) {
+            icon.classList.remove('mdi-eye');
+            icon.classList.add('mdi-eye-off');
+        } else {
+            icon.classList.remove('mdi-eye-off');
+            icon.classList.add('mdi-eye');
+        }
+    });
+});
+
+	</script>
 @endpush
 @endsection

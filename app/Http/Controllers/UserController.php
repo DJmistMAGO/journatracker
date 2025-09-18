@@ -21,12 +21,12 @@ class UserController extends Controller
                 ->get();
         }
 
-        return view('content.user-management.user-management', compact('users'));
+        return view('spj-content.user-management.user-management', compact('users'));
     }
 
     public function create()
     {
-        return view('content.user-management.user-create');
+        return view('spj-content.user-management.user-create');
     }
 
     public function store(Request $request)
@@ -35,8 +35,13 @@ class UserController extends Controller
         $user = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
         ]);
+
+        // create a random password
+        $randomPassword = bin2hex(random_bytes(4)); // 8 characters
+        $user['password'] = $randomPassword;
+        $user['default_password'] = $randomPassword;
+        $user['has_changed_password'] = false;
 
         // dd($user);
 
@@ -44,6 +49,8 @@ class UserController extends Controller
             'name' => $user['name'],
             'email' => $user['email'],
             'password' => bcrypt($user['password']),
+            'default_password' => $user['default_password'],
+            'has_changed_password' => $user['has_changed_password'],
         ])->assignRole('student');
 
         return redirect()
@@ -54,7 +61,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('content.user-management.user-edit', compact('user'));
+        return view('spj-content.user-management.user-edit', compact('user'));
     }
 
     public function resetPassword($id)
@@ -95,7 +102,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         dd($user);
-        return view('content.user-management.user-view', compact('user'));
+        return view('spj-content.user-managament.show', compact('user'));
     }
 
     public function destroy($id)

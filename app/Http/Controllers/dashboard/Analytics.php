@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class Analytics extends Controller
 {
-  public function index()
-  {
-    return view('content.dashboard.dashboards-analytics');
-  }
+    public function index()
+    {
+        return view('spj-content.dashboard.dashboards-analytics');
+    }
 }

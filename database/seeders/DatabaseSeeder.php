@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
+            'default_password' => 'password',
+            'has_changed_password' => false,
         ]);
         $admin->assignRole('admin');
 
@@ -34,6 +36,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Editor in Chief',
             'email' => 'eic@example.com',
             'password' => Hash::make('password'),
+            'default_password' => 'password',
+            'has_changed_password' => false,
         ]);
         $eic->assignRole('eic');
 
@@ -42,6 +46,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Student User',
             'email' => 'student@example.com',
             'password' => Hash::make('password'),
+            'default_password' => 'password',
+            'has_changed_password' => false,
         ]);
         $student->assignRole('student');
     }
