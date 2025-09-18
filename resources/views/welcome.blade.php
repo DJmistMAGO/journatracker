@@ -55,10 +55,10 @@
         top: 100px;
         }
     }
-  }
+
 
   .landing-page {
-     background-image: linear-gradient(rgba(22, 97, 14, 0.8), rgba(124, 220, 113, 0.8)), url('{{ asset('assets/img/spj/snhs bg.jpg') }}');
+  background-image: linear-gradient(rgba(22, 97, 14, 0.8), rgba(124, 220, 113, 0.8)), url('{{ asset('assets/img/spj/snhsbg.jpg') }}');
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
