@@ -52,6 +52,7 @@ use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\users\User;
+use App\Http\Controllers\MediaController;
 
 // welcome
 Route::get('/', function () {
@@ -92,6 +93,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}', 'show')->name('article-management.show');
             Route::put('/{id}', 'update')->name('article-management.update');
             Route::delete('/{id}', 'destroy')->name('article-management.destroy');
+        });
+
+	Route::controller(MediaController::class)
+        ->prefix('media-management')
+        ->group(function () {
+            Route::get('/', 'index')->name('media-management');
         });
 
     // editorial scheduling

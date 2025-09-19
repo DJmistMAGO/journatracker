@@ -44,6 +44,8 @@
             <option value="Features" {{ old('category') == 'Features' ? 'selected' : '' }}>Features</option>
             <option value="Editorial" {{ old('category') == 'Editorial' ? 'selected' : '' }}>Editorial</option>
             <option value="Sports" {{ old('category') == 'Sports' ? 'selected' : '' }}>Sports</option>
+			<option value="Column" {{ old('category') == 'Column' ? 'selected' : '' }}>Column</option>
+			<option value="Sci-Tech" {{ old('category') == 'Sci-Tech' ? 'selected' : '' }}>Sci-Tech</option>
           </select>
         </div>
 
