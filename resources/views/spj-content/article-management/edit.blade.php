@@ -1,0 +1,139 @@
+@extends('layouts/contentNavbarLayout')
+
+@section('title', 'SPJ | Article Management')
+
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
+@endsection
+
+@section('content')
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ / Article Management /</span> Edit Article</h4>
+
+<div class="card mb-4">
+  	<div class="card-body">
+    	<form action="{{ route('article-management.update', $article->id) }}" method="POST" enctype="multipart/form-data" onsubmit="prepareTags()">
+    	@csrf
+        @method('PUT')
+		@include('_partials.errors')
+
+        <!-- Image Upload -->
+        <div class="mb-3 text-center">
+            @if($article->thumbnail_image)
+                <div class="mt-3">
+                    <img id="preview" src="{{ asset('storage/' . $article->thumbnail_image) }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 250px;">
+                </div>
+            @else
+                <div class="mt-3">
+                    <img id="preview" src="#" alt="Image Preview" class="img-fluid d-none rounded" style="max-height: 250px;">
+                </div>
+            @endif
+            <input class="form-control mt-2" type="file" name="thumbnail_image" id="articleImage" accept="image/*" onchange="previewImage(event)">
+        </div>
+
+        <div class="row mb-3">
+            <!-- Title -->
+            <div class="col-12 col-md-6">
+                <label for="articleTitle" class="form-label">Article Title</label>
+                <input type="text" class="form-control" id="articleTitle" name="title_article" value="{{ old('title_article', $article->title_article) }}" placeholder="Enter article title" required>
+            </div>
+
+            <!-- Category -->
+            <div class="col-12 col-md-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="category" required>
+                    <option disabled>-- Select Category --</option>
+                    <option value="News" {{ $article->category == 'News' ? 'selected' : '' }}>News</option>
+                    <option value="Features" {{ $article->category == 'Features' ? 'selected' : '' }}>Features</option>
+                    <option value="Editorial" {{ $article->category == 'Editorial' ? 'selected' : '' }}>Editorial</option>
+                    <option value="Sports" {{ $article->category == 'Sports' ? 'selected' : '' }}>Sports</option>
+                </select>
+            </div>
+
+            <!-- Date -->
+            <div class="col-12 col-md-3">
+                <label for="articleDate" class="form-label">Date</label>
+                <input type="date" class="form-control" id="articleDate" name="date_written" value="{{ old('date_written', $article->date_written->format('Y-m-d')) }}" required>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="mb-3">
+            <label for="articleContent" class="form-label">Content</label>
+            <textarea class="form-control" id="articleContent" name="article_content" rows="5" placeholder="Write your content here..." required>{{ old('article_content', $article->article_content) }}</textarea>
+        </div>
+
+        <!-- Tags -->
+        <div class="mb-3">
+            <label for="tagInput" class="form-label">Tags</label>
+            <div class="input-group">
+                <input type="text" id="tagInput" class="form-control" placeholder="Type a tag">
+                <button type="button" class="btn btn-outline-primary" onclick="handleAddTag()">Add Tag</button>
+            </div>
+            <div id="tagsContainer" class="mt-2">
+                @if(!empty($article->tags))
+					@foreach($article->tags as $tag)
+						<span class="badge bg-secondary me-2 mb-2">
+							{{ $tag }}
+							<button type="button" class="btn-close btn-close-white btn-sm ms-1" onclick="removeTag(this)"></button>
+						</span>
+					@endforeach
+				@endif
+            </div>
+        </div>
+
+        <input type="hidden" name="tags" id="tagsField">
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Update Article</button>
+            <a href="{{ route('article-management') }}" class="btn btn-danger">Cancel</a>
+        </div>
+        </form>
+	</div>
+</div>
+
+<script>
+  function previewImage(event) {
+    const preview = document.getElementById('preview');
+    preview.src = URL.createObjectURL(event.target.files[0]);
+    preview.classList.remove('d-none');
+  }
+
+  const tagInput = document.getElementById('tagInput');
+  const tagsContainer = document.getElementById('tagsContainer');
+  const tagsField = document.getElementById('tagsField');
+
+  tagInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTag();
+    }
+  });
+
+  function handleAddTag() {
+    const value = tagInput.value.trim();
+    if (value !== '') {
+      addTag(value);
+      tagInput.value = '';
+    }
+  }
+
+  function addTag(text) {
+    const tag = document.createElement('span');
+    tag.className = 'badge bg-secondary me-2 mb-2';
+    tag.innerHTML = text + ' <button type="button" class="btn-close btn-close-white btn-sm ms-1" onclick="removeTag(this)"></button>';
+    tagsContainer.appendChild(tag);
+  }
+
+  function removeTag(button) {
+    button.parentElement.remove();
+  }
+
+  function prepareTags() {
+    const tags = [];
+    document.querySelectorAll('#tagsContainer span').forEach(tag => {
+        tags.push(tag.textContent.replace('×','').trim());
+    });
+    document.getElementById('tagsField').value = JSON.stringify(tags);
+  }
+</script>
+@endsection

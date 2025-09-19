@@ -1,79 +1,71 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
-    <!-- ! Hide app brand if navbar-full -->
     <div class="app-brand demo d-flex justify-content-center align-items-center" style="height: 120px;">
         <div class="mt-3">
-            <a href="{{ url('/') }}" class="app-brand-link">
-                <span class="app-brand-logo demo me-1">
-                    <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="SPJ Logo" width="100" height="100">
-                </span>
-                {{-- <span class="app-brand-text demo menu-text fw-semibold ms-2">SPJ</span> --}}
+            <a href="{{url('/')}}" class="app-brand-link">
+            <span class="app-brand-logo demo me-1">
+                <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="SPJ Logo" width="100" height="100">
+            </span>
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-                <i class="mdi menu-toggle-icon d-xl-block align-middle mdi-20px"></i>
+            <i class="mdi menu-toggle-icon d-xl-block align-middle mdi-20px"></i>
             </a>
         </div>
-    </div>
+        </div>
 
-    <div class="menu-inner-shadow"></div>
+        <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1 mt-3">
-        @foreach ($menuData[0]->menu as $menu)
-            {{-- adding active and open class if child is active --}}
+        <ul class="menu-inner py-1 mt-3">
 
-            {{-- menu headers --}}
-            @if (isset($menu->menuHeader))
-                <li class="menu-header fw-medium">
-                    <span class="menu-header-text">{{ __($menu->menuHeader) }}</span>
-                </li>
-            @else
-                {{-- active menu method --}}
-                @php
-                    $activeClass = null;
-                    $currentRouteName = Route::currentRouteName();
+        <li class="menu-header fw-medium">
+            <span class="menu-header-text">Special Program in Journalism</span>
+        </li>
 
-                    if ($currentRouteName === $menu->slug) {
-                        $activeClass = 'active';
-                    } elseif (isset($menu->submenu)) {
-                        if (gettype($menu->slug) === 'array') {
-                            foreach ($menu->slug as $slug) {
-                                if (str_contains($currentRouteName, $slug) and strpos($currentRouteName, $slug) === 0) {
-                                    $activeClass = 'active open';
-                                }
-                            }
-                        } else {
-                            if (
-                                str_contains($currentRouteName, $menu->slug) and
-                                strpos($currentRouteName, $menu->slug) === 0
-                            ) {
-                                $activeClass = 'active open';
-                            }
-                        }
-                    }
-                @endphp
+        <li class="menu-item {{ request()->is('dashboard') ? 'active' : '' }}">
+            <a href="{{ url('/dashboard') }}" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-home-outline"></i>
+            <div>Dashboards</div>
+            </a>
+        </li>
 
-                {{-- main menu --}}
-                <li class="menu-item {{ $activeClass }}">
-                    <a href="{{ isset($menu->url) ? url($menu->url) : 'javascript:void(0);' }}"
-                        class="{{ isset($menu->submenu) ? 'menu-link menu-toggle' : 'menu-link' }}"
-                        @if (isset($menu->target) and !empty($menu->target)) target="_blank" @endif>
-                        @isset($menu->icon)
-                            <i class="{{ $menu->icon }}"></i>
-                        @endisset
-                        <div>{{ isset($menu->name) ? __($menu->name) : '' }}</div>
-                        @isset($menu->badge)
-                            <div class="badge bg-{{ $menu->badge[0] }} rounded-pill ms-auto">{{ $menu->badge[1] }}</div>
-                        @endisset
-                    </a>
+        <li class="menu-item {{ request()->is('publication*') ? 'active' : '' }}">
+            <a href="{{ url('/publication') }}" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-bookshelf"></i>
+            <div>Publication Management</div>
+            </a>
+        </li>
 
-                    {{-- submenu --}}
-                    @isset($menu->submenu)
-                        @include('layouts.sections.menu.submenu', ['menu' => $menu->submenu])
-                    @endisset
-                </li>
-            @endif
-        @endforeach
-    </ul>
+        <li class="menu-item {{ request()->is('article-management*') ? 'active' : '' }}">
+            <a href="{{ url('/article-management') }}" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-book-edit-outline"></i>
+            <div>Article Management</div>
+            </a>
+        </li>
 
-</aside>
+        <li class="menu-item {{ request()->is('editorial-scheduling*') ? 'active' : '' }}">
+            <a href="{{ url('/editorial-scheduling') }}" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-book-clock-outline"></i>
+            <div>Editorial Scheduling</div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ request()->is('incident-report*') ? 'active' : '' }}">
+            <a href="{{ url('/incident-report') }}" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-sticker-alert-outline"></i>
+            <div>Incident Report</div>
+            </a>
+        </li>
+
+        @role('admin')
+            <li class="menu-item {{ request()->is('user-management*') ? 'active' : '' }}">
+                <a href="{{ url('/user-management') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-account-cog"></i>
+                <div>User Management</div>
+                </a>
+            </li>
+        @endrole
+
+        </ul>
+
+    </aside>

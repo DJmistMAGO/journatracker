@@ -11,37 +11,19 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-  use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
-  protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'default_password', 'has_changed_password'];
 
-  /**
-   * The attributes that should be hidden for serialization.
-   *
-   * @var array<int, string>
-   */
-  protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'default_password'];
 
-  /**
-   * The attributes that should be cast.
-   *
-   * @var array<string, string>
-   */
-  protected $casts = [
-    'email_verified_at' => 'datetime',
-    'password' => 'hashed',
-  ];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
-  /**
-   * Check if user has a specific role (admin, eic, student)
-   */
-  public function isRole($role)
-  {
-    return $this->hasRole($role);
-  }
+    public function isRole($role)
+    {
+        return $this->hasRole($role);
+    }
 }
