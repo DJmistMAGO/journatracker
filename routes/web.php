@@ -99,7 +99,18 @@ Route::middleware('auth')->group(function () {
         ->prefix('media-management')
         ->group(function () {
             Route::get('/', 'index')->name('media-management');
+			Route::get('/create', 'create')->name('media-management.create');
+			Route::post('/', 'store')->name('media-management.store');
+			Route::get('/{id}/edit', 'edit')->name('media-management.edit');
+			Route::get('/{id}', 'show')->name('media-management.show');
+			Route::put('/{id}', 'update')->name('media-management.update');
+			Route::delete('/{id}', 'destroy')->name('media-management.destroy');
         });
+
+	Route::middleware('auth')->group(function () {
+    Route::resource('media', MediaController::class);
+});
+
 
     // editorial scheduling
     Route::controller(EditorialSchedulingController::class)
