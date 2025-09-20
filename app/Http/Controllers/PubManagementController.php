@@ -49,7 +49,7 @@ public function show($type, $id)
     $type = strtolower(trim($type));
 
     if ($type === 'article') {
-        $item = Article::with('user')->findOrFail($id);
+        $item = Article::findOrFail($id);
 
         // Map article into common structure
         $itemMapped = [
@@ -66,7 +66,7 @@ public function show($type, $id)
         ];
 
     } elseif ($type === 'media') {
-        $item = Media::with('user')->findOrFail($id);
+        $item = Media::findOrFail($id);
 
         // Map media into common structure
         $itemMapped = [
