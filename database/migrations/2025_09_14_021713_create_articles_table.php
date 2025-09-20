@@ -21,10 +21,17 @@ return new class extends Migration {
       $table->string('category')->nullable();
       $table->longText('article_content');
       $table->date('date_written');
-      $table->enum('status', ['draft', 'pending', 'approved'])->default('draft');
+      $table->enum('status', ['Draft', 'Pending', 'Approved'])->default('Draft');
       $table->json('tags')->nullable();
       $table->timestamps();
     });
+  }
+
+  //function for view
+  public function show($id)
+  {
+	$article = \App\Models\Article::findOrFail($id);
+	return view('spj-content.publication-management.show', compact('article'));
   }
 
   /**

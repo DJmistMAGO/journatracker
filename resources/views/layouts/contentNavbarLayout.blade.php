@@ -1,25 +1,26 @@
-@extends('layouts/commonMaster' )
+@extends('layouts/commonMaster')
 
 @php
-/* Display elements */
-$contentNavbar = true;
-$containerNav = ($containerNav ?? 'container-xxl');
-$isNavbar = ($isNavbar ?? true);
-$isMenu = ($isMenu ?? true);
-$isFlex = ($isFlex ?? false);
-$isFooter = ($isFooter ?? true);
+    /* Display elements */
+    $contentNavbar = true;
+    $containerNav = $containerNav ?? 'container-xxl';
+    $isNavbar = $isNavbar ?? true;
+    $isMenu = $isMenu ?? true;
+    $isFlex = $isFlex ?? false;
+    $isFooter = $isFooter ?? true;
 
-/* HTML Classes */
-$navbarDetached = 'navbar-detached';
+    /* HTML Classes */
+    $navbarDetached = 'navbar-detached';
 
-/* Content classes */
-$container = ($container ?? 'container-xxl');
+    /* Content classes */
+    $container = $container ?? 'container-xxl';
 
 @endphp
 
 @section('layoutContent')
+    <div class="layout-wrapper layout-content-navbar {{ $isMenu ? '' : 'layout-without-menu' }}">
 
-<div class="layout-wrapper layout-content-navbar {{ $isMenu ? '' : 'layout-without-menu' }}">
+        <div class="layout-container">
 
 	<div class="layout-container">
 
