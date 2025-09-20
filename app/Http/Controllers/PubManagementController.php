@@ -40,10 +40,58 @@ class PubManagementController extends Controller
 		// Merge them into one collection
 		$items = $articles->merge($media)->sortByDesc('date');
 
+
 		return view('spj-content.publication-management.index', compact('items'));
 	}
 
+public function show($type, $id)
+{
+    $type = strtolower(trim($type));
 
+    if ($type === 'article') {
+        $item = Article::with('user')->findOrFail($id);
+
+        // Map article into common structure
+        $itemMapped = [
+            'id'          => $item->id,
+            'type'        => 'Article',
+            'title'       => $item->title_article,
+            'author'      => $item->user->name ?? 'Unknown',
+            'date'        => $item->date_written,
+            'status'      => $item->status,
+            'thumbnail'   => $item->thumbnail_image,
+            'content'     => $item->article_content,
+            'category'    => $item->category,
+            'tags'        => $item->tags ?? [],
+        ];
+
+    } elseif ($type === 'media') {
+        $item = Media::with('user')->findOrFail($id);
+
+        // Map media into common structure
+        $itemMapped = [
+            'id'          => $item->id,
+            'type'        => 'Media',
+            'title'       => $item->title,
+            'author'      => $item->user->name ?? 'Unknown',
+            'date'        => $item->date,
+            'status'      => $item->status ?? 'Draft',
+            'media_type'  => $item->type,
+            'description' => $item->description,
+            'image_path'  => $item->image_path,
+            'link'        => $item->link,
+            'tags'        => $item->tags ?? [],
+        ];
+
+    } else {
+        abort(404, 'Invalid type.');
+    }
+
+    return view('spj-content.publication-management.show', [
+        'item' => $itemMapped,
+        'type' => $type,
+    ]);
+}
 
 	public function create()
 	{
