@@ -18,7 +18,10 @@
                     <td>{{ $item->date }}</td>
                     <td>{{ $item->user->name ?? 'N/A' }}</td>
                     <td>
-                        <span class="badge bg-label-primary me-1">{{ $item->status }}</span>
+                        <span
+                                    class="badge {{ $item->status == 'published' ? 'bg-label-secondary' : 'bg-label-success' }}">
+                                    {{ ucfirst($item->status) }}
+                                </span>
                     </td>
                     <td>
                         <div class="d-flex gap-2">

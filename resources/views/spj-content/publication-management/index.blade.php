@@ -8,7 +8,6 @@
 
 @section('content')
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Publication Management</h4>
-    {{-- content --}}
 
     <div class="card">
         <h5 class="card-header">Publication List</h5>
@@ -17,168 +16,112 @@
                 <thead>
                     <tr>
                         <th>Title</th>
+                        <th>Type</th>
                         <th>Author</th>
-                        <th>DATE CREATED</th>
+                        <th>Date Created</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th>Manage</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    <tr>
-                        <td>
-                            <i class="icon-base ri ri-suitcase-2-line icon-22px text-danger me-4"></i>
-                            <span>Tours Project</span>
-                        </td>
-                        <td>Albert Cook</td>
-                        <td>
-                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                    <img src="../../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                    <img src="../../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Christina Parker">
-                                    <img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                            </ul>
-                        </td>
-                        <td><span class="badge bg-label-primary me-1">Active</span></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="icon-base ri ri-more-2-fill icon-18px"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-pencil-line icon-18px me-1"></i>Edit</a>
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i>Delete</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <i class="icon-base ri ri-basketball-fill icon-22px text-info me-4"></i>
-                            <span>Sports Project</span>
-                        </td>
-                        <td>Barry Hunter</td>
-                        <td>
-                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                    <img src="../../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                    <img src="../../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Christina Parker">
-                                    <img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                            </ul>
-                        </td>
-                        <td><span class="badge bg-label-success me-1">Completed</span></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="icon-base ri ri-more-2-fill icon-18px"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-pencil-line icon-18px me-1"></i>Edit</a>
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i>Delete</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <i class="icon-base ri ri-leaf-fill icon-22px text-success me-4"></i>
-                            <span>Greenhouse Project</span>
-                        </td>
-                        <td>Trevor Baker</td>
-                        <td>
-                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                    <img src="../../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                    <img src="../../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Christina Parker">
-                                    <img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                            </ul>
-                        </td>
-                        <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                    data-bs-toggle="dropdown">
-                                    <i class="icon-base ri ri-more-2-fill icon-18px"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-pencil-line icon-18px me-1"></i>Edit</a>
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i>Delete</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <i class="icon-base ri ri-bank-fill icon-22px text-primary me-4"></i>
-                            <span>Bank Project</span>
-                        </td>
-                        <td>Jerry Milton</td>
-                        <td>
-                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                    <img src="../../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                    <img src="../../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                    class="avatar avatar-xs pull-up" title="Christina Parker">
-                                    <img src="../../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                                </li>
-                            </ul>
-                        </td>
-                        <td><span class="badge bg-label-warning me-1">Pending</span></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                    data-bs-toggle="dropdown">
-                                    <i class="icon-base ri ri-more-2-fill icon-18px"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-pencil-line icon-18px me-1"></i>Edit</a>
-                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                            class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i>Delete</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach ($items as $item)
+                        <tr>
+                            <td>{{ $item['title'] }}</td>
+                            <td>{{ $item['type'] }}</td>
+                            <td>{{ $item['author'] }}</td>
+                            <td>{{ $item['date'] }}</td>
+                            <td><span class="badge bg-label-primary">{{ $item['status'] }}</span></td>
+                            <td>
+                                <!-- Manage button/modal goes here -->
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
 
-    {{-- content end --}}
+    <!-- Modal -->
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="">
+                    @csrf
+                    @method('PATCH')
 
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Publication Status</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="modalItemId">
+
+                        <p><strong>Title:</strong> <span id="modalItemTitle"></span></p>
+
+                        <!-- Status Select -->
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Select Status</label>
+                            <select class="form-select" name="status" id="statusSelect" required>
+                                <option value="">-- Select --</option>
+                                <option value="publish">Publish</option>
+                                <option value="revision">Revision</option>
+                                <option value="declined">Declined</option>
+                            </select>
+                        </div>
+
+                        <!-- Date (only for publish) -->
+                        <div class="mb-3 d-none" id="publishDateField">
+                            <label for="publish_date" class="form-label">Publication Date</label>
+                            <input type="date" class="form-control" name="publish_date" id="publish_date">
+                        </div>
+
+                        <!-- Remarks (for revision or declined) -->
+                        <div class="mb-3 d-none" id="remarksField">
+                            <label for="remarks" class="form-label">Remarks</label>
+                            <textarea class="form-control" name="remarks" id="remarks" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const statusSelect = document.getElementById('statusSelect');
+        const publishDateField = document.getElementById('publishDateField');
+        const remarksField = document.getElementById('remarksField');
+
+        // Toggle fields based on status
+        statusSelect.addEventListener('change', function() {
+            publishDateField.classList.add('d-none');
+            remarksField.classList.add('d-none');
+
+            if (this.value === 'publish') {
+                publishDateField.classList.remove('d-none');
+            } else if (this.value === 'revision' || this.value === 'declined') {
+                remarksField.classList.remove('d-none');
+            }
+        });
+
+        // Fill modal with item data
+        const statusModal = document.getElementById('statusModal');
+        statusModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const title = button.getAttribute('data-title');
+            const status = button.getAttribute('data-status');
+
+            document.getElementById('modalItemId').value = id;
+            document.getElementById('modalItemTitle').innerText = title;
+            statusSelect.value = status ?? '';
+            statusSelect.dispatchEvent(new Event('change'));
+        });
+    </script>
 @endsection
