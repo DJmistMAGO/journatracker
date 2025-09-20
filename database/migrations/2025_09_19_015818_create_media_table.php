@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('type');
             $table->string('title');
             $table->date('date')->nullable();
-            $table->string('tags')->nullable();
+            $table->json('tags')->nullable();
             $table->string('image_path')->nullable();
             $table->text('description')->nullable();
+			$table->enum('status', ['draft', 'pending', 'approved'])->default('draft');
             $table->string('link')->nullable();
             $table->timestamps();
 		});

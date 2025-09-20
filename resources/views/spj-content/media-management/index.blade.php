@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'SPJ | Article Management')
+@section('title', 'SPJ | Media Management')
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
@@ -24,119 +24,76 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-home" aria-controls="navs-top-home" aria-selected="true">
+                            data-bs-target="#photojournalism" aria-controls="photojournalism" aria-selected="true">
                             Photojournalism
                         </button>
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-profile" aria-controls="navs-top-profile" aria-selected="false">
+                            data-bs-target="#cartooning" aria-controls="cartooning" aria-selected="false">
                             Cartooning
                         </button>
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-messages" aria-controls="navs-top-messages" aria-selected="false">
+                            data-bs-target="#tv" aria-controls="tv" aria-selected="false">
                             TV Broadcasting
                         </button>
                     </li>
-					<li class="nav-item">
+                    <li class="nav-item">
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-messages" aria-controls="navs-top-messages" aria-selected="false">
+                            data-bs-target="#radio" aria-controls="radio" aria-selected="false">
                             Radio Broadcasting
                         </button>
                     </li>
                 </ul>
+
                 <div class="tab-content ps-0 pe-0">
-                    <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
-                        {{-- tablle --}}
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Date Submitted</th>
-                                        <th>Creator</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><i class="icon-base ri ri-suitcase-2-line icon-22px text-danger"></i>
-                                            <span>Tours Project</span></td>
-                                        <td>Albert Cook</td>
-                                        <td>
-                                            admin
-                                        </td>
-                                        <td><span class="badge bg-label-primary me-1">Active</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                    data-bs-toggle="dropdown"><i
-                                                        class="icon-base ri ri-more-2-fill icon-18px"></i></button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                                            class="icon-base ri ri-pencil-line icon-18px me-1"></i>Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0);"><i
-                                                            class="icon-base ri ri-delete-bin-6-line icon-18px me-1"></i>Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="tab-pane fade show active" id="photojournalism" role="tabpanel">
+                        @include('spj-content.media-management.partials.table', ['items' => $photojournalism])
                     </div>
-                    <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
-                        <p>
-                            Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice cream.
-                            Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
-                            cheesecake fruitcake.
-                        </p>
-                        <p class="mb-0">
-                            Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah cotton
-                            candy liquorice caramels.
-                        </p>
+                    <div class="tab-pane fade" id="cartooning" role="tabpanel">
+                        @include('spj-content.media-management.partials.table', ['items' => $cartooning])
                     </div>
-                    <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
-                        <p>
-                            Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
-                            cupcake gummi bears cake chocolate.
-                        </p>
-                        <p class="mb-0">
-                            Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
-                            roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
-                            jelly-o tart brownie jelly.
-                        </p>
+                    <div class="tab-pane fade" id="tv" role="tabpanel">
+                        @include('spj-content.media-management.partials.table', ['items' => $tv])
+                    </div>
+                    <div class="tab-pane fade" id="radio" role="tabpanel">
+                        @include('spj-content.media-management.partials.table', ['items' => $radio])
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+	<!-- View Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Date:</strong> <span id="viewDate"></span></p>
+        <p><strong>Author:</strong> <span id="viewAuthor"></span></p>
+        <p><strong>Description:</strong></p>
+        <p id="viewDescription"></p>
 
-    {{-- <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-3">
-                <div class="modal-body display-6 text-center">
-                    Are you sure you want to delete <strong id="articleTitle"></strong>?
-                </div>
-                <div class="modal-footer align-items-center justify-content-center">
-                    <form id="deleteForm" method="POST" action="">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </form>
-                </div>
-            </div>
+        {{-- Container for embedded video --}}
+        <div id="viewVideoContainer" class="ratio ratio-16x9 d-none">
+          <iframe id="viewVideo" src="" frameborder="0" allowfullscreen></iframe>
         </div>
-    </div> --}}
+
+        {{-- Container for image --}}
+        <div id="viewImageContainer" class="mt-3 d-none text-center">
+          <img id="viewImage" src="" class="img-fluid rounded" alt="Media Image">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 @endsection
-
-@push('scripts')
-    <script></script>
-@endpush

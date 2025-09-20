@@ -20,6 +20,10 @@ class Media extends Model
         'link',
     ];
 
+	 protected $casts = [
+        'tags' => 'array',
+    ];
+
     /**
      * Relation: Media belongs to a user (who submitted it)
      */
