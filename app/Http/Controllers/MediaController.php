@@ -115,24 +115,65 @@ class MediaController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 */
-	public function edit(Media $media)
+	public function edit( $id)
 	{
-		//
+		$media = Media::with('user')->findOrFail($id);
+		return view('spj-content.media-management.edit', compact('media'));
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(Request $request, Media $media)
-	{
-		//
-	}
+	public function update(Request $request, $id)
+    {
+        $item = Media::findOrFail($id);
+
+        // Validate input
+        $validated = $request->validate([
+            'media_type'   => 'required|string',
+            'title'        => 'required|string|max:255',
+            'date'         => 'required|date',
+            'description'  => 'nullable|string',
+            'tags'         => 'nullable|string', // JSON string
+            'image'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'link'         => 'nullable|url',
+        ]);
+
+		//tags json handling
+		$validated['tags'] = $validated['tags'] ? json_decode($validated['tags'], true) : [];
+
+        // Handle file upload (if new image uploaded)
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('uploads/media', 'public');
+            $validated['thumbnail_image'] = $path;
+        }
+
+
+
+        // Update the record
+        $item->update($validated);
+
+		return redirect()
+			->route('media-management')
+			->with('success', 'Media updated successfully!');
+    }
 
 	/**
 	 * Remove the specified resource from storage.
 	 */
-	public function destroy(Media $media)
+	public function destroy($id)
 	{
-		//
+		$media = Media::findOrFail($id);
+
+		// Delete image if exists
+		if ($media->image_path && Storage::disk('public')->exists($media->image_path)) {
+			Storage::disk('public')->delete($media->image_path);
+		}
+
+		$media->delete();
+
+		return redirect()
+			->route('media-management')
+			->with('success', 'Media deleted successfully!');
 	}
 }

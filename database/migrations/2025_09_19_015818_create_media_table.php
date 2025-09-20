@@ -20,7 +20,7 @@ return new class extends Migration
             $table->json('tags')->nullable();
             $table->string('image_path')->nullable();
             $table->text('description')->nullable();
-			$table->enum('status', ['draft', 'pending', 'approved'])->default('draft');
+			$table->enum('status', ['Draft', 'Pending', 'Approved'])->default('Draft');
             $table->string('link')->nullable();
             $table->timestamps();
 		});

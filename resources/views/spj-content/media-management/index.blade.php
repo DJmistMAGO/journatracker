@@ -6,6 +6,7 @@
     <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
 @endsection
 
+
 @section('content')
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Media Management</h4>
 
@@ -35,14 +36,14 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#tv" aria-controls="tv" aria-selected="false">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#tv"
+                            aria-controls="tv" aria-selected="false">
                             TV Broadcasting
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#radio" aria-controls="radio" aria-selected="false">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#radio"
+                            aria-controls="radio" aria-selected="false">
                             Radio Broadcasting
                         </button>
                     </li>
@@ -50,7 +51,9 @@
 
                 <div class="tab-content ps-0 pe-0">
                     <div class="tab-pane fade show active" id="photojournalism" role="tabpanel">
-                        @include('spj-content.media-management.partials.table', ['items' => $photojournalism])
+                        @include('spj-content.media-management.partials.table', [
+                            'items' => $photojournalism,
+                        ])
                     </div>
                     <div class="tab-pane fade" id="cartooning" role="tabpanel">
                         @include('spj-content.media-management.partials.table', ['items' => $cartooning])
@@ -66,33 +69,43 @@
         </div>
     </div>
 
-	<!-- View Modal -->
-<div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewTitle"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Date:</strong> <span id="viewDate"></span></p>
-        <p><strong>Author:</strong> <span id="viewAuthor"></span></p>
-        <p><strong>Description:</strong></p>
-        <p id="viewDescription"></p>
-
-        {{-- Container for embedded video --}}
-        <div id="viewVideoContainer" class="ratio ratio-16x9 d-none">
-          <iframe id="viewVideo" src="" frameborder="0" allowfullscreen></iframe>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete <strong id="deleteItemTitle"></strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        {{-- Container for image --}}
-        <div id="viewImageContainer" class="mt-3 d-none text-center">
-          <img id="viewImage" src="" class="img-fluid rounded" alt="Media Image">
-        </div>
-      </div>
     </div>
-  </div>
-</div>
+
+    <script>
+        // Set form action dynamically
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const title = button.getAttribute('data-title');
+
+            const form = document.getElementById('deleteForm');
+            form.action = `/media-management/${id}`;
+
+            document.getElementById('deleteItemTitle').textContent = title;
+        });
+    </script>
 
 
 
