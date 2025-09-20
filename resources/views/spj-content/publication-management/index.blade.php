@@ -24,20 +24,34 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @foreach ($items as $item)
-                        <tr>
-                            <td>{{ $item['title'] }}</td>
-                            <td>{{ $item['type'] }}</td>
-                            <td>{{ $item['author'] }}</td>
-                            <td>{{ $item['date'] }}</td>
-                            <td><span class="badge bg-label-primary">{{ $item['status'] }}</span></td>
-							<td>
-								<a href="{{ route('publication-management.show', ['id' => $item['id'], 'type' => strtolower($item['type'])]) }}" class="btn btn-sm btn-info">
-									View
-								</a>
-							</td>
-                        </tr>
-                    @endforeach
+
+                      @forelse($items as $item)
+                    <tr>
+                        <td>{{ $item->title }}</td>
+                        <td>{{ $item->type }}</td>
+                        <td>{{ $item->author }}</td>
+                        <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('Y-m-d') : '-' }}</td>
+                        <td>
+                            <span class="badge
+                                @if($item->status === 'Draft') bg-secondary
+                                @elseif($item->status === 'Publish') bg-success
+                                @elseif($item->status === 'Revision') bg-warning
+                                @elseif($item->status === 'Rejected') bg-danger
+                                @else bg-info @endif">
+                                {{ $item->status }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ route('publication-management.show', ['id' => $item->id, 'type' => strtolower($item->type)]) }}" class="btn btn-sm btn-info">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">No records found.</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>

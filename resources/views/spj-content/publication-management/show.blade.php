@@ -9,6 +9,18 @@
 @section('content')
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ / Publication Management </h4>
 
+    @if ($errors->any())
+        <div class="alert alert-danger mb-3">
+            <strong>Oops!</strong> There were some problems with your input:
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div class="card-title">
@@ -79,9 +91,10 @@
     <div class="modal fade" id="statusModal-{{ $item['id'] }}" tabindex="-1"
         aria-labelledby="statusModalLabel-{{ $item['id'] }}" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="">
+            <form method="POST"
+                action="{{ route('publication-management.update-status', ['type' => $type, 'id' => $item['id']]) }}">
                 @csrf
-                @method('PATCH')
+                @method('PUT')
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="statusModalLabel-{{ $item['id'] }}">Manage Status</h5>
@@ -93,15 +106,15 @@
                             <select name="status" id="status-{{ $item['id'] }}" class="form-select"
                                 onchange="toggleFields({{ $item['id'] }})" required>
                                 <option value="">-- Select --</option>
-                                <option value="publish">Publish</option>
-                                <option value="revision">Revision</option>
-                                <option value="declined">Declined</option>
+                                <option value="Published">Published</option>
+                                <option value="Revision">Revision</option>
+                                <option value="Rejected">Rejected</option>
                             </select>
                         </div>
 
                         <div class="mb-3 d-none" id="publishDate-{{ $item['id'] }}">
                             <label class="form-label">Publication Date</label>
-                            <input type="date" name="publish_date" class="form-control">
+                            <input type="date" name="date_publish" class="form-control">
                         </div>
 
                         <div class="mb-3 d-none" id="remarks-{{ $item['id'] }}">
@@ -125,10 +138,10 @@
             const publishDate = document.getElementById('publishDate-' + id);
             const remarks = document.getElementById('remarks-' + id);
 
-            if (status === 'publish') {
+            if (status === 'Published') {
                 publishDate.classList.remove('d-none');
                 remarks.classList.add('d-none');
-            } else if (status === 'revision' || status === 'declined') {
+            } else if (status === 'Revision' || status === 'Rejected') {
                 remarks.classList.remove('d-none');
                 publishDate.classList.add('d-none');
             } else {

@@ -81,6 +81,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', 'index')->name('publication-management.index');
 			Route::get('show/{type}/{id}', 'show')->name('publication-management.show');
+			Route::put('update-status/{type}/{id}', 'updateStatus')->name('publication-management.update-status');
         });
 
     Route::controller(ArticleManagementController::class)
