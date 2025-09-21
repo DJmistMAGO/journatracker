@@ -15,7 +15,7 @@ class UserController extends Controller
         $users = \App\Models\User::with('roles')->get();
         $search = request()->query('search');
         if ($search) {
-            $users = \App\Models\User::where('name', 'like', '%' . $search . '%')
+            $users = \App\Models\User::where('first_name', 'like', '%' . $search . '%')
                 ->orWhere('email', 'like', '%' . $search . '%')
                 ->with('roles')
                 ->get();
@@ -31,9 +31,10 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-        $user = $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'penname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
         ]);
 
@@ -43,15 +44,9 @@ class UserController extends Controller
         $user['default_password'] = $randomPassword;
         $user['has_changed_password'] = false;
 
-        // dd($user);
+        // dd($validated + $user);
 
-        User::create([
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'password' => bcrypt($user['password']),
-            'default_password' => $user['default_password'],
-            'has_changed_password' => $user['has_changed_password'],
-        ])->assignRole('student');
+        $user = User::create($validated + $user)->assignRole('student');
 
         return redirect()
             ->route('user-management')
@@ -81,12 +76,16 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         $data = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'penname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
         ]);
 
-        $user->name = $data['name'];
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->penname = $data['penname'];
         $user->email = $data['email'];
         if (!empty($data['password'])) {
             $user->password = bcrypt($data['password']);
