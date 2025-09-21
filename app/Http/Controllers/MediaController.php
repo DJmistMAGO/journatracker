@@ -15,10 +15,33 @@ class MediaController extends Controller
 	 */
 	public function index()
 	{
-		$photojournalism = Media::where('type', 'photojournalism')->latest()->get();
-		$cartooning = Media::where('type', 'cartooning')->latest()->get();
-		$tv = Media::where('type', 'tv_broadcasting')->latest()->get();
-		$radio = Media::where('type', 'radio_broadcasting')->latest()->get();
+		//get user id
+		$auth_id = Auth::user()->id;
+
+		$photojournalism = Media::where('type', 'photojournalism')
+		->where('user_id', $auth_id)
+		->where('status', 'Draft')
+		->latest()
+		->get();
+
+		$cartooning = Media::where('type', 'cartooning')
+		->where('user_id', $auth_id)
+		->where('status', 'Draft')
+		->latest()
+		->get();
+
+		$tv = Media::where('type', 'tv_broadcasting')
+		->where('user_id', $auth_id)
+		->where('status', 'Draft')
+		->latest()
+		->get();
+
+		$radio = Media::where('type', 'radio_broadcasting')
+		->where('user_id', $auth_id)
+		->where('status', 'Draft')
+		->latest()
+		->get();
+
 
 		return view('spj-content.media-management.index', compact('photojournalism', 'cartooning', 'tv', 'radio'));
 	}
@@ -83,21 +106,21 @@ class MediaController extends Controller
 			$data['image_path'] = $file->storeAs('media', $filename, 'public');
 		}
 
-		  // Save to database
-    Media::create([
-        'user_id'     => Auth::id(),
-        'type'        => $data['media_type'],
-        'title'       => $data['title'],
-        'date'        => $data['date'],
-        'tags'        => $data['tags'],
-        'description' => $data['description'] ?? null,
-        'image_path'  => $data['image_path'] ?? null,
-        'link'        => $data['link'] ?? null,
-    ]);
+		// Save to database
+		Media::create([
+			'user_id'     => Auth::id(),
+			'type'        => $data['media_type'],
+			'title'       => $data['title'],
+			'date'        => $data['date'],
+			'tags'        => $data['tags'],
+			'description' => $data['description'] ?? null,
+			'image_path'  => $data['image_path'] ?? null,
+			'link'        => $data['link'] ?? null,
+		]);
 
-    return redirect()
-            ->route('media-management')
-            ->with('success', 'Media created successfully!');
+		return redirect()
+			->route('media-management')
+			->with('success', 'Media created successfully!');
 	}
 
 
@@ -115,7 +138,7 @@ class MediaController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 */
-	public function edit( $id)
+	public function edit($id)
 	{
 		$media = Media::with('user')->findOrFail($id);
 		return view('spj-content.media-management.edit', compact('media'));
@@ -125,38 +148,38 @@ class MediaController extends Controller
 	 * Update the specified resource in storage.
 	 */
 	public function update(Request $request, $id)
-    {
-        $item = Media::findOrFail($id);
+	{
+		$item = Media::findOrFail($id);
 
-        // Validate input
-        $validated = $request->validate([
-            'media_type'   => 'required|string',
-            'title'        => 'required|string|max:255',
-            'date'         => 'required|date',
-            'description'  => 'nullable|string',
-            'tags'         => 'nullable|string', // JSON string
-            'image'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'link'         => 'nullable|url',
-        ]);
+		// Validate input
+		$validated = $request->validate([
+			'media_type'   => 'required|string',
+			'title'        => 'required|string|max:255',
+			'date'         => 'required|date',
+			'description'  => 'nullable|string',
+			'tags'         => 'nullable|string', // JSON string
+			'image'        => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+			'link'         => 'nullable|url',
+		]);
 
 		//tags json handling
 		$validated['tags'] = $validated['tags'] ? json_decode($validated['tags'], true) : [];
 
-        // Handle file upload (if new image uploaded)
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('uploads/media', 'public');
-            $validated['thumbnail_image'] = $path;
-        }
+		// Handle file upload (if new image uploaded)
+		if ($request->hasFile('image')) {
+			$path = $request->file('image')->store('uploads/media', 'public');
+			$validated['thumbnail_image'] = $path;
+		}
 
 
 
-        // Update the record
-        $item->update($validated);
+		// Update the record
+		$item->update($validated);
 
 		return redirect()
 			->route('media-management')
 			->with('success', 'Media updated successfully!');
-    }
+	}
 
 	/**
 	 * Remove the specified resource from storage.

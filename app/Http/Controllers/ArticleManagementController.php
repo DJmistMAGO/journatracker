@@ -9,133 +9,138 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleManagementController extends Controller
 {
-    public function index()
-    {
-        $articles = Article::with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
-			
-        return view('spj-content.article-management.index', compact('articles'));
+	public function index()
+	{
+		//get user id
+		$auth_id = Auth::user()->id;
 
-    }
 
-    public function create()
-    {
-        return view('spj-content.article-management.create');
-    }
+		$articles = Article::with('user')
+			->where('user_id', $auth_id)
+			->where('status', 'Draft')
+			->orderBy('created_at', 'desc')
+			->get();
 
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        $data = $request->validate([
-            'title_article' => 'required|string|max:255',
-            'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'article_content' => 'required|string',
-            'date_written' => 'required|date',
-            'category' => 'required|string|max:100',
-            'tags' => 'nullable|string', // tags come as JSON string
-        ]);
+		return view('spj-content.article-management.index', compact('articles'));
+	}
 
-        $data['date_written'] = $data['date_written'] ?? now()->toDateString();
+	public function create()
+	{
+		return view('spj-content.article-management.create');
+	}
 
-        // dd($data);
+	public function store(Request $request)
+	{
+		// dd($request->all());
+		$data = $request->validate([
+			'title_article' => 'required|string|max:255',
+			'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+			'article_content' => 'required|string',
+			'date_written' => 'required|date',
+			'category' => 'required|string|max:100',
+			'tags' => 'nullable|string', // tags come as JSON string
+		]);
 
-        $data['tags'] = $data['tags'] ? json_decode($data['tags'], true) : [];
+		$data['date_written'] = $data['date_written'] ?? now()->toDateString();
 
-        if ($request->hasFile('thumbnail_image')) {
-            $file = $request->file('thumbnail_image');
-            $date = date('Y-m-d');
-            $extension = $file->getClientOriginalExtension();
+		// dd($data);
 
-            $count = Storage::disk('public')->files('thumbnails');
-            $todayCount = collect($count)
-                ->filter(fn($f) => str_contains(basename($f), "article_{$date}_"))
-                ->count();
-            $increment = $todayCount + 1;
+		$data['tags'] = $data['tags'] ? json_decode($data['tags'], true) : [];
 
-            $filename = "article_{$date}_{$increment}.{$extension}";
+		if ($request->hasFile('thumbnail_image')) {
+			$file = $request->file('thumbnail_image');
+			$date = date('Y-m-d');
+			$extension = $file->getClientOriginalExtension();
 
-            $data['thumbnail_image'] = $file->storeAs('thumbnails', $filename, 'public');
-        }
+			$count = Storage::disk('public')->files('thumbnails');
+			$todayCount = collect($count)
+				->filter(fn($f) => str_contains(basename($f), "article_{$date}_"))
+				->count();
+			$increment = $todayCount + 1;
 
-        $data['user_id'] = Auth::id();
+			$filename = "article_{$date}_{$increment}.{$extension}";
 
-        Article::create($data);
+			$data['thumbnail_image'] = $file->storeAs('thumbnails', $filename, 'public');
+		}
 
-        return redirect()
-            ->route('article-management')
-            ->with('success', 'Article created successfully!');
-    }
+		$data['user_id'] = Auth::id();
 
-    public function show($id)
-    {
-        $article = Article::with('user')->findOrFail($id);
-        // dd($article);
-        return view('spj-content.article-management.show', compact('article'));
-    }
+		Article::create($data);
 
-    public function edit($id)
-    {
-        $article = Article::with('user')->findOrFail($id);
-        return view('spj-content.article-management.edit', compact('article'));
-    }
+		return redirect()
+			->route('article-management')
+			->with('success', 'Article created successfully!');
+	}
 
-    public function update(Request $request, $id)
-    {
-        $article = Article::findOrFail($id);
+	public function show($id)
+	{
+		$article = Article::with('user')->findOrFail($id);
+		// dd($article);
+		return view('spj-content.article-management.show', compact('article'));
+	}
 
-        $data = $request->validate([
-            'title_article' => 'required|string|max:255',
-            'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'article_content' => 'required|string',
-            'date_written' => 'required|date',
-            'category' => 'required|string|max:100',
-            'tags' => 'nullable|string', // tags come as JSON string
-        ]);
+	public function edit($id)
+	{
+		$article = Article::with('user')->findOrFail($id);
+		return view('spj-content.article-management.edit', compact('article'));
+	}
 
-        $data['tags'] = $data['tags'] ? json_decode($data['tags'], true) : [];
+	public function update(Request $request, $id)
+	{
+		$article = Article::findOrFail($id);
 
-        if ($request->hasFile('thumbnail_image')) {
-            // Delete old thumbnail if exists
-            if ($article->thumbnail_image && Storage::disk('public')->exists($article->thumbnail_image)) {
-                Storage::disk('public')->delete($article->thumbnail_image);
-            }
+		$data = $request->validate([
+			'title_article' => 'required|string|max:255',
+			'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+			'article_content' => 'required|string',
+			'date_written' => 'required|date',
+			'category' => 'required|string|max:100',
+			'tags' => 'nullable|string', // tags come as JSON string
+		]);
 
-            $file = $request->file('thumbnail_image');
-            $date = date('Y-m-d');
-            $extension = $file->getClientOriginalExtension();
+		$data['tags'] = $data['tags'] ? json_decode($data['tags'], true) : [];
 
-            $count = Storage::disk('public')->files('thumbnails');
-            $todayCount = collect($count)
-                ->filter(fn($f) => str_contains(basename($f), "article_{$date}_"))
-                ->count();
-            $increment = $todayCount + 1;
+		if ($request->hasFile('thumbnail_image')) {
+			// Delete old thumbnail if exists
+			if ($article->thumbnail_image && Storage::disk('public')->exists($article->thumbnail_image)) {
+				Storage::disk('public')->delete($article->thumbnail_image);
+			}
 
-            $filename = "article_{$date}_{$increment}.{$extension}";
+			$file = $request->file('thumbnail_image');
+			$date = date('Y-m-d');
+			$extension = $file->getClientOriginalExtension();
 
-            $data['thumbnail_image'] = $file->storeAs('thumbnails', $filename, 'public');
-        }
+			$count = Storage::disk('public')->files('thumbnails');
+			$todayCount = collect($count)
+				->filter(fn($f) => str_contains(basename($f), "article_{$date}_"))
+				->count();
+			$increment = $todayCount + 1;
 
-        $article->update($data);
+			$filename = "article_{$date}_{$increment}.{$extension}";
 
-        return redirect()
-            ->route('article-management')
-            ->with('success', 'Article updated successfully!');
-    }
+			$data['thumbnail_image'] = $file->storeAs('thumbnails', $filename, 'public');
+		}
 
-    public function destroy($id)
-    {
-        $article = Article::findOrFail($id);
+		$article->update($data);
 
-        // Delete thumbnail if exists
-        if ($article->thumbnail_image && Storage::disk('public')->exists($article->thumbnail_image)) {
-            Storage::disk('public')->delete($article->thumbnail_image);
-        }
+		return redirect()
+			->route('article-management')
+			->with('success', 'Article updated successfully!');
+	}
 
-        $article->delete();
+	public function destroy($id)
+	{
+		$article = Article::findOrFail($id);
 
-        return redirect()
-            ->route('article-management')
-            ->with('success', 'Article deleted successfully!');
-    }
+		// Delete thumbnail if exists
+		if ($article->thumbnail_image && Storage::disk('public')->exists($article->thumbnail_image)) {
+			Storage::disk('public')->delete($article->thumbnail_image);
+		}
+
+		$article->delete();
+
+		return redirect()
+			->route('article-management')
+			->with('success', 'Article deleted successfully!');
+	}
 }
