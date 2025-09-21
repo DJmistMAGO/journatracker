@@ -30,6 +30,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+	public function getNameAttribute()
+{
+    return trim("{$this->first_name} {$this->last_name}");
+}
+
+
     public function isRole($role)
     {
         return $this->hasRole($role);
