@@ -4,10 +4,10 @@ JournaTracker is a modern blog post and journal management application built wit
 
 Key features include:
 
-- Easy post creation and editing
-- Categorization and tagging
-- Responsive dashboard analytics
-- User-friendly interface
+-   Easy post creation and editing
+-   Categorization and tagging
+-   Responsive dashboard analytics
+-   User-friendly interface
 
 Whether you're maintaining a personal diary or running a professional blog, JournaTracker streamlines your writing workflow and keeps your content organized.
 
@@ -17,52 +17,58 @@ Follow these steps to set up the system:
 
 1. **Clone the repository**
 
-   ```sh
-   git clone https://github.com/DJmistMAGO/journatracker.git
-   cd journatracker
-   ```
+    ```sh
+    git clone https://github.com/DJmistMAGO/journatracker.git
+    cd journatracker
+    ```
 
 2. **Install PHP dependencies**
 
-   ```sh
-   composer install
-   ```
+    ```sh
+    composer install
+    ```
 
 3. **Install Node.js dependencies**
 
-   ```sh
-   npm install
-   ```
+    ```sh
+    npm install
+    ```
 
 4. **Copy the example environment file and set your configuration**
 
-   ```sh
-   cp .env.example .env
-   ```
+    ```sh
+    cp .env.example .env
+    ```
 
 5. **Generate the application key**
 
-   ```sh
-   php artisan key:generate
-   ```
+    ```sh
+    php artisan key:generate
+    ```
 
 6. **Run database migrations**
 
-   ```sh
-   php artisan migrate
-   ```
+    ```sh
+    php artisan migrate
+    ```
 
 7. **Start the development server**
 
-   ```sh
-   php artisan serve
-   ```
+    ```sh
+    php artisan serve
+    ```
 
 8. **Compile frontend assets**
 
-   ```sh
-   npm run dev
-   ```
+    ```sh
+    npm run dev
+    ```
+
+9. **Link Storage**
+
+    ```sh
+    php artisan storage:link
+    ```
 
 Now you can access the application at `http://localhost:8000`.
 
@@ -76,13 +82,14 @@ If you are using Laragon, follow these steps:
 2. Start Laragon and ensure Apache/Nginx and MySQL are running.
 3. Open a terminal in the project directory and run:
 
-   ```sh
-   composer install
-   npm install
-   cp .env.example .env
-   php artisan key:generate
-   php artisan migrate
-   npm run dev
-   ```
+    ```sh
+    composer install
+    npm install
+    cp .env.example .env
+    php artisan key:generate
+    php artisan migrate
+    npm run dev
+    php artisan storage:link
+    ```
 
 4. Visit your project in the browser at `http://journatracker.test` (or the domain Laragon assigns).
