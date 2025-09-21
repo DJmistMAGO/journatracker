@@ -14,25 +14,29 @@
 		@method('PUT')
 		<div class="row">
 			<div class="col-md-4 mb-3">
-				<label for="first_name" class="form-label">First Name</label>
-				<input type="text" name="first_name" class="form-control" id="first_name" placeholder="" required value="{{ $user->first_name }}">
+				<div class="form-floating form-floating-outline">
+					<input class="form-control" type="text" id="firstName" name="first_name" value="{{ old('first_name', $user->first_name) }}" placeholder="" required autofocus />
+					<label for="firstName">First Name</label>
+				</div>
 			</div>
 			<div class="col-md-4 mb-3">
-				<label for="last_name" class="form-label">Last Name</label>
-				<input type="text" name="last_name" class="form-control" id="last_name" placeholder="" required value="{{ $user->last_name }}">
+				<div class="form-floating form-floating-outline">
+					<input class="form-control" type="text" id="lastName" name="last_name" value="{{ old('last_name', $user->last_name) }}" placeholder="" required />
+					<label for="lastName">Last Name</label>
+				</div>
 			</div>
 			<div class="col-md-4 mb-3">
-				<label for="penname" class="form-label">Pen Name</label>
-				<input type="text" name="penname" class="form-control" id="penname" placeholder="" required value="{{ $user->penname }}">
+				<div class="form-floating form-floating-outline">
+					<input class="form-control" type="text" id="penName" name="penname" value="{{ old('penname', $user->penname) }}" placeholder="" />
+					<label for="penName">Pen Name</label>
+				</div>
 			</div>
-		</div>
-		<div class="mb-3">
-			<label for="email" class="form-label">Email address</label>
-			<input type="email" name="email" class="form-control" id="email" required value="{{ $user->email }}">
-		</div>
-		<div class="mb-3">
-			<label for="password" class="form-label">Password</label>
-			<input type="password" name="password" class="form-control" id="password" required ">
+			<div class="col-md-12 mb-3">
+				<div class="form-floating form-floating-outline">
+					<input class="form-control" type="email" id="email" name="email" value="{{ old('email', $user->email) }}" placeholder="" required />
+					<label for="email">Email</label>
+				</div>
+			</div>
 		</div>
 		<button type="submit" class="btn btn-success">Update User</button>
 		{{-- cancel --}}
