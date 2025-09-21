@@ -14,7 +14,9 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'penname',
         'email',
         'password',
         'default_password',
@@ -30,11 +32,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-	public function getNameAttribute()
-{
-    return trim("{$this->first_name} {$this->last_name}");
-}
-
+    public function getNameAttribute()
+    {
+        return trim("{$this->first_name} {$this->last_name}");
+    }
 
     public function isRole($role)
     {

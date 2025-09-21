@@ -9,19 +9,19 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 */
-	public function index()
-	{
-		$users = \App\Models\User::with('roles')->get();
-		$search = request()->query('search');
-		if ($search) {
-			$users = \App\Models\User::where('name', 'like', '%' . $search . '%')
-				->orWhere('email', 'like', '%' . $search . '%')
-				->with('roles')
-				->get();
-		}
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $users = \App\Models\User::with('roles')->get();
+        $search = request()->query('search');
+        if ($search) {
+            $users = \App\Models\User::where('first_name', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%')
+                ->with('roles')
+                ->get();
+        }
 
 		return view('spj-content.user-management.user-management', compact('users'));
 	}
@@ -31,13 +31,14 @@ class UserController extends Controller
 		return view('spj-content.user-management.user-create');
 	}
 
-	public function store(Request $request)
-	{
-		// Validate request
-		$user = $request->validate([
-			'name' => 'required|string|max:255',
-			'email' => 'required|string|email|max:255|unique:users',
-		]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'penname' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+        ]);
 
 		// Create a random password
 		$randomPassword = bin2hex(random_bytes(4)); // 8 characters
@@ -45,21 +46,9 @@ class UserController extends Controller
 		$user['default_password'] = $randomPassword;
 		$user['has_changed_password'] = false;
 
-		// Create user in database
-		User::create([
-			'name' => $user['name'],
-			'email' => $user['email'],
-			'password' => bcrypt($user['password']),
-			'default_password' => $user['default_password'],
-			'has_changed_password' => $user['has_changed_password'],
-		])->assignRole('student');
+        // dd($validated + $user);
 
-		// Send credentials via email
-		Mail::to($user['email'])->send(new SendUserCredentials(
-			$user['name'],
-			$user['email'],
-			$randomPassword
-		));
+        $user = User::create($validated + $user)->assignRole('student');
 
 		return redirect()
 			->route('user-management')
@@ -89,11 +78,22 @@ class UserController extends Controller
 	{
 		$user = User::findOrFail($id);
 
-		$data = $request->validate([
-			'name' => 'required|string|max:255',
-			'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-			'password' => 'nullable|string|min:8',
-		]);
+        $data = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'penname' => 'nullable|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->penname = $data['penname'];
+        $user->email = $data['email'];
+        if (!empty($data['password'])) {
+            $user->password = bcrypt($data['password']);
+        }
+        $user->save();
 
 		$user->name = $data['name'];
 		$user->email = $data['email'];
