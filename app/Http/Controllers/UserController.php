@@ -46,7 +46,7 @@ class UserController extends Controller
 		$user['has_changed_password'] = false;
 
 		// Create user in database
-		$newUser = User::create([
+		User::create([
 			'name' => $user['name'],
 			'email' => $user['email'],
 			'password' => bcrypt($user['password']),
