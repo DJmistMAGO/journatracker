@@ -12,6 +12,7 @@ use App\Http\Controllers\ArticleManagementController;
 use App\Http\Controllers\authentications\RegisterBasic;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
+use App\Http\Controllers\ArchiveController;
 
 // welcome
 Route::get('/', function () {
@@ -76,13 +77,13 @@ Route::middleware('auth')->group(function () {
         ->prefix('editorial-scheduling')
         ->group(function () {
             Route::get('/', 'index')->name('editorial-scheduling');
-            //   Route::get('/create', 'create')->name('editorial-scheduling.create');
-            //   Route::post('/', 'store')->name('editorial-scheduling.store');
-            //   Route::get('/{id}/edit', 'edit')->name('editorial-scheduling.edit');
-            //   Route::get('/{id}', 'show')->name('editorial-scheduling.show');
-            //   Route::put('/{id}', 'update')->name('editorial-scheduling.update');
-            //   Route::delete('/{id}', 'destroy')->name('editorial-scheduling.destroy');
         });
+
+	Route::controller(ArchiveController::class)
+	->prefix('archive')
+	->group(function () {
+		Route::get('/','index')->name('archive');
+	});
 
     Route::controller(UserController::class)
         ->prefix('user-management')

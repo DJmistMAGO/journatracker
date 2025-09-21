@@ -58,8 +58,8 @@
             </a>
         </li>
 
-		<li class="menu-item {{ request()->is('editorial-scheduling*') ? 'active' : '' }}">
-            <a href="{{ url('/editorial-scheduling') }}" class="menu-link">
+		<li class="menu-item {{ request()->is('archive*') ? 'active' : '' }}">
+            <a href="{{ url('/archive') }}" class="menu-link">
             <i class="menu-icon tf-icons mdi mdi-bookshelf"></i>
             <div>Archive</div>
             </a>
