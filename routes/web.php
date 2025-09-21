@@ -52,6 +52,7 @@ use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\users\User;
+use App\Http\Controllers\MediaController;
 
 // welcome
 Route::get('/', function () {
@@ -78,8 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::controller(PubManagementController::class)
         ->prefix('publication')
         ->group(function () {
-            Route::get('/', 'index')->name('publication-management');
-            Route::get('/create', 'create')->name('publication.create');
+            Route::get('/', 'index')->name('publication-management.index');
+			Route::get('show/{type}/{id}', 'show')->name('publication-management.show');
+			Route::put('update-status/{type}/{id}', 'updateStatus')->name('publication-management.update-status');
         });
 
     Route::controller(ArticleManagementController::class)
@@ -88,11 +90,28 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('article-management');
             Route::get('/create', 'create')->name('article-management.create');
             Route::post('/', 'store')->name('article-management.store');
-            Route::get('/{id}/edit', 'edit')->name('article-management.edit');
-            Route::get('/{id}', 'show')->name('article-management.show');
-            Route::put('/{id}', 'update')->name('article-management.update');
-            Route::delete('/{id}', 'destroy')->name('article-management.destroy');
+            Route::get('edit/{id}', 'edit')->name('article-management.edit');
+            Route::get('show/{id}', 'show')->name('article-management.show');
+            Route::put('update/{id}', 'update')->name('article-management.update');
+            Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
         });
+
+	Route::controller(MediaController::class)
+        ->prefix('media-management')
+        ->group(function () {
+            Route::get('/', 'index')->name('media-management');
+			Route::get('/create', 'create')->name('media-management.create');
+			Route::post('/', 'store')->name('media-management.store');
+			Route::get('edit/{id}', 'edit')->name('media-management.edit');
+			Route::get('show/{id}', 'show')->name('media-management.show');
+			Route::put('update/{id}', 'update')->name('media-management.update');
+			Route::delete('delete/{id}', 'destroy')->name('media-management.destroy');
+        });
+
+	Route::middleware('auth')->group(function () {
+    Route::resource('media', MediaController::class);
+});
+
 
     // editorial scheduling
     Route::controller(EditorialSchedulingController::class)
