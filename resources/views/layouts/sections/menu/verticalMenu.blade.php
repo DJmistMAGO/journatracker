@@ -45,7 +45,7 @@
 
 		<li class="menu-item {{ request()->is('media-management*') ? 'active' : '' }}">
             <a href="{{ url('/media-management') }}" class="menu-link">
-            <i class="menu-icon tf-icons mdi mdi-book-edit-outline"></i>
+            <i class="menu-icon tf-icons mdi mdi-folder-play-outline"></i>
             <div>Media Management</div>
             </a>
         </li>

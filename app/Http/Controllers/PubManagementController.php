@@ -10,31 +10,46 @@ class PubManagementController extends Controller
 {
 	public function index()
 {
-    // Get all Draft articles with user relation
+    // Articles
     $articles = Article::with('user')
         ->where('status', 'Draft')
         ->orderBy('created_at', 'desc')
         ->get()
-        ->each(function ($article) {
-            $article->type = 'Article'; // Add type property for Blade
+        ->map(function ($article) {
+            return (object) [
+                'id' => $article->id,
+                'title' => $article->title_article,
+                'type' => 'Article',
+                'user' => $article->user,
+                'status' => $article->status,
+                'date' => $article->date_written ?? $article->created_at,
+                'created_at' => $article->created_at,
+            ];
         });
 
-    // Get all Draft media with user relation
+    // Media
     $media = Media::with('user')
         ->where('status', 'Draft')
         ->orderBy('created_at', 'desc')
         ->get()
-        ->each(function ($mediaItem) {
-            $mediaItem->type = 'Media'; // Add type property for Blade
+        ->map(function ($mediaItem) {
+            return (object) [
+                'id' => $mediaItem->id,
+                'title' => $mediaItem->title, // assuming media has `title` field
+                'type' => 'Media',
+                'user' => $mediaItem->user,
+                'status' => $mediaItem->status,
+                'date' => $mediaItem->date ?? $mediaItem->created_at,
+                'created_at' => $mediaItem->created_at,
+            ];
         });
 
-    // Merge articles and media, then sort by date (descending)
-    $items = $articles->merge($media)->sortByDesc(function ($item) {
-        return $item->created_at ?? now();
-    });
+    // Merge and sort by date
+    $items = $articles->merge($media)->sortByDesc('date')->values();
 
     return view('spj-content.publication-management.index', compact('items'));
 }
+
 
 
 	public function show($type, $id)
