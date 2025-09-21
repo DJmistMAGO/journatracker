@@ -43,7 +43,7 @@ class SendUserCredentials extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user-credentials',
+            view: 'spj-content.user-management.email.user-credentials',
             with: [
                 'name' => $this->name,
                 'email' => $this->email,
