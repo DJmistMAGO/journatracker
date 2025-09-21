@@ -12,9 +12,19 @@
 	<form action="{{ route('user-management.update', $user->id) }}" method="POST">
 		@csrf
 		@method('PUT')
-		<div class="mb-3">
-			<label for="name" class="form-label">Name</label>
-			<input type="text" name="name" class="form-control" id="name" placeholder="" required value="{{ $user->name }}">
+		<div class="row">
+			<div class="col-md-4 mb-3">
+				<label for="first_name" class="form-label">First Name</label>
+				<input type="text" name="first_name" class="form-control" id="first_name" placeholder="" required value="{{ $user->first_name }}">
+			</div>
+			<div class="col-md-4 mb-3">
+				<label for="last_name" class="form-label">Last Name</label>
+				<input type="text" name="last_name" class="form-control" id="last_name" placeholder="" required value="{{ $user->last_name }}">
+			</div>
+			<div class="col-md-4 mb-3">
+				<label for="penname" class="form-label">Pen Name</label>
+				<input type="text" name="penname" class="form-control" id="penname" placeholder="" required value="{{ $user->penname }}">
+			</div>
 		</div>
 		<div class="mb-3">
 			<label for="email" class="form-label">Email address</label>
