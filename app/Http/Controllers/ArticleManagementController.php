@@ -14,7 +14,9 @@ class ArticleManagementController extends Controller
         $articles = Article::with('user')
             ->orderBy('created_at', 'desc')
             ->get();
+			
         return view('spj-content.article-management.index', compact('articles'));
+
     }
 
     public function create()
