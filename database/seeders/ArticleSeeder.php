@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Article;
+
 
 class ArticleSeeder extends Seeder
 {
@@ -13,7 +15,7 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('articles')->insert([
+        $articleData = [
             [
                 'user_id'     => 1,
                 'title_article' => 'The Rise of Student Journalism',
@@ -24,8 +26,6 @@ class ArticleSeeder extends Seeder
                 'thumbnail_image' => 'thumbnails/article_2025-09-21_1.jpg',
 				'date_publish' => null,
 				'remarks' => null,
-				'created_at' => now(),
-				'updated_at' => now(),
             ],
             [
                 'user_id'     => 1,
@@ -34,12 +34,14 @@ class ArticleSeeder extends Seeder
                 'category'    => 'Media',
                 'tags'        => json_encode(['digital', 'media']),
                 'article_content' => 'Digital media is transforming the way we consume information...',
-                'thumbnail_image' => 'thumbnails/article_2025-09-21_1.jpg', 
+                'thumbnail_image' => 'thumbnails/article_2025-09-21_1.jpg',
 				'date_publish' => null,
 				'remarks' => null,
-				'created_at' => now()->subDays(3),
-				'updated_at' => now()->subDays(3),
-            ],
-        ]);
+            ]
+        ];
+
+        foreach ($articleData as $article) {
+            Article::create($article);
+        }
     }
 }
