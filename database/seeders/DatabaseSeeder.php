@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use Database\Seeders\MediaSeeder;
+use Database\Seeders\ArticleSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -50,5 +52,12 @@ class DatabaseSeeder extends Seeder
             'has_changed_password' => false,
         ]);
         $student->assignRole('student');
+
+		//Create Media
+		$this->call(MediaSeeder::class);
+
+		//Create Articles
+		$this->call(ArticleSeeder::class);
+
     }
 }
