@@ -70,14 +70,19 @@
                 <p><strong>Description:</strong> {{ $item['description'] ?? 'No description provided.' }}</p>
             @endif
             <p><strong>Tags:</strong>
-                @if (!empty($item['tags']))
-                    @foreach ($item['tags'] as $tag)
-                        <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
-                    @endforeach
-                @else
-                    None
-                @endif
-            </p>
+    @php
+        $tags = is_array($item['tags']) ? $item['tags'] : json_decode($item['tags'], true);
+    @endphp
+
+    @if (!empty($tags))
+        @foreach ($tags as $tag)
+            <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
+        @endforeach
+    @else
+        None
+    @endif
+</p>
+
         </div>
         <div class="card-footer">
             <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"

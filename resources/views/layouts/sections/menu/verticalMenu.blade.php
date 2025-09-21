@@ -28,13 +28,14 @@
             <div>Dashboards</div>
             </a>
         </li>
-
+		@role('admin')
         <li class="menu-item {{ request()->is('publication*') ? 'active' : '' }}">
             <a href="{{ url('/publication') }}" class="menu-link">
             <i class="menu-icon tf-icons mdi mdi-bookshelf"></i>
             <div>Publication Management</div>
             </a>
         </li>
+		@endrole
 
         <li class="menu-item {{ request()->is('article-management*') ? 'active' : '' }}">
             <a href="{{ url('/article-management') }}" class="menu-link">
@@ -54,6 +55,13 @@
             <a href="{{ url('/editorial-scheduling') }}" class="menu-link">
             <i class="menu-icon tf-icons mdi mdi-book-clock-outline"></i>
             <div>Editorial Scheduling</div>
+            </a>
+        </li>
+
+		<li class="menu-item {{ request()->is('editorial-scheduling*') ? 'active' : '' }}">
+            <a href="{{ url('/editorial-scheduling') }}" class="menu-link">
+            <i class="menu-icon tf-icons mdi mdi-bookshelf"></i>
+            <div>Archive</div>
             </a>
         </li>
 
