@@ -24,6 +24,7 @@
 			<input type="password" name="password" class="form-control" id="password" required>
 		</div> --}}
 		<button type="submit" class="btn btn-success">Create User</button>
+		<a href="{{ route('user-management') }}" class="btn btn-secondary">Cancel</a>
 	</form>
 </div>
 @endsection
