@@ -46,16 +46,16 @@ class UserController extends Controller
 		$user['default_password'] = $randomPassword;
 		$user['has_changed_password'] = false;
 
-		// dd($validated + $user); 
+		// dd($validated + $user);
 
 		$user = User::create($validated + $user)->assignRole('student');
 
 		//send email with credentials
-		Mail::to($user['email'])->queue(new SendUserCredentials(
-			$user['name'],
-			$user['email'],
-			$randomPassword
-		));
+		// Mail::to($user['email'])->queue(new SendUserCredentials(
+		// 	$user['name'],
+		// 	$user['email'],
+		// 	$randomPassword
+		// ));
 
 
 		return redirect()
