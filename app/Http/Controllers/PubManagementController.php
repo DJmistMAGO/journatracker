@@ -136,23 +136,26 @@ class PubManagementController extends Controller
 			'remarks' => 'required_if:status,Revision,Rejected|nullable|string|max:1000',
 		]);
 
+
 		// Save updated values for status, date_publish, and remarks
 		$item->status = $validated['status'];
 		$item->date_publish = $validated['date_publish'] ?? null;
 		$item->remarks = $validated['remarks'] ?? null;
 		$item->save();
 
-		// Send email to author
-		if ($item->user && $item->user->email) {
-			Mail::to('jkenneth.gerero@gmail.com')->queue(new StatusUpdateNotification(
-				$item->user->first_name,           // or $item->user->name if you defined accessor
-				$itemMapped['type'],               // Article or Media
-				$itemMapped['title'] ?? 'Untitled',
-				$validated['status'],
-				$validated['remarks'] ?? null,
-				$validated['date_publish'] ?? null
-			));
-		}
+
+
+		// // Send email to author
+		// if ($item->user && $item->user->email) {
+		// 	Mail::to($item->user->email)->queue(new StatusUpdateNotification(
+		// 		$item->user->first_name,           // or $item->user->name if you defined accessor
+		// 		$itemMapped['type'],               // Article or Media
+		// 		$itemMapped['title'] ?? 'Untitled',
+		// 		$validated['status'],
+		// 		$validated['remarks'] ?? null,
+		// 		$validated['date_publish'] ?? null
+		// 	));
+		// }
 
 		return redirect()->back()->with('success', ucfirst($type) . ' status updated successfully.');
 	}
