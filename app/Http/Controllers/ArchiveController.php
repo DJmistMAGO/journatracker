@@ -10,49 +10,57 @@ use Illuminate\Support\Facades\Storage;
 
 class ArchiveController extends Controller
 {
-	public function index(){
+	public function index()
+	{
+		$user = Auth::user();
+		$auth_id = $user->id;
 
-		$auth_id = Auth::user()->id;
+		// Get first role of the user
+		$user_role = $user->getRoleNames()->first();
 
-		//get article and map data
-		$articles = Article::with('user')
-			->where('user_id',$auth_id)
-			->where('status', 'Draft')
-			->orderBy('created_at', 'desc')
-			->get()
-			->map(function ($article) {
+		// Helper function to map items
+		$mapItems = function ($items, $type) {
+			return $items->map(function ($item) use ($type) {
 				return (object) [
-					'id' => $article->id,
-					'title' => $article->title_article,
-					'type' => 'Article',
-					'user' => $article->user,
-					'status' => $article->status,
-					'date' => $article->date_written ?? $article->created_at,
-					'created_at' => $article->created_at,
+					'id' => $item->id,
+					'title' => $type === 'Article' ? $item->title_article : $item->title,
+					'type' => $type,
+					'user' => $item->user,
+					'status' => $item->status,
+					'date' => $item->date_publish,
+					'created_at' => $item->created_at,
 				];
 			});
+		};
 
-		//get media and map data
-		$media = Media::with('user')
-			->where('user_id',$auth_id)
-			->where('status', 'Draft')
-			->orderBy('created_at', 'desc')
-			->get()
-			->map(function ($mediaItem) {
-				return (object) [
-					'id' => $mediaItem->id,
-					'title' => $mediaItem->title,
-					'type' => 'Media',
-					'user' => $mediaItem->user,
-					'status' => $mediaItem->status,
-					'date' => $mediaItem->date ?? $mediaItem->created_at,
-					'created_at' => $mediaItem->created_at,
-				];
-			});
+		if ($user_role === "admin" || $user_role === "eic") {
 
-		//merge article and media
+			$articles = $mapItems(Article::with('user')
+				->where('status', 'Published')
+				->orderBy('created_at', 'desc')
+				->get(), 'Article');
+
+			$media = $mapItems(Media::with('user')
+				->where('status', 'Published')
+				->orderBy('created_at', 'desc')
+				->get(), 'Media');
+		} else {
+			$articles = $mapItems(Article::with('user')
+				->where('user_id', $auth_id)
+				->where('status', 'Published')
+				->orderBy('created_at', 'desc')
+				->get(), 'Article');
+
+			$media = $mapItems(Media::with('user')
+				->where('user_id', $auth_id)
+				->where('status', 'Published')
+				->orderBy('created_at', 'desc')
+				->get(), 'Media');
+		}
+
+		// Merge articles and media
 		$items = $articles->merge($media)->sortByDesc('date')->values();
-		
+
 		return view("spj-content.archive.index", compact('items'));
 	}
 }

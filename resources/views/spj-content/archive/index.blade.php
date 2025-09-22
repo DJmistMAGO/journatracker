@@ -19,26 +19,32 @@
                         <th>Title</th>
                         <th>Date Published</th>
                         <th>Author</th>
+						<th>Views</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    <tr>
-                        <td>
-                        Tours Project
-                        </td>
-                        <td>
-						Albert Cook
-						</td>
-                        <td>
-                        test
-                        </td>
-                        <td><span class="badge bg-label-primary me-1">Active</span></td>
-                        <td>
-                        
-                        </td>
-                    </tr>
+                    @forelse($items as $item)
+                        <tr>
+                            <td>{{ $item->title }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}</td>
+                            <td>{{ $item->user->name ?? 'N/A' }}</td>
+							<td>00</td>
+                            <td>
+                                <span class="badge bg-label-primary me-1">{{ $item->status }}</span>
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-sm btn-primary">
+									View
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No records found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
