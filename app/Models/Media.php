@@ -7,20 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'type',
-        'title',
-        'date',
-        'tags',
-        'description',
-        'image_path',
-        'link',
-    ];
+    protected $fillable = ['user_id', 'type', 'title', 'date', 'tags', 'description', 'image_path', 'link'];
 
-	 protected $casts = [
+    protected $casts = [
         'tags' => 'array',
     ];
 
