@@ -57,7 +57,7 @@
                 <!-- Broadcast Link (TV/Radio) -->
                 <div class="mb-3 {{ in_array($media->type, ['tv_broadcasting', 'radio_broadcasting']) ? '' : 'd-none' }}" id="linkField">
                     <label for="link" class="form-label">Video/Audio Link</label>
-                    <input type="url" class="form-control" name="link" id="link" value="{{ old('link', $media->link) }}"
+                    <input type="text" class="form-control" name="link" id="link" value="{{ old('link', $media->link) }}"
                         placeholder="Enter video or audio link">
                 </div>
 
@@ -88,15 +88,19 @@
                         <input type="text" id="tagInput" class="form-control" placeholder="Type a tag">
                         <button type="button" class="btn btn-outline-primary" onclick="handleAddTag()">Add Tag</button>
                     </div>
-                    <div id="tagsContainer" class="mt-2">
-                        @foreach ($media->tags ?? [] as $tag)
-                            <span class="badge bg-secondary me-2 mb-2">
-                                {{ $tag }}
-                                <button type="button" class="btn-close btn-close-white btn-sm ms-1"
-                                    onclick="removeTag(this)"></button>
-                            </span>
-                        @endforeach
-                    </div>
+                    @php
+						$tags = is_string($media->tags) ? json_decode($media->tags, true) : ($media->tags ?? []);
+					@endphp
+
+					<div id="tagsContainer" class="mt-2">
+						@foreach ($tags as $tag)
+							<span class="badge bg-secondary me-2 mb-2">
+								{{ $tag }}
+								<button type="button" class="btn-close btn-close-white btn-sm ms-1"
+									onclick="removeTag(this)"></button>
+							</span>
+						@endforeach
+					</div>
                 </div>
                 <input type="hidden" name="tags" id="tagsHidden">
 

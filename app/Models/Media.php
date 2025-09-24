@@ -8,22 +8,13 @@ use App\Models\PubManagement;
 
 class Media extends Model
 {
-	use HasFactory;
+    use HasFactory;
 
-	protected $fillable = [
-		'user_id',
-		'type',
-		'title',
-		'date',
-		'tags',
-		'description',
-		'image_path',
-		'link',
-	];
+    protected $fillable = ['user_id', 'type', 'title', 'date', 'tags', 'description', 'image_path', 'link'];
 
-	protected $casts = [
-		'tags' => 'array',
-	];
+    protected $casts = [
+        'tags' => 'array',
+    ];
 
 	/**
 	 * Relation: Media belongs to a user (who submitted it)

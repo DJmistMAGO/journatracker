@@ -24,11 +24,16 @@
 
 						<!-- Tags -->
 						@if (!empty($media->tags))
+							@php
+								$tags = is_string($media->tags) ? json_decode($media->tags, true) : $media->tags;
+							@endphp
+
 							<div class="mb-3">
 								<p><strong>Tags:</strong>
-									@foreach ($media->tags as $tag)
+									@foreach ($tags as $tag)
 										<span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
 									@endforeach
+								</p>
 							</div>
 						@endif
 
@@ -39,6 +44,8 @@
 									<img src="{{ asset('storage/' . $media->image_path) }}" alt="{{ $media->title }}"
 										class="img-fluid rounded shadow-sm" style="max-height: 400px;">
 								</div>
+							@else
+								<p>No image available.</p>
 							@endif
 						@endif
 
@@ -46,13 +53,20 @@
 						@if (in_array($media->type, ['tv_broadcasting', 'radio_broadcasting']))
 							@if ($media->link)
 								<div class="ratio ratio-16x9 my-3">
-									<iframe src="{{ $media->link }}" frameborder="0" allowfullscreen></iframe>
+									<iframe
+										src="{{ $media->link }}"
+										width="560" height="314"
+										style="border:none;overflow:hidden"
+										scrolling="no"
+										frameborder="0"
+										allowfullscreen="true"
+										allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+									</iframe>
 								</div>
 							@endif
 						@endif
 					</div>
-					
-        </div>
-    </div>
+        	</div>
+    	</div>
     </div>
 @endsection

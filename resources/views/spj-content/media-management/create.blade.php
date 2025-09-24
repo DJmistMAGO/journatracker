@@ -90,16 +90,25 @@
                         <button type="button" class="btn btn-outline-primary" onclick="handleAddTag()">Add Tag</button>
                     </div>
                     <div id="tagsContainer" class="mt-2">
-                        @if (old('tags'))
-                            @foreach (json_decode(old('tags'), true) as $tag)
-                                <span class="badge bg-secondary me-2 mb-2">
-                                    {{ $tag }}
-                                    <button type="button" class="btn-close btn-close-white btn-sm ms-1"
-                                        onclick="removeTag(this)"></button>
-                                </span>
-                            @endforeach
-                        @endif
-                    </div>
+						@if (old('tags'))
+							@php
+								$tagsOld = old('tags');
+								// Ensure $tagsOld is always an array
+								if (is_string($tagsOld)) {
+									$tagsOld = json_decode($tagsOld, true) ?? [];
+								}
+							@endphp
+
+							@foreach ($tagsOld as $tag)
+								<span class="badge bg-secondary me-2 mb-2">
+									{{ $tag }}
+									<button type="button" class="btn-close btn-close-white btn-sm ms-1"
+										onclick="removeTag(this)"></button>
+								</span>
+							@endforeach
+						@endif
+					</div>
+
                 </div>
                 <input type="hidden" name="tags" id="tagsHidden">
 
