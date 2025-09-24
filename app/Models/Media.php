@@ -12,7 +12,7 @@ class Media extends Model
 
     protected $fillable = ['user_id', 'type', 'title', 'date', 'tags', 'description', 'image_path', 'link'];
 
-    protected $casts = [
+	 protected $casts = [
         'tags' => 'array',
     ];
 
