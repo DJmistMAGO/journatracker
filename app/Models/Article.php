@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\PubManagement;
 
 class Article extends Model
 {
@@ -31,4 +32,9 @@ class Article extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+	public function publication()
+{
+    return $this->morphOne(PubManagement::class, 'content');
+}
 }
