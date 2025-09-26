@@ -105,8 +105,6 @@
 @section('layoutContent')
     @include('_partials.loader')
 	@include('layouts.sections.navbar.public-navbar')
-
-	
         <main class="container-xxl my-5">
             <div class="row g-5">
                 <article class="col-lg-8">
