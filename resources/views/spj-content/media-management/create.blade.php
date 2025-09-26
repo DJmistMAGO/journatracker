@@ -31,10 +31,10 @@
                     <label for="mediaType" class="form-label">Select Media Type</label>
                     <select id="mediaType" name="media_type" class="form-select" required>
                         <option value="">-- Select --</option>
-                        <option value="photojournalism">Photojournal</option>
-                        <option value="cartooning">Cartooning</option>
-                        <option value="tv_broadcasting">TV Broadcasting</option>
-                        <option value="radio_broadcasting">Radio Broadcasting</option>
+                        <option value="Photojournalism">Photojournal</option>
+                        <option value="Cartooning">Cartooning</option>
+                        <option value="TV Broadcasting">TV Broadcasting</option>
+                        <option value="Radio Broadcasting">Radio Broadcasting</option>
                     </select>
                 </div>
 
@@ -138,9 +138,9 @@
             imageField.classList.add('d-none');
             linkField.classList.add('d-none');
 
-            if (this.value === 'photojournalism' || this.value === 'cartooning') {
+            if (this.value === 'Photojournalism' || this.value === 'Cartooning') {
                 imageField.classList.remove('d-none');
-            } else if (this.value === 'tv_broadcasting' || this.value === 'radio_broadcasting') {
+            } else if (this.value === 'TV Broadcasting' || this.value === 'Radio Broadcasting') {
                 linkField.classList.remove('d-none');
             }
         });

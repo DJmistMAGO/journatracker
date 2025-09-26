@@ -14,22 +14,22 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $photojournalism = Media::where('type', 'photojournalism')
+        $photojournalism = Media::where('type', 'Photojournalism')
             ->where('status', 'Draft')
             ->latest()
             ->get();
 
-        $cartooning = Media::where('type', 'cartooning')
+        $cartooning = Media::where('type', 'Cartooning')
             ->where('status', 'Draft')
             ->latest()
             ->get();
 
-        $tv = Media::where('type', 'tv_broadcasting')
+        $tv = Media::where('type', 'TV Broadcasting')
             ->where('status', 'Draft')
             ->latest()
             ->get();
 
-        $radio = Media::where('type', 'radio_broadcasting')
+        $radio = Media::where('type', 'Radio Broadcasting')
             ->where('status', 'Draft')
             ->latest()
             ->get();
@@ -55,7 +55,7 @@ class MediaController extends Controller
     {
         // dd($request->all());
         $rules = [
-            'media_type' => 'required|in:photojournalism,cartooning,tv_broadcasting,radio_broadcasting',
+            'media_type' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
             'title' => 'required|string|max:255',
             'date' => 'nullable|date',
             'tags' => 'nullable', // still comes as JSON string
@@ -69,11 +69,11 @@ class MediaController extends Controller
         }
 
         // Conditional rules
-        if ($request->isMethod('post') && in_array($request->media_type, ['photojournalism', 'cartooning'])) {
+        if ($request->isMethod('post') && in_array($request->media_type, ['Photojournalism', 'Cartooning'])) {
             $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
         }
 
-        if (in_array($request->media_type, ['tv_broadcasting', 'radio_broadcasting'])) {
+        if (in_array($request->media_type, ['TV Broadcasting', 'Radio Broadcasting'])) {
             $rules['link'] = 'required|string';
         }
 
@@ -144,7 +144,7 @@ class MediaController extends Controller
     public function update(Request $request, Media $media)
     {
         $rules = [
-            'media_type' => 'required|in:photojournalism,cartooning,tv_broadcasting,radio_broadcasting',
+            'media_type' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
             'title' => 'required|string|max:255',
             'date' => 'nullable|date',
             'tags' => 'nullable', // can be string (JSON) or array
@@ -163,11 +163,11 @@ class MediaController extends Controller
         }
 
         // Conditional rules
-        if (in_array($request->media_type, ['photojournalism', 'cartooning'])) {
+        if (in_array($request->media_type, ['Photojournalism', 'Cartooning'])) {
             $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
         }
 
-        if (in_array($request->media_type, ['tv_broadcasting', 'radio_broadcasting'])) {
+        if (in_array($request->media_type, ['TV Broadcasting', 'Radio Broadcasting'])) {
             $rules['link'] = 'required|string';
         }
 

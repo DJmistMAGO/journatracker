@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('description')->nullable();
 			$table->enum('status', ['Draft', 'Published', 'Revision', 'Rejected'])->default('Draft');
             $table->string('link')->nullable();
-			$table->string('remarks')->nullable();
+			$table->string('remarks')->nullable(); 
 			$table->string('date_publish')->nullable();
             $table->timestamps();
 		});
