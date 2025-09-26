@@ -33,11 +33,11 @@
                             <td>
                                 <span
                                     class="badge
-                @if ($item->status === 'Draft') bg-secondary
-                @elseif($item->status === 'Publish') bg-success
-                @elseif($item->status === 'Revision') bg-warning
-                @elseif($item->status === 'Rejected') bg-danger
-                @else bg-info @endif">
+										@if ($item->status === 'Draft') bg-secondary
+										@elseif($item->status === 'Publish') bg-success
+										@elseif($item->status === 'Revision') bg-warning
+										@elseif($item->status === 'Rejected') bg-danger
+										@else bg-info @endif">
                                     {{ $item->status }}
                                 </span>
                             </td>

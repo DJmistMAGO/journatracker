@@ -12,7 +12,7 @@ return new class extends Migration {
 	{
 		Schema::create('pub_management', function (Blueprint $table) {
 			$table->id();
-			$table->morphs('content'); // creates content_id + content_type
+			$table->morphs('content'); 
 			$table->unsignedBigInteger('views')->default(0);
 			$table->timestamps();
 		});

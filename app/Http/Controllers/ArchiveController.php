@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Media;
+use App\Models\PubManagement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ArchiveController extends Controller
 {
@@ -63,4 +65,33 @@ class ArchiveController extends Controller
 
 		return view("spj-content.archive.index", compact('items'));
 	}
+
+	public function view($type, $id, Request $request)
+{
+    $sessionKey = "viewed_{$type}_{$id}";
+
+    if ($request->session()->has($sessionKey)) {
+        // Already viewed → skip increment
+        return;
+    }
+
+    if ($type === 'article') {
+        $article = Article::findOrFail($id);
+
+        $article->publication()->firstOrCreate([]);
+        $article->publication()->increment('views');
+
+    } elseif ($type === 'media') {
+        $media = Media::findOrFail($id);
+
+        $media->publication()->firstOrCreate([]);
+        $media->publication()->increment('views');
+
+    } else {
+        abort(404);
+    }
+
+    $request->session()->put($sessionKey, true);
+}
+
 }

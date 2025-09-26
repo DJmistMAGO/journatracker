@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
 	->prefix('archive')
 	->group(function () {
 		Route::get('/','index')->name('archive');
+		Route::get('view/{type}/{id}','view')->name('archive.view');
 	});
 
     Route::controller(UserController::class)
