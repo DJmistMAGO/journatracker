@@ -50,19 +50,19 @@
                 <div class="collapse navbar-collapse" id="navbar-ex-2">
                     <div class="navbar-nav me-auto">
                         <a class="nav-item nav-link text-black" href="#">Home</a>
-                        <a class="nav-item nav-link " href="#">News</a>
-                        <a class="nav-item nav-link " href="#">Features</a>
-                        <a class="nav-item nav-link " href="#">Editorial</a>
-                        <a class="nav-item nav-link " href="#">Column</a>
-                        <a class="nav-item nav-link " href="#">Sci-Tech</a>
+                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'News']) }}">News</a>
+                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Features']) }}">Features</a>
+                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Editorial']) }}">Editorial</a>
+                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Column']) }}">Column</a>
+                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Sci-Tech']) }}">Sci-Tech</a>
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Media</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Editorial Cartooning</a>
-                                    <a class="dropdown-item" href="#">Photojournalism</a>
-                                    <a class="dropdown-item" href="#">Radio Broadcasting</a>
-                                    <a class="dropdown-item" href="#">TV Broadcasting</a>
+                                    <a class="dropdown-item" href="{{ route('category.view', ['category' => 'Editorial Cartooning']) }}">Editorial Cartooning</a>
+                                    <a class="dropdown-item" href="{{ route('category.view', ['category' => 'Photojournalism']) }}">Photojournalism</a>
+                                    <a class="dropdown-item" href="{{ route('category.view', ['category' => 'Radio Broadcasting']) }}">Radio Broadcasting</a>
+                                    <a class="dropdown-item" href="{{ route('category.view', ['category' => 'TV Broadcasting']) }}">TV Broadcasting</a>
                                 </div>
                             </li>
                         </ul>
