@@ -31,28 +31,26 @@ class ArticleManagementController extends Controller
 
 	public function store(Request $request)
 	{
-		// dd($request->all());
+		// Validate input fields
 		$data = $request->validate([
-			'title_article' => 'required|string|max:255',
-			'thumbnail_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-			'article_content' => 'required|string',
-			'date_written' => 'required|date',
+			'title' => 'required|string|max:255',
+			'image_path' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+			'description' => 'required|string',
+			'date_submitted' => 'required|date',
 			'category' => 'required|string|max:100',
 			'tags' => 'nullable|string', // tags come as JSON string
 		]);
 
-		$data['date_written'] = $data['date_written'] ?? now()->toDateString();
-
-		// dd($data);
-
+		// Convert tags into array (if provided)
 		$data['tags'] = $data['tags'] ? json_decode($data['tags'], true) : [];
 
-		if ($request->hasFile('thumbnail_image')) {
-			$file = $request->file('thumbnail_image');
+		// Handle image upload
+		if ($request->hasFile('image_path')) {
+			$file = $request->file('image_path');
 			$date = date('Y-m-d');
 			$extension = $file->getClientOriginalExtension();
 
-			$count = Storage::disk('public')->files('thumbnails');
+			$count = Storage::disk('public')->files('articles');
 			$todayCount = collect($count)
 				->filter(fn($f) => str_contains(basename($f), "article_{$date}_"))
 				->count();
@@ -60,17 +58,24 @@ class ArticleManagementController extends Controller
 
 			$filename = "article_{$date}_{$increment}.{$extension}";
 
-			$data['thumbnail_image'] = $file->storeAs('thumbnails', $filename, 'public');
+			$data['image_path'] = $file->storeAs('articles', $filename, 'public');
 		}
 
+		// Attach logged-in user
 		$data['user_id'] = Auth::id();
 
+		// Default type
+		$data['type'] = 'Article';
+
+		// Save article
 		Article::create($data);
 
 		return redirect()
 			->route('article-management')
 			->with('success', 'Article created successfully!');
 	}
+
+
 
 	public function show($id)
 	{

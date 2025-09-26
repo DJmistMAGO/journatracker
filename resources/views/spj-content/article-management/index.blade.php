@@ -33,9 +33,9 @@
                 <tbody class="table-border-bottom-0">
                     @forelse($articles as $article)
                         <tr>
-                            <td>{{ $article->title_article }}</td>
+                            <td>{{ $article->title }}</td>
                             <td>{{ $article->user->name ?? 'Unknown' }}</td>
-                            <td>{{ $article->date_written->format('F d, Y') }}</td>
+                            <td>{{ $article->date_submitted->format('F d, Y') }}</td>
                             <td>
                                 <span
                                     class="badge {{ $article->status == 'published' ? 'bg-label-secondary' : 'bg-label-success' }}">

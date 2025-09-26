@@ -8,13 +8,28 @@ use App\Models\PubManagement;
 
 class Media extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $fillable = ['user_id', 'type', 'title', 'date', 'tags', 'description', 'image_path', 'link'];
+	protected $fillable = [
+		'user_id',
+		'title',
+		'description',
+		'image_path',
+		'link',
+		'category',
+		'tags',
+		'date_submitted',
+		'date_publish',
+		'status',
+		'remarks',
+	];
 
-	 protected $casts = [
-        'tags' => 'array',
-    ];
+	protected $casts = [
+		'tags'          => 'array',
+		'date_submitted' => 'date',
+		'date_publish'  => 'date',
+	];
+
 
 	/**
 	 * Relation: Media belongs to a user (who submitted it)
@@ -25,7 +40,7 @@ class Media extends Model
 	}
 
 	public function publication()
-{
-    return $this->morphOne(PubManagement::class, 'content');
-}
+	{
+		return $this->morphOne(PubManagement::class, 'content');
+	}
 }

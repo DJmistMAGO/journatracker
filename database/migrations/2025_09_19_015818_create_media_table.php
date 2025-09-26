@@ -13,18 +13,19 @@ return new class extends Migration
 	{
 		Schema::create('media', function (Blueprint $table) {
 			$table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('type');
-            $table->string('title');
-            $table->date('date')->nullable();
-            $table->json('tags')->nullable();
-            $table->string('image_path')->nullable();
-            $table->text('description')->nullable();
-			$table->enum('status', ['Draft', 'Published', 'Revision', 'Rejected'])->default('Draft');
-            $table->string('link')->nullable();
-			$table->string('remarks')->nullable(); 
+			$table->foreignId('user_id')->constrained()->onDelete('cascade');
+			$table->string('title');
+			$table->text('description')->nullable();
+			$table->string('image_path')->nullable();
+			$table->string('link')->nullable();
+			$table->string('type')->default('Media');
+			$table->string('category');
+			$table->json('tags')->nullable();
+			$table->date('date_submitted');
 			$table->string('date_publish')->nullable();
-            $table->timestamps();
+			$table->enum('status', ['Draft', 'Published', 'Revision', 'Rejected'])->default('Draft');
+			$table->string('remarks')->nullable();
+			$table->timestamps();
 		});
 	}
 

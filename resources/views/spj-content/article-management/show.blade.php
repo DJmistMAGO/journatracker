@@ -9,7 +9,7 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">{{ $article->title_article }}</h5>
+        <h5 class="mb-0">{{ $article->title }}</h5>
         <a href="{{ route('article-management') }}" class="btn btn-primary btn-sm">
             <i class="mdi mdi-arrow-left me-1"></i> Back to List
         </a>
@@ -17,17 +17,17 @@
 
     <div class="card-body">
         <!-- Author, Date, Status, Category -->
-        <!-- Thumbnail -->
-        @if($article->thumbnail_image)
+        <!-- Image -->
+        @if($article->image_path)
             <div class="mb-3 text-center">
-                <img src="{{ asset('/storage/' . $article->thumbnail_image) }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 300px;">
+                <img src="{{ asset('/storage/' . $article->image_path) }}" alt="Image" class="img-fluid rounded" style="max-height: 300px;">
             </div>
         @endif
         <div class="mb-3">
             <p><strong>Author:</strong> {{ $article->user->name ?? 'Unknown' }}</p>
-            <p><strong>Date Written:</strong> {{ $article->date_written->format('F d, Y') }}</p>
+            <p><strong>Date Written:</strong> {{ $article->date_submitted->format('F d, Y') }}</p>
             <p><strong>Status:</strong>
-                <span class="badge {{ $article->status == 'published' ? 'bg-label-success' : 'bg-label-secondary' }}">
+                <span class="badge {{ $article->status == 'Published' ? 'bg-label-success' : 'bg-label-secondary' }}">
                     {{ ucfirst($article->status) }}
                 </span>
             </p>
@@ -38,7 +38,7 @@
         <!-- Content -->
         <div class="mb-3">
             <h6>Content:</h6>
-            <p>{!! nl2br(e($article->article_content)) !!}</p>
+            <p>{!! nl2br(e($article->description)) !!}</p>
         </div>
 
         <!-- Tags -->

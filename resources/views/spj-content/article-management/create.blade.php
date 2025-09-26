@@ -19,15 +19,15 @@
                 <!-- Image Upload -->
                 <div class="mb-3 text-center">
                     <div class="mt-3">
-                        @if (old('thumbnail_image'))
-                            <img id="preview" src="{{ asset('storage/' . old('thumbnail_image')) }}" alt="Image Preview"
+                        @if (old('image_path'))
+                            <img id="preview" src="{{ asset('storage/' . old('image_path')) }}" alt="Image Preview"
                                 class="img-fluid rounded mb-2" style="max-height: 250px;">
                         @else
                             <img id="preview" src="#" alt="Image Preview" class="img-fluid d-none rounded"
                                 style="max-height: 250px;">
                         @endif
                     </div>
-                    <input class="form-control mt-2" type="file" name="thumbnail_image" id="articleImage"
+                    <input class="form-control mt-2" type="file" name="image_path" id="articleImage"
                         accept="image/*" onchange="previewImage(event)">
                 </div>
 
@@ -35,13 +35,13 @@
                     <!-- Title -->
                     <div class="col-12 col-md-6">
                         <label for="articleTitle" class="form-label">Article Title</label>
-                        <input type="text" class="form-control" id="articleTitle" name="title_article"
-                            value="{{ old('title_article') }}" placeholder="Enter article title" required>
+                        <input type="text" class="form-control" id="articleTitle" name="title"
+                            value="{{ old('title') }}" placeholder="Enter article title" required>
                     </div>
 
                     <!-- Category -->
                     <div class="col-12 col-md-3">
-                        <label for="category" class="form-label">Category</label>
+                        <label for="categooptionry" class="form-label">Category</label>
                         <select class="form-select" id="category" name="category" required>
                             <option disabled {{ old('category') ? '' : 'selected' }}>-- Select Category --</option>
                             <option value="News" {{ old('category') == 'News' ? 'selected' : '' }}>News</option>
@@ -59,7 +59,7 @@
                     <div class="col-12 col-md-3">
                         <label for="articleDate" class="form-label">Date</label>
                         <input type="date" class="form-control" id="articleDate"
-                            value="{{ old('date_written', date('Y-m-d')) }}" name="date_written" required>
+                            value="{{ old('date_submitted', date('Y-m-d')) }}" name="date_submitted" required>
 
                     </div>
                 </div>
@@ -67,8 +67,8 @@
                 <!-- Content -->
                 <div class="mb-3">
                     <label for="articleContent" class="form-label">Content</label>
-                    <textarea class="form-control" id="articleContent" name="article_content" rows="5"
-                        placeholder="Write your content here..." required>{{ old('article_content') }}</textarea>
+                    <textarea class="form-control" id="articleContent" name="description" rows="5"
+                        placeholder="Write your content here..." required>{{ old('description') }}</textarea>
                 </div>
 
                 <!-- Tags -->
