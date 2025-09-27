@@ -13,7 +13,8 @@ class IncidentReport extends Model
 		'image_proof',
 		'date_submitted',
 		'date_status',
-		'status'
+		'status',
+		'remarks'
 	];
 
 	protected $casts = [

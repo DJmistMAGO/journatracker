@@ -19,12 +19,12 @@
         </div>
 
         <div class="card-body">
-			<p><strong>Status: {{ $incident->status }} </strong> on <strong>{{ $incident->date_status->format('F d, Y') }}</strong></p>
+            <p><strong>Status: {{ $incident->status }} </strong> on
+                <strong>{{ $incident->date_status->format('F d, Y') }}</strong></p>
             <hr>
             {{-- Incident description --}}
             <p><strong>Description:</strong> {{ $incident->incident_description }}</p>
             <hr>
-
             {{-- Images section --}}
             <div class="row">
                 {{-- Student ID Image --}}
@@ -49,14 +49,17 @@
                     @endif
                 </div>
             </div>
+            <hr>
+            {{-- Remarks Section --}}
+            <p><strong>Remarks:</strong> {{ $incident->remarks ?? 'N/A' }}</p>
         </div>
         {{-- Card Footer --}}
         <div class="card-footer d-flex justify-content-end align-items-center">
-			@if($incident->status !== 'Resolved')
-            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#statusModal">
-                Manage Status
-            </button>
-			@endif
+            @if ($incident->status !== 'Resolved')
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#statusModal">
+                    Manage Status
+                </button>
+            @endif
         </div>
     </div>
 
@@ -89,6 +92,10 @@
                             <label for="date_status" class="form-label">Date Status</label>
                             <input type="date" name="date_status" id="date_status" class="form-control"
                                 value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="remarks" class="form-label">Remarks (optional)</label>
+                            <textarea name="remarks" id="remarks" class="form-control" rows="3">{{ old('remarks') }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

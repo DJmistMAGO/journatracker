@@ -20,6 +20,7 @@ return new class extends Migration
 			$table->date('date_submitted')->default(now());
 			$table->date('date_status')->default(now());
 			$table->enum('status', ['Pending', 'Under Review', 'Resolved', 'Rejected'])->default('Pending');
+			$table->longText('remarks')->nullable();
             $table->timestamps();
         });
     }

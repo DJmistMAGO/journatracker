@@ -81,10 +81,12 @@ class IncidentReportController extends Controller
 		$data = $request->validate([
 			'status' => 'required|string',
 			'date_status' => 'required|date',
+			'remarks' => 'nullable|string',
 		]);
-		
+
 		$incident->status = $data['status'];
 		$incident->date_status = $data['date_status'];
+		$incident->remarks = $data['remarks'];
 		$incident->save();
 
 		return redirect()->back()->with('success', 'Incident status updated successfully.');
