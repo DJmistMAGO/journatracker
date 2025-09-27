@@ -21,6 +21,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
+Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
 
 // Guest routes
 Route::middleware('guest')->group(function () {

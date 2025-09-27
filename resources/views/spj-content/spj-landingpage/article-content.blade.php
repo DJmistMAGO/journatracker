@@ -99,10 +99,6 @@
         }
 
         /*mobile responsive for novtop*/
-
-		.article-content .empty-library .mdi:before, .mdi-set{
-			font-size: 50px;
-		}
     </style>
 @endpush
 
@@ -111,48 +107,56 @@
     @include('layouts.sections.navbar.public-navbar')
     <main class="container-xxl my-5">
         <div class="row g-5">
-            <article class="col-lg-8 article-content">
-                <h2 class="mt-0 mb-3 text-white">{{ $category }}</h2>
-                <div class="row g-4">
-                    @forelse ($items as $item)
-                        <div class="col-md-6">
-                            <div class="card shadow-sm h-100 border-0">
-                                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
-                                    alt="{{ $item->title }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $item->title }}</h5>
-                                    <small class="text-muted">Published on
-                                        {{ $item->date_publish->format('F j, Y') }}</small>
-                                    <p class="card-text">
-                                        {{ \Illuminate\Support\Str::words($item->description, 15, '...') }}
-                                    </p>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <a href="{{ route('article.read', [$item->type, $item->id]) }}"
-                                            class="btn btn-outline-theme btn-sm">
-                                            Read More
-                                        </a>
-                                        <div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
-                                            <i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
-                                            <span class="fw-semibold">{{ $item->publication->views ?? 0 }}</span>
-                                        </div>
-                                    </div>
-                                </div>
+            <article class="col-lg-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <!-- Article Header -->
+                        <header class="mb-4">
+                            <h1 class="fw-bold">{{ $item->title }}</h1>
+                            <div class="text-muted small">
+                                Published on {{ $item->date_publish->format('F j, Y') }}
+                                by <span class="fw-semibold">{{ $item->user->penname ?? $item->user->name }}</span>
                             </div>
-                        </div>
-                    @empty
-                        <div class="col-12 empty-library">
-                            <div class="card shadow-sm border-0 text-center py-5">
-                                <div class="card-body">
-                                    <i class="mdi mdi-library-outline text-primary icon-read-article"></i>
-                                    <h5 class="mt-3">Empty Library</h5>
-                                    <p class="text-muted">No content available at the moment.</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforelse
+                        </header>
 
+                        <!-- Article Image -->
+                        <figure class="mb-4 text-center">
+                            <img src="{{ asset('/storage/' . $item->image_path) }}" alt="Future of Technology"
+                                class="img-fluid rounded shadow-sm">
+                        </figure>
+
+                        <!-- Article Content -->
+                        <section class="article-body mb-5">
+                            {{ $item->description }}
+                        </section>
+
+                        <!-- Tags Section -->
+                        <div class="mb-4">
+                            <strong>Tags: </strong>
+                            @php
+                                $tags = is_array($item->tags) ? $item->tags : json_decode($item->tags, true);
+                            @endphp
+
+                            @if (!empty($tags))
+                                @foreach ($tags as $tag)
+                                    <span class="badge bg-primary me-1 mb-1">{{ $tag }}</span>
+                                @endforeach
+                            @else
+                                None
+                            @endif
+                        </div>
+
+                        {{-- <!-- Back Button -->
+                        <footer class="mt-4">
+                            <a href="#" class="btn btn-outline-secondary">
+                                ← Back to Articles
+                            </a>
+                        </footer> --}}
+                    </div>
                 </div>
             </article>
+
+
 
             <!-- Sidebar -->
             <aside class="col-lg-4">
@@ -188,7 +192,6 @@
                         <a href="#" class="btn btn-outline-theme btn-sm"><i class="ti ti-brand-linkedin"></i></a>
                     </div>
                 </div>
-
             </aside>
         </div>
     </main>

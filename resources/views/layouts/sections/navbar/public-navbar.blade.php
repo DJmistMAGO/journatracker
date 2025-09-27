@@ -49,12 +49,12 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbar-ex-2">
                     <div class="navbar-nav me-auto">
-                        <a class="nav-item nav-link text-black" href="#">Home</a>
-                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'News']) }}">News</a>
-                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Features']) }}">Features</a>
-                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Editorial']) }}">Editorial</a>
-                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Column']) }}">Column</a>
-                        <a class="nav-item nav-link " href="{{ route('category.view', ['category' => 'Sci-Tech']) }}">Sci-Tech</a>
+                        <a class="nav-item nav-link {{ Route::is('welcome') ? 'text-black' : '' }}" href="{{ route('welcome') }}">Home</a>
+                        <a class="nav-item nav-link  {{ request()->route('category') === 'News' ? 'text-black' : '' }}" href="{{ route('category.view', ['category' => 'News']) }}">News</a>
+                        <a class="nav-item nav-link  {{ request()->route('category') === 'Features' ? 'text-black' : '' }}" href="{{ route('category.view', ['category' => 'Features']) }}">Features</a>
+                        <a class="nav-item nav-link  {{ request()->route('category') === 'Editorial' ? 'text-black' : '' }}" href="{{ route('category.view', ['category' => 'Editorial']) }}">Editorial</a>
+                        <a class="nav-item nav-link  {{ request()->route('category') === 'Column' ? 'text-black' : '' }}" href="{{ route('category.view', ['category' => 'Column']) }}">Column</a>
+                        <a class="nav-item nav-link  {{ request()->route('category') === 'Sci-Tech' ? 'text-black' : '' }}" href="{{ route('category.view', ['category' => 'Sci-Tech']) }}">Sci-Tech</a>
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Media</a>
