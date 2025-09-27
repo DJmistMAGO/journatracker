@@ -38,7 +38,7 @@
                             <td>{{ $article->date_submitted->format('F d, Y') }}</td>
                             <td>
                                 <span
-                                    class="badge {{ $article->status == 'published' ? 'bg-label-secondary' : 'bg-label-success' }}">
+                                    class="badge {{ $article->status == 'Published' ? 'bg-label-secondary' : 'bg-label-success' }}">
                                     {{ ucfirst($article->status) }}
                                 </span>
                             </td>

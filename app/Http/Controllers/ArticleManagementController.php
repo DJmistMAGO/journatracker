@@ -17,7 +17,7 @@ class ArticleManagementController extends Controller
 
 		$articles = Article::with('user')
 			->where('user_id', $auth_id)
-			->where('status', 'Draft')
+			->whereIn('status', ['Draft', 'Revision'])
 			->orderBy('created_at', 'desc')
 			->get();
 

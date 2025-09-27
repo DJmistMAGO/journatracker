@@ -18,25 +18,25 @@ class MediaController extends Controller
 
 		$photojournalism = Media::where("user_id", $user_id)
 			->where('category', 'Photojournalism')
-			->where('status', 'Draft')
+			->whereIn('status', ['Draft', 'Revision'])
 			->latest()
 			->get();
 
 		$cartooning = Media::where('user_id', $user_id)
 			->where('category', 'Cartooning')
-			->where('status', 'Draft')
+			->whereIn('status', ['Draft', 'Revision'])
 			->latest()
 			->get();
 
 		$tv = Media::where('user_id', $user_id)
 			->where('category', 'TV Broadcasting')
-			->where('status', 'Draft')
+			->whereIn('status', ['Draft', 'Revision'])
 			->latest()
 			->get();
 
 		$radio = Media::where('user_id', $user_id)
 			->where('category', 'Radio Broadcasting')
-			->where('status', 'Draft')
+			->whereIn('status', ['Draft', 'Revision'])
 			->latest()
 			->get();
 
