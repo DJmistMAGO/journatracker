@@ -5,6 +5,7 @@
                 <th>Title</th>
                 <th>Date Submitted</th>
                 <th>Author</th>
+				<th>Category</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -17,6 +18,7 @@
                     </td>
                     <td>{{ $item->date_submitted }}</td>
                     <td>{{ $item->user->name ?? 'N/A' }}</td>
+					<td>{{ $item->category}}</td>
                     <td>
                         <span
                                     class="badge {{ $item->status == 'Published' ? 'bg-label-secondary' : 'bg-label-success' }}">
