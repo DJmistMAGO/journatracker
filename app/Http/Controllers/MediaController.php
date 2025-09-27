@@ -6,6 +6,8 @@ use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\StatusChangedNotification;
+use App\Models\User;
 
 class MediaController extends Controller
 {
@@ -113,8 +115,7 @@ class MediaController extends Controller
 			$data['link'] = $matches[1];
 		}
 
-		// Save media
-		Media::create([
+		$media = Media::create([
 			'user_id' => Auth::id(),
 			'category' => $data['category'],
 			'title' => $data['title'],
@@ -124,6 +125,18 @@ class MediaController extends Controller
 			'image_path' => $data['image_path'] ?? null,
 			'link' => $data['link'] ?? null,
 		]);
+		
+		$media->type   = $media->type ?? 'Media';
+		$media->status = $media->status ?? 'Draft';
+
+		$media->author->notify(new StatusChangedNotification($media));
+
+		// Get all users with role 'Admin' or 'EIC'
+		$usersToNotify = User::role(['admin', 'eic'])->get();
+		foreach ($usersToNotify as $user) {
+			$user->notify(new StatusChangedNotification($media));
+		}
+
 
 		return redirect()
 			->route('media-management')

@@ -13,7 +13,7 @@ class Article extends Model
 		'user_id',
 		'title',
 		'description',
-		'image_path', 
+		'image_path',
 		'category',
 		'tags',
 		'date_submitted',
@@ -39,4 +39,9 @@ class Article extends Model
 	{
 		return $this->morphOne(PubManagement::class, 'content');
 	}
+
+	public function author()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 }

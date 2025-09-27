@@ -32,7 +32,7 @@
                             </td>
                             <td>{{ $incident->date_status ? $incident->date_status->format('F j, Y') : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('incident-report.show', $incident->id) }}"
+                                <a href="{{ route('incident-report.show', $incident->id ) }}"
                                     class="btn btn-info btn-sm">View</a>
                             </td>
                         </tr>
