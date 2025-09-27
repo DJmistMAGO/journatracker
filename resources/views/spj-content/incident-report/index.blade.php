@@ -30,7 +30,7 @@
                             <td>
                                 <span class="badge bg-label-success me-1">{{ $incident->status }}</span>
                             </td>
-                            <td>{{ $incident->date_resolved ? $incident->date_resolved->format('F j, Y') : 'N/A' }}</td>
+                            <td>{{ $incident->date_status ? $incident->date_status->format('F j, Y') : 'N/A' }}</td>
                             <td>
                                 <a href="{{ route('incident-report.show', $incident->id) }}"
                                     class="btn btn-info btn-sm">View</a>
