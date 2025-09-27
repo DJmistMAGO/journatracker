@@ -79,10 +79,10 @@ class ArticleManagementController extends Controller
 		$article->author->notify(new StatusChangedNotification($article));
 
 		// Get all users with role 'Admin' or 'EIC'
-		$usersToNotify = User::role(['Admin', 'EIC'])->get();
-foreach ($usersToNotify as $user) {
-    $user->notify(new StatusChangedNotification($article));
-}
+		$usersToNotify = User::role(['admin', 'eic'])->get();
+		foreach ($usersToNotify as $user) {
+			$user->notify(new StatusChangedNotification($article));
+		}
 
 
 		return redirect()

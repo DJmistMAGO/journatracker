@@ -43,7 +43,7 @@ class StatusChangedNotification extends Notification
 			'type' => $this->item->type,
 			'id' => $this->item->id,
 			'message' => $isAdmin
-            ? "{$this->item->author->name} submitted {$this->item->type} for Publication"
+            ? "{$this->item->author->name} submitted {$this->item->type} for Publication."
             : "Your {$this->item->type} has been {$this->item->status} for Publication.",
 			'created_at' => now(),
 		];

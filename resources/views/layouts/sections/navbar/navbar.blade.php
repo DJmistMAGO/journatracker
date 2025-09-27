@@ -97,8 +97,6 @@
                 </ul>
             </li>
 
-
-
             <li class="nav-item me-3">
                 <a class="nav-link d-flex align-items-center" href="javascript:void(0);">
                     <i class="ti ti-user me-1"></i> {{ Auth::user()->first_name }} | {{ Auth::user()->penname ?? '' }}
@@ -224,6 +222,6 @@
             });
         }
 
-		
+
     </script>
 @endpush

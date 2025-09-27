@@ -43,4 +43,9 @@ class Media extends Model
 	{
 		return $this->morphOne(PubManagement::class, 'content');
 	}
+
+		public function author()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 }
