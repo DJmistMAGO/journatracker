@@ -52,31 +52,6 @@ class ArchiveController extends Controller
 		return view("spj-content.archive.index", compact('items'));
 	}
 
-	public function view($type, $id, Request $request)
-{
-    $sessionKey = "viewed_{$type}_{$id}";
-
-    if ($request->session()->has($sessionKey)) {
-        return;
-    }
-
-    if ($type === 'article') {
-        $article = Article::findOrFail($id);
-
-        $article->publication()->firstOrCreate([]);
-        $article->publication()->increment('views');
-
-    } elseif ($type === 'media') {
-        $media = Media::findOrFail($id);
-
-        $media->publication()->firstOrCreate([]);
-        $media->publication()->increment('views');
-
-    } else {
-        abort(404);
-    }
-
-    $request->session()->put($sessionKey, true);
-}
+	
 
 }

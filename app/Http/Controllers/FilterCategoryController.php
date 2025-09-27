@@ -28,20 +28,25 @@ class FilterCategoryController extends Controller
 		return view('spj-content.spj-landingpage.filter-category', compact('category', 'items'));
 	}
 
-	public function showContent($type, $id)
+	public function showContent($type, $id, Request $request)
 	{
+		$sessionKey = "viewed_{$type}_{$id}";
 
-		if ($type == 'Article') {
+		if ($type === 'Article') {
 			$item = Article::findOrFail($id);
-
-		} else if ($type == 'Media') {
+		} elseif ($type === 'Media') {
 			$item = Media::findOrFail($id);
-
 		} else {
 			abort(404);
 		}
 
-		return view('spj-content.spj-landingpage.article-content', compact('item'));
+		// Increment views only if not already viewed in this session
+		if (!$request->session()->has($sessionKey)) {
+			$publication = $item->publication()->firstOrCreate([]);
+			$publication->increment('views');
+			$request->session()->put($sessionKey, true);
+		}
 
+		return view('spj-content.spj-landingpage.article-content', compact('item'));
 	}
 }
