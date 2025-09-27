@@ -5,42 +5,40 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-  /**
-   * Run the migrations.
-   */
-  public function up(): void
-  {
-    Schema::create('articles', function (Blueprint $table) {
-      $table->id();
-      $table
-        ->foreignId('user_id')
-        ->constrained()
-        ->onDelete('cascade');
-      $table->string('thumbnail_image')->nullable();
-      $table->string('title_article');
-      $table->string('category')->nullable();
-      $table->longText('article_content');
-      $table->date('date_written');
-      $table->enum('status', ['Draft','Published', 'Revision', 'Rejected'])->default('Draft');
-      $table->json('tags')->nullable();
-	  $table->string('remarks')->nullable();
-	  $table->string('date_publish')->nullable();
-      $table->timestamps();
-    });
-  }
+	/**
+	 * Run the migrations.
+	 */
+	public function up(): void
+	{
+		Schema::create('articles', function (Blueprint $table) {
+			$table->id();
+			$table->foreignId('user_id')->constrained()->onDelete('cascade');
+			$table->string('title');
+			$table->longText('description');
+			$table->string('image_path')->nullable();
+			$table->string('type')->default('Article');
+			$table->string('category');
+			$table->json('tags')->nullable();
+			$table->date('date_submitted');
+			$table->string('date_publish')->nullable();
+			$table->enum('status', ['Draft', 'Published', 'Revision', 'Rejected'])->default('Draft');
+			$table->string('remarks')->nullable();
+			$table->timestamps();
+		});
+	}
 
-  //function for view
-  public function show($id)
-  {
-	$article = \App\Models\Article::findOrFail($id);
-	return view('spj-content.publication-management.show', compact('article'));
-  }
+	//function for view
+	public function show($id)
+	{
+		$article = \App\Models\Article::findOrFail($id);
+		return view('spj-content.publication-management.show', compact('article'));
+	}
 
-  /**
-   * Reverse the migrations.
-   */
-  public function down(): void
-  {
-    Schema::dropIfExists('articles');
-  }
+	/**
+	 * Reverse the migrations.
+	 */
+	public function down(): void
+	{
+		Schema::dropIfExists('articles');
+	}
 };

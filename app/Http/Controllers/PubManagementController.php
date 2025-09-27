@@ -12,42 +12,29 @@ class PubManagementController extends Controller
 {
 	public function index()
 	{
-		// Articles
+		// Map articles
 		$articles = Article::with('user')
 			->where('status', 'Draft')
-			->orderBy('created_at', 'desc')
+			->orderBy('date_submitted', 'desc')
 			->get()
-			->map(function ($article) {
-				return (object) [
-					'id' => $article->id,
-					'title' => $article->title_article,
-					'type' => 'Article',
-					'user' => $article->user,
-					'status' => $article->status,
-					'date' => $article->date_written ?? $article->created_at,
-					'created_at' => $article->created_at,
-				];
+			->map(function ($item) {
+				$item->type;
+				return $item;
 			});
 
-		// Media
+
+		// Map media
 		$media = Media::with('user')
 			->where('status', 'Draft')
-			->orderBy('created_at', 'desc')
+			->orderBy('date_submitted', 'desc')
 			->get()
-			->map(function ($mediaItem) {
-				return (object) [
-					'id' => $mediaItem->id,
-					'title' => $mediaItem->title, // assuming media has `title` field
-					'type' => 'Media',
-					'user' => $mediaItem->user,
-					'status' => $mediaItem->status,
-					'date' => $mediaItem->date ?? $mediaItem->created_at,
-					'created_at' => $mediaItem->created_at,
-				];
+			->map(function ($item) {
+				$item->type;
+				return $item;
 			});
 
-		// Merge and sort by date
-		$items = $articles->merge($media)->sortByDesc('date')->values();
+		// Merge & sort
+		$items = $articles->concat($media)->sortByDesc('date_submitted')->values();
 
 		return view('spj-content.publication-management.index', compact('items'));
 	}
@@ -60,70 +47,25 @@ class PubManagementController extends Controller
 
 		if ($type === 'article') {
 			$item = Article::findOrFail($id);
-
-			// Map article into common structure
-			$itemMapped = [
-				'id'          => $item->id,
-				'type'        => 'Article',
-				'title'       => $item->title_article,
-				'author'      => $item->user->name ?? 'Unknown',
-				'date'        => $item->date_written,
-				'status'      => $item->status,
-				'thumbnail'   => $item->thumbnail_image,
-				'content'     => $item->article_content,
-				'category'    => $item->category,
-				'tags'        => $item->tags ?? [],
-			];
 		} elseif ($type === 'media') {
 			$item = Media::findOrFail($id);
-
-			// Map media into common structure
-			$itemMapped = [
-				'id'          => $item->id,
-				'type'        => 'Media',
-				'title'       => $item->title,
-				'author'      => $item->user->name ?? 'Unknown',
-				'date'        => $item->date,
-				'status'      => $item->status ?? 'Draft',
-				'media_type'  => $item->type,
-				'description' => $item->description,
-				'image_path'  => $item->image_path,
-				'link'        => $item->link,
-				'tags'        => $item->tags ?? [],
-			];
 		} else {
 			abort(404, 'Invalid type.');
 		}
 
-		return view('spj-content.publication-management.show', [
-			'item' => $itemMapped,
-			'type' => $type,
-		]);
+		return view('spj-content.publication-management.show', ['item' => $item, 'type' => $type,]);
 	}
 
 	public function updateStatus($type, $id, Request $request)
 	{
+
 		// Find the correct item
-		if ($type === 'article') {
+		if ($type === 'Article') {
 			$item = Article::with('user')->findOrFail($id);
 
-			// Map article into common structure
-			$itemMapped = [
-				'id'          => $item->id,
-				'type'        => 'Article',
-				'title'       => $item->title_article,
-				'status'      => $item->status,
-			];
-		} elseif ($type === 'media') {
+		} elseif ($type === 'Media') {
 			$item = Media::with('user')->findOrFail($id);
 
-			// Map to common structure
-			$itemMapped = [
-				'id'          => $item->id,
-				'type'        => 'Media',
-				'title'       => $item->title,
-				'status'      => $item->status,
-			];
 		} else {
 			abort(404, 'Invalid type');
 		}
@@ -157,6 +99,6 @@ class PubManagementController extends Controller
 		// 	));
 		// }
 
-		return redirect()->back()->with('success', ucfirst($type) . ' status updated successfully.');
+		return redirect()->route('publication-management.index')->with('success', ucfirst($type) . ' status updated successfully.');
 	}
 }

@@ -6,9 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\SendUserCredentials;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Traits\HasRoles;
 
 class UserController extends Controller
 {
+
 	/**
 	 * Display a listing of the resource.
 	 */

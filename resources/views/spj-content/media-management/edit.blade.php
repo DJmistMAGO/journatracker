@@ -30,17 +30,17 @@
                 <!-- Media Type -->
                 <div class="mb-3 col-12">
                     <label for="mediaType" class="form-label">Select Media Type</label>
-                    <select id="mediaType" name="media_type" class="form-select" required>
+                    <select id="mediaType" name="category" class="form-select" required>
                         <option value="">-- Select --</option>
-                        <option value="photojournalism" {{ $media->type == 'photojournalism' ? 'selected' : '' }}>Photojournal</option>
-                        <option value="cartooning" {{ $media->type == 'cartooning' ? 'selected' : '' }}>Cartooning</option>
-                        <option value="tv_broadcasting" {{ $media->type == 'tv_broadcasting' ? 'selected' : '' }}>TV Broadcasting</option>
-                        <option value="radio_broadcasting" {{ $media->type == 'radio_broadcasting' ? 'selected' : '' }}>Radio Broadcasting</option>
+                        <option value="Photojournalism" {{ $media->category == 'Photojournalism' ? 'selected' : '' }}>Photojournal</option>
+                        <option value="Cartooning" {{ $media->category == 'Cartooning' ? 'selected' : '' }}>Cartooning</option>
+                        <option value="TV Broadcasting" {{ $media->category == 'TV Broadcasting' ? 'selected' : '' }}>TV Broadcasting</option>
+                        <option value="Radio Broadcasting" {{ $media->category == 'Radio Broadcasting' ? 'selected' : '' }}>Radio Broadcasting</option>
                     </select>
                 </div>
 
                 <!-- Image Upload (Photojournalism/Cartooning) -->
-                <div class="mb-3 {{ in_array($media->type, ['photojournalism', 'cartooning']) ? '' : 'd-none' }} text-center" id="imageField">
+                <div class="mb-3 {{ in_array($media->category, ['Photojournalism', 'Cartooning']) ? '' : 'd-none' }} text-center" id="imageField">
                     <div class="mt-3">
                         @if ($media->image_path)
                             <img id="preview" src="{{ asset('storage/' . $media->image_path) }}" alt="Image Preview"
@@ -50,12 +50,12 @@
                                 style="max-height: 250px;">
                         @endif
                     </div>
-                    <input class="form-control mt-2" type="file" name="image" id="image" accept="image/*"
+                    <input class="form-control mt-2" type="file" name="image_path" id="image" accept="image/*"
                         onchange="previewImage(event)">
                 </div>
 
                 <!-- Broadcast Link (TV/Radio) -->
-                <div class="mb-3 {{ in_array($media->type, ['tv_broadcasting', 'radio_broadcasting']) ? '' : 'd-none' }}" id="linkField">
+                <div class="mb-3 {{ in_array($media->category, ['TV Broadcasting', 'Radio Broadcasting']) ? '' : 'd-none' }}" id="linkField">
                     <label for="link" class="form-label">Video/Audio Link</label>
                     <input type="text" class="form-control" name="link" id="link" value="{{ old('link', $media->link) }}"
                         placeholder="Enter video or audio link">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="mb-3 col-md-4 col-12">
                         <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control" name="date" id="date" value="{{ old('date', $media->date) }}"
+                        <input type="date" class="form-control" name="date_submitted" id="date" value="{{ old('date_submitted', $media->date_submitted->format('Y-m-d')) }}"
                             required>
                     </div>
                 </div>
@@ -130,9 +130,9 @@
             imageField.classList.add('d-none');
             linkField.classList.add('d-none');
 
-            if (this.value === 'photojournalism' || this.value === 'cartooning') {
+            if (this.value === 'Photojournalism' || this.value === 'Cartooning') {
                 imageField.classList.remove('d-none');
-            } else if (this.value === 'tv_broadcasting' || this.value === 'radio_broadcasting') {
+            } else if (this.value === 'TV Broadcasting' || this.value === 'Radio Broadcasting') {
                 linkField.classList.remove('d-none');
             }
         });

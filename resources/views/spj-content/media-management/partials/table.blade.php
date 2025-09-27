@@ -4,7 +4,7 @@
             <tr>
                 <th>Title</th>
                 <th>Date Submitted</th>
-                <th>Creator</th>
+                <th>Author</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -15,11 +15,11 @@
                     <td>
                     {{ Str::limit($item->title, 30, '...') }}
                     </td>
-                    <td>{{ $item->date }}</td>
+                    <td>{{ $item->date_submitted }}</td>
                     <td>{{ $item->user->name ?? 'N/A' }}</td>
                     <td>
                         <span
-                                    class="badge {{ $item->status == 'published' ? 'bg-label-secondary' : 'bg-label-success' }}">
+                                    class="badge {{ $item->status == 'Published' ? 'bg-label-secondary' : 'bg-label-success' }}">
                                     {{ ucfirst($item->status) }}
                                 </span>
                     </td>

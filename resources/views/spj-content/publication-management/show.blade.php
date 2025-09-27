@@ -24,92 +24,106 @@
     <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div class="card-title">
-                <h4 class="mb-0">{{ $item['title'] }}</h4>
+                <h4 class="mb-0">{{ $item->title }}</h4>
             </div>
             <div class="back-button">
-                <a href="{{ route('publication-management.index') }}" class="btn btn-primary btn-sm">
-                    <i class="mdi mdi-arrow-left me-1"></i> Back to List
-                </a>
+                @if ($item->status == 'Draft')
+                    <a href="{{ route('publication-management.index') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
+                    </a>
+                @else
+                    <a href="{{ route('archive') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
+                    </a>
+                @endif
+
             </div>
         </div>
 
         <div class="card-body">
-            <p><strong>Type:</strong> {{ $item['type'] }}</p>
-            <p><strong>Author:</strong> {{ $item['author'] }}</p>
-            <p><strong>Date:</strong> {{ $item['date'] }}</p>
-            <p><strong>Status:</strong> {{ $item['status'] }}</p>
+            <p><strong>Type:</strong> {{ $item->type }}</p>
+            <p><strong>Author:</strong> {{ $item->user->name }}</p>
+            <p><strong>Date Submitted:</strong> {{ $item->date_submitted->format('F j, Y') }}</p>
+            <p><strong>Status:</strong> {{ $item->status }}</p>
 
             {{-- Article specific fields --}}
             @if ($type === 'article')
-                <p><strong>Category:</strong> {{ $item['category'] ?? 'N/A' }}</p>
+                <p><strong>Category:</strong> {{ $item->category ?? 'N/A' }}</p>
                 <p><strong>Thumbnail:</strong></p>
-                @if ($item['thumbnail'])
-                    <img src="{{ asset('storage/' . $item['thumbnail']) }}" alt="Thumbnail" class="img-fluid mb-3"
+                @if ($item->image_path)
+                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="Thumbnail" class="img-fluid mb-3"
                         style="max-height: 250px;">
                 @endif
                 <p><strong>Content:</strong></p>
-                <div class="border p-2 mb-3">{!! nl2br(e($item['content'])) !!}</div>
+                <div class="border p-2 mb-3">{!! nl2br(e($item->description)) !!}</div>
             @endif
 
             {{-- Media specific fields --}}
             @if ($type === 'media')
-                <p><strong>Media Type:</strong> {{ ucfirst(str_replace('_', ' ', $item['media_type'])) }}</p>
+                <p><strong>Category:</strong> {{ ucfirst(str_replace('_', ' ', $item->category)) }}</p>
 
-                @if (in_array($item['media_type'], ['photojournalism', 'cartooning']))
+                @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
                     <p><strong>Image:</strong></p>
-                    @if ($item['image_path'])
-                        <img src="{{ asset('storage/' . $item['image_path']) }}" alt="Media Image" class="img-fluid mb-3"
+                    @if ($item->image_path)
+                        <img src="{{ asset('storage/' . $item->image_path) }}" alt="Media Image" class="img-fluid mb-3"
                             style="max-height: 250px;">
                     @endif
                 @else
                     <p><strong>Link:</strong></p>
-                    @if ($item['link'])
-                        <iframe src="{{ $item['link'] }}"></iframe>
+                    @if ($item->link)
+                        <iframe src="{{ $item->link }}"></iframe>
                     @endif
                 @endif
-                <p><strong>Description:</strong> {{ $item['description'] ?? 'No description provided.' }}</p>
+                <p><strong>Description:</strong> {{ $item->description ?? 'No description provided.' }}</p>
             @endif
             <p><strong>Tags:</strong>
-    @php
-        $tags = is_array($item['tags']) ? $item['tags'] : json_decode($item['tags'], true);
-    @endphp
+                @php
+                    $tags = is_array($item->tags) ? $item->tags : json_decode($item->tags, true);
+                @endphp
 
-    @if (!empty($tags))
-        @foreach ($tags as $tag)
-            <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
-        @endforeach
-    @else
-        None
-    @endif
-</p>
+                @if (!empty($tags))
+                    @foreach ($tags as $tag)
+                        <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
+                    @endforeach
+                @else
+                    None
+                @endif
+            </p>
+
+			@if($item->status == 'Published')
+			<p><strong>Date Published:</strong> {{ $item->date_publish->format('F j, Y') }}</p>
+
+			@endif
 
         </div>
-        <div class="card-footer">
-            <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
-                data-bs-target="#statusModal-{{ $item['id'] }}">
-                Manage
-            </button>
-        </div>
+        @if ($item->status == 'Draft')
+            <div class="card-footer">
+                <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
+                    data-bs-target="#statusModal-{{ $item->id }}">
+                    Manage
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="statusModal-{{ $item['id'] }}" tabindex="-1"
-        aria-labelledby="statusModalLabel-{{ $item['id'] }}" aria-hidden="true">
+    <div class="modal fade" id="statusModal-{{ $item->id }}" tabindex="-1"
+        aria-labelledby="statusModalLabel-{{ $item->id }}" aria-hidden="true">
         <div class="modal-dialog">
             <form method="POST"
-                action="{{ route('publication-management.update-status', ['type' => $type, 'id' => $item['id']]) }}">
+                action="{{ route('publication-management.update-status', ['type' => $item->type, 'id' => $item->id]) }}">
                 @csrf
                 @method('PUT')
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="statusModalLabel-{{ $item['id'] }}">Manage Status</h5>
+                        <h5 class="modal-title" id="statusModalLabel-{{ $item->id }}">Manage Status</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="status-{{ $item['id'] }}" class="form-label">Status</label>
-                            <select name="status" id="status-{{ $item['id'] }}" class="form-select"
-                                onchange="toggleFields({{ $item['id'] }})" required>
+                            <label for="status-{{ $item->id }}" class="form-label">Status</label>
+                            <select name="status" id="status-{{ $item->id }}" class="form-select"
+                                onchange="toggleFields({{ $item->id }})" required>
                                 <option value="">-- Select --</option>
                                 <option value="Published">Published</option>
                                 <option value="Revision">Revision</option>
@@ -117,12 +131,12 @@
                             </select>
                         </div>
 
-                        <div class="mb-3 d-none" id="publishDate-{{ $item['id'] }}">
+                        <div class="mb-3 d-none" id="publishDate-{{ $item->id }}">
                             <label class="form-label">Publication Date</label>
                             <input type="date" name="date_publish" class="form-control">
                         </div>
 
-                        <div class="mb-3 d-none" id="remarks-{{ $item['id'] }}">
+                        <div class="mb-3 d-none" id="remarks-{{ $item->id }}">
                             <label class="form-label">Remarks</label>
                             <textarea name="remarks" class="form-control" rows="3"></textarea>
                         </div>

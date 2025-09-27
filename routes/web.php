@@ -13,11 +13,14 @@ use App\Http\Controllers\authentications\RegisterBasic;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\FilterCategoryController;
 
 // welcome
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+
+Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
 
 // Guest routes
 Route::middleware('guest')->group(function () {
@@ -83,6 +86,7 @@ Route::middleware('auth')->group(function () {
 	->prefix('archive')
 	->group(function () {
 		Route::get('/','index')->name('archive');
+		Route::get('view/{type}/{id}','view')->name('archive.view');
 	});
 
     Route::controller(UserController::class)

@@ -108,18 +108,7 @@
         <main class="container-xxl my-5">
             <div class="row g-5">
                 <article class="col-lg-8">
-                    <div class="card w-100">
-                        <img src="https://picsum.photos/600/400?random=1" class="card-img-top h-20" alt="..."
-                            style="height: 250px;">
-                        <div class="card-body">
-                            <h1 class="fw-bold display-6 mb-2">The Future of Green Technology</h1>
-                            <div class="d-flex align-items-center mb-2">
-                                <img src="https://picsum.photos/50" alt="Author" class="rounded-circle me-2"
-                                    width="40" />
-                                <small class="text-muted">By Jane Doe • Sept 8, 2025</small>
-                            </div>
-                        </div>
-                    </div>
+                
 
                     <h2 class="mt-5 mb-3 text-white">Latest Articles</h2>
                     <div class="row g-4">

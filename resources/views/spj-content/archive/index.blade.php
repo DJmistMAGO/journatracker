@@ -19,26 +19,34 @@
                         <th>Title</th>
                         <th>Date Published</th>
                         <th>Author</th>
-                        <th>Status</th>
+						<th>Type</th>
+						<th>Category</th>
+						<th>Views</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    <tr>
-                        <td>
-                        Tours Project
-                        </td>
-                        <td>
-						Albert Cook
-						</td>
-                        <td>
-                        test
-                        </td>
-                        <td><span class="badge bg-label-primary me-1">Active</span></td>
-                        <td>
-                        
-                        </td>
-                    </tr>
+                    @forelse($items as $item)
+                        <tr>
+                            <td>
+								<i class="menu-icon tf-icons mdi mdi-check-decagram text-success"></i>
+								{{ $item->title }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}</td>
+                            <td>{{ $item->user->name ?? 'N/A' }}</td>
+							<td>{{ $item->type }}</td>
+							<td>{{ $item->category }}</td>
+							<td>00</td>
+                            <td>
+                                <a href="{{route('publication-management.show',  ['id' => $item->id, 'type' => strtolower($item->type)])}}" class="btn btn-sm btn-primary">
+									View
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No records found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

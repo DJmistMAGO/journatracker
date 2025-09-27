@@ -13,8 +13,6 @@
     <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/spj/spj_logo.png') }}" />
 
-
-
     @include('layouts/sections/styles')
     @stack('styles')
 

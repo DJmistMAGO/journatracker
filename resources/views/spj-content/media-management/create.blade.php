@@ -29,27 +29,27 @@
                 <!-- Media Type -->
                 <div class="mb-3 col-12">
                     <label for="mediaType" class="form-label">Select Media Type</label>
-                    <select id="mediaType" name="media_type" class="form-select" required>
+                    <select id="mediaType" name="category" class="form-select" required>
                         <option value="">-- Select --</option>
-                        <option value="photojournalism">Photojournal</option>
-                        <option value="cartooning">Cartooning</option>
-                        <option value="tv_broadcasting">TV Broadcasting</option>
-                        <option value="radio_broadcasting">Radio Broadcasting</option>
+                        <option value="Photojournalism">Photojournal</option>
+                        <option value="Cartooning">Cartooning</option>
+                        <option value="TV Broadcasting">TV Broadcasting</option>
+                        <option value="Radio Broadcasting">Radio Broadcasting</option>
                     </select>
                 </div>
 
 				<!-- Image Upload (Photojournalism/Cartooning) -->
                 <div class="mb-3 d-none text-center" id="imageField">
                     <div class="mt-3">
-                        @if (old('thumbnail_image'))
-                            <img id="preview" src="{{ asset('storage/' . old('thumbnail_image')) }}" alt="Image Preview"
+                        @if (old('image_path'))
+                            <img id="preview" src="{{ asset('storage/' . old('image_path')) }}" alt="Image Preview"
                                 class="img-fluid rounded mb-2" style="max-height: 250px;">
                         @else
                             <img id="preview" src="#" alt="Image Preview" class="img-fluid d-none rounded"
                                 style="max-height: 250px;">
                         @endif
                     </div>
-                    <input class="form-control mt-2" type="file" name="image" id="image" accept="image/*"
+                    <input class="form-control mt-2" type="file" name="image_path" id="image" accept="image/*"
                         onchange="previewImage(event)">
                 </div>
 
@@ -68,8 +68,8 @@
                             placeholder="Enter title" required>
                     </div>
                     <div class="mb-3 col-md-4 col-12">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control" name="date" id="date" value="{{ old('date') }}"
+                        <label for="date_submitted" class="form-label">Date</label>
+                        <input type="date" class="form-control" name="date_submitted" id="date" value="{{ old('date_submitted') }}"
                             required>
                     </div>
                 </div>
@@ -138,9 +138,9 @@
             imageField.classList.add('d-none');
             linkField.classList.add('d-none');
 
-            if (this.value === 'photojournalism' || this.value === 'cartooning') {
+            if (this.value === 'Photojournalism' || this.value === 'Cartooning') {
                 imageField.classList.remove('d-none');
-            } else if (this.value === 'tv_broadcasting' || this.value === 'radio_broadcasting') {
+            } else if (this.value === 'TV Broadcasting' || this.value === 'Radio Broadcasting') {
                 linkField.classList.remove('d-none');
             }
         });

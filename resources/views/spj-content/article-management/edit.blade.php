@@ -18,23 +18,23 @@
 
         <!-- Image Upload -->
         <div class="mb-3 text-center">
-            @if($article->thumbnail_image)
+            @if($article->image_path)
                 <div class="mt-3">
-                    <img id="preview" src="{{ asset('storage/' . $article->thumbnail_image) }}" alt="Thumbnail" class="img-fluid rounded" style="max-height: 250px;">
+                    <img id="preview" src="{{ asset('storage/' . $article->image_path) }}" alt="Image Preview" class="img-fluid rounded" style="max-height: 250px;">
                 </div>
             @else
                 <div class="mt-3">
                     <img id="preview" src="#" alt="Image Preview" class="img-fluid d-none rounded" style="max-height: 250px;">
                 </div>
             @endif
-            <input class="form-control mt-2" type="file" name="thumbnail_image" id="articleImage" accept="image/*" onchange="previewImage(event)">
+            <input class="form-control mt-2" type="file" name="image_path" id="articleImage" accept="image/*" onchange="previewImage(event)">
         </div>
 
         <div class="row mb-3">
             <!-- Title -->
             <div class="col-12 col-md-6">
                 <label for="articleTitle" class="form-label">Article Title</label>
-                <input type="text" class="form-control" id="articleTitle" name="title_article" value="{{ old('title_article', $article->title_article) }}" placeholder="Enter article title" required>
+                <input type="text" class="form-control" id="articleTitle" name="title" value="{{ old('title', $article->title) }}" placeholder="Enter article title" required>
             </div>
 
             <!-- Category -->
@@ -52,14 +52,14 @@
             <!-- Date -->
             <div class="col-12 col-md-3">
                 <label for="articleDate" class="form-label">Date</label>
-                <input type="date" class="form-control" id="articleDate" name="date_written" value="{{ old('date_written', $article->date_written->format('Y-m-d')) }}" required>
+                <input type="date" class="form-control" id="articleDate" name="date_submitted" value="{{ old('date_submitted', $article->date_submitted->format('Y-m-d')) }}" required>
             </div>
         </div>
 
         <!-- Content -->
         <div class="mb-3">
             <label for="articleContent" class="form-label">Content</label>
-            <textarea class="form-control" id="articleContent" name="article_content" rows="5" placeholder="Write your content here..." required>{{ old('article_content', $article->article_content) }}</textarea>
+            <textarea class="form-control" id="articleContent" name="description" rows="5" placeholder="Write your content here..." required>{{ old('description', $article->description) }}</textarea>
         </div>
 
         <!-- Tags -->

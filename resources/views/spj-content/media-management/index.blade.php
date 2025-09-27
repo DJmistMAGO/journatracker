@@ -97,7 +97,7 @@
             const title = button.getAttribute('data-title');
 
             const form = document.getElementById('deleteForm');
-            form.action = `/media-management/${id}`;
+            form.action = `/media-management/delete/${id}`;
 
             document.getElementById('deleteItemTitle').textContent = title;
         });

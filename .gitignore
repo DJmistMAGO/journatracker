@@ -32,3 +32,9 @@ package-lock.log
 /public/assets/js
 /public/assets/css
 /public/assets/vendor
+
+
+# IDE Helper files
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php

@@ -33,12 +33,12 @@
                 <tbody class="table-border-bottom-0">
                     @forelse($articles as $article)
                         <tr>
-                            <td>{{ $article->title_article }}</td>
+                            <td>{{ $article->title }}</td>
                             <td>{{ $article->user->name ?? 'Unknown' }}</td>
-                            <td>{{ $article->date_written->format('F d, Y') }}</td>
+                            <td>{{ $article->date_submitted->format('F d, Y') }}</td>
                             <td>
                                 <span
-                                    class="badge {{ $article->status == 'published' ? 'bg-label-secondary' : 'bg-label-success' }}">
+                                    class="badge {{ $article->status == 'Published' ? 'bg-label-secondary' : 'bg-label-success' }}">
                                     {{ ucfirst($article->status) }}
                                 </span>
                             </td>
@@ -59,7 +59,7 @@
                                     <!-- Delete Button (Trigger Modal) -->
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal" data-id="{{ $article->id }}"
-                                        data-title="{{ $article->title_article }}">
+                                        data-title="{{ $article->title }}">
                                         <i class="mdi mdi-delete"></i>
                                     </button>
                                 </div>
@@ -74,6 +74,7 @@
             </table>
         </div>
     </div>
+
 
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
@@ -93,7 +94,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @push('scripts')
@@ -107,7 +107,7 @@
             let form = document.getElementById('deleteForm');
             let articleTitle = document.getElementById('articleTitle');
 
-            form.action = "/article-management/" + id; // dynamic route
+            form.action = "/article-management/delete/" + id;
             articleTitle.textContent = title;
         });
     </script>
