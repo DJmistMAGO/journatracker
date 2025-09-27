@@ -27,16 +27,23 @@
                 <h4 class="mb-0">{{ $item->title }}</h4>
             </div>
             <div class="back-button">
-                <a href="{{ route('publication-management.index') }}" class="btn btn-primary btn-sm">
-                    <i class="mdi mdi-arrow-left me-1"></i> Back to List
-                </a>
+                @if ($item->status == 'Draft')
+                    <a href="{{ route('publication-management.index') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
+                    </a>
+                @else
+                    <a href="{{ route('archive') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
+                    </a>
+                @endif
+
             </div>
         </div>
 
         <div class="card-body">
             <p><strong>Type:</strong> {{ $item->type }}</p>
             <p><strong>Author:</strong> {{ $item->user->name }}</p>
-            <p><strong>Date Submitted:</strong> {{ $item->date_submitted }}</p>
+            <p><strong>Date Submitted:</strong> {{ $item->date_submitted->format('F j, Y') }}</p>
             <p><strong>Status:</strong> {{ $item->status }}</p>
 
             {{-- Article specific fields --}}
@@ -70,26 +77,33 @@
                 <p><strong>Description:</strong> {{ $item->description ?? 'No description provided.' }}</p>
             @endif
             <p><strong>Tags:</strong>
-    @php
-        $tags = is_array($item->tags) ? $item->tags : json_decode($item->tags, true);
-    @endphp
+                @php
+                    $tags = is_array($item->tags) ? $item->tags : json_decode($item->tags, true);
+                @endphp
 
-    @if (!empty($tags))
-        @foreach ($tags as $tag)
-            <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
-        @endforeach
-    @else
-        None
-    @endif
-</p>
+                @if (!empty($tags))
+                    @foreach ($tags as $tag)
+                        <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
+                    @endforeach
+                @else
+                    None
+                @endif
+            </p>
+
+			@if($item->status == 'Published')
+			<p><strong>Date Published:</strong> {{ $item->date_publish->format('F j, Y') }}</p>
+
+			@endif
 
         </div>
-        <div class="card-footer">
-            <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
-                data-bs-target="#statusModal-{{ $item->id }}">
-                Manage
-            </button>
-        </div>
+        @if ($item->status == 'Draft')
+            <div class="card-footer">
+                <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
+                    data-bs-target="#statusModal-{{ $item->id }}">
+                    Manage
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Modal -->
