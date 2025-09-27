@@ -12,19 +12,36 @@ class FilterCategoryController extends Controller
 	{
 		// Articles
 		$articles = Article::where('status', 'Published')
-				->where('category', $category)
-				->orderBy('date_publish', 'desc')
-				->get();
+			->where('category', $category)
+			->orderBy('date_publish', 'desc')
+			->get();
 
 		// Media
 		$media = Media::where('status', 'Published')
-				->where('type', $category)
-				->orderBy('date_publish', 'desc')
-				->get();
+			->where('category', $category)
+			->orderBy('date_publish', 'desc')
+			->get();
 
 		// Merge articles and media
 		$items = $articles->concat($media)->sortByDesc('date_publish')->values();
 
 		return view('spj-content.spj-landingpage.filter-category', compact('category', 'items'));
+	}
+
+	public function showContent($type, $id)
+	{
+
+		if ($type == 'Article') {
+			$item = Article::findOrFail($id);
+
+		} else if ($type == 'Media') {
+			$item = Media::findOrFail($id);
+
+		} else {
+			abort(404);
+		}
+
+		return view('spj-content.spj-landingpage.article-content', compact('item'));
+
 	}
 }

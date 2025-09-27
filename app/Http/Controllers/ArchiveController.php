@@ -47,7 +47,7 @@ class ArchiveController extends Controller
 
 		// Merge articles and media
 		$items = $articles->concat($media)->sortByDesc('date')->values();
-		
+
 
 		return view("spj-content.archive.index", compact('items'));
 	}
@@ -57,7 +57,6 @@ class ArchiveController extends Controller
     $sessionKey = "viewed_{$type}_{$id}";
 
     if ($request->session()->has($sessionKey)) {
-        // Already viewed → skip increment
         return;
     }
 

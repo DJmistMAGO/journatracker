@@ -108,57 +108,21 @@
         <main class="container-xxl my-5">
             <div class="row g-5">
                 <article class="col-lg-8">
-
-
-                    <h2 class="mt-0 mb-3 text-white">Latest Articles</h2>
+                    <h2 class="mt-0 mb-3 text-white">{{ $category }}</h2>
                     <div class="row g-4">
-                        <div class="col-md-6">
+						@foreach ($items as $item)
+						<div class="col-md-6">
                             <div class="card shadow-sm h-100 border-0">
-                                <img src="https://picsum.photos/600/400?random=1" class="card-img-top" alt="News 1">
+                                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top" alt="{{ $item->title }}">
                                 <div class="card-body">
-                                    <h5 class="card-title">Solar Farms Powering Cities</h5>
-                                    <p class="card-text">Entire urban districts are now running on renewable solar energy
-                                        thanks to massive solar farms.</p>
-                                    <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
+                                    <h5 class="card-title">{{ $item->title }}</h5>
+									<small class="text-muted">Published on {{ $item->date_publish->format('F j, Y') }}</small>
+                                    <p class="card-text">{{ \Illuminate\Support\Str::words($item->description, 15, '...') }}</p>
+                                    <a href="{{ route('article.read', [$item->type, $item->id]) }}" class="btn btn-outline-theme btn-sm">Read More</a>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="card shadow-sm h-100 border-0">
-                                <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="News 2">
-                                <div class="card-body">
-                                    <h5 class="card-title">Electric Cars Beyond 2030</h5>
-                                    <p class="card-text">Governments plan to phase out fossil fuel vehicles in favor of
-                                        electric alternatives.</p>
-                                    <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card shadow-sm h-100 border-0">
-                                <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="News 3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Smart Cities of the Future</h5>
-                                    <p class="card-text">Urban landscapes are evolving with green infrastructure and
-                                        AI-driven planning.</p>
-                                    <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card shadow-sm h-100 border-0">
-                                <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="News 4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Schools Going Green</h5>
-                                    <p class="card-text">From solar panels to zero-waste programs, schools are leading the
-                                        eco-friendly movement.</p>
-                                    <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                                </div>
-                            </div>
-                        </div>
+						@endforeach
                     </div>
                 </article>
 
