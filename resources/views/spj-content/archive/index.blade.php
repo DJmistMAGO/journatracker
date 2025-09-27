@@ -35,7 +35,7 @@
                             <td>{{ $item->user->name ?? 'N/A' }}</td>
 							<td>{{ $item->type }}</td>
 							<td>{{ $item->category }}</td>
-							<td>00</td>
+							<td class="text-center">{{ $item->publication->views }}</td>
                             <td>
                                 <a href="{{route('publication-management.show',  ['id' => $item->id, 'type' => strtolower($item->type)])}}" class="btn btn-sm btn-primary">
 									View

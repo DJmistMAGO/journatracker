@@ -99,82 +99,107 @@
         }
 
         /*mobile responsive for novtop*/
+
+		.article-content .empty-library .mdi:before, .mdi-set{
+			font-size: 50px;
+		}
     </style>
 @endpush
 
 @section('layoutContent')
     @include('_partials.loader')
-	@include('layouts.sections.navbar.public-navbar')
-        <main class="container-xxl my-5">
-            <div class="row g-5">
-                <article class="col-lg-8">
-                    <h2 class="mt-0 mb-3 text-white">{{ $category }}</h2>
-                    <div class="row g-4">
-						@foreach ($items as $item)
-						<div class="col-md-6">
+    @include('layouts.sections.navbar.public-navbar')
+    <main class="container-xxl my-5">
+        <div class="row g-5">
+            <article class="col-lg-8 article-content">
+                <h2 class="mt-0 mb-3 text-white">{{ $category }}</h2>
+                <div class="row g-4">
+                    @forelse ($items as $item)
+                        <div class="col-md-6">
                             <div class="card shadow-sm h-100 border-0">
-                                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top" alt="{{ $item->title }}">
+                                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
+                                    alt="{{ $item->title }}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $item->title }}</h5>
-									<small class="text-muted">Published on {{ $item->date_publish->format('F j, Y') }}</small>
-                                    <p class="card-text">{{ \Illuminate\Support\Str::words($item->description, 15, '...') }}</p>
-                                    <a href="{{ route('article.read', [$item->type, $item->id]) }}" class="btn btn-outline-theme btn-sm">Read More</a>
+                                    <small class="text-muted">Published on
+                                        {{ $item->date_publish->format('F j, Y') }}</small>
+                                    <p class="card-text">
+                                        {{ \Illuminate\Support\Str::words($item->description, 15, '...') }}
+                                    </p>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <a href="{{ route('article.read', [$item->type, $item->id]) }}"
+                                            class="btn btn-outline-theme btn-sm">
+                                            Read More
+                                        </a>
+                                        <div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
+                                            <i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
+                                            <span class="fw-semibold">{{ $item->publication->views ?? 0 }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-						@endforeach
-                    </div>
-                </article>
-
-                <!-- Sidebar -->
-                <aside class="col-lg-4">
-                    <!-- Related Articles -->
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
-                            <ul class="list-unstyled">
-                                <li><a href="#" class="text-black">Sustainable Homes of the Future</a></li>
-                                <li><a href="#" class="text-black">Electric Cars: Beyond 2030</a></li>
-                                <li><a href="#" class="text-black">How Schools Go Green</a></li>
-                            </ul>
+                    @empty
+                        <div class="col-12 empty-library">
+                            <div class="card shadow-sm border-0 text-center py-5">
+                                <div class="card-body">
+                                    <i class="mdi mdi-library-outline text-primary icon-read-article"></i>
+                                    <h5 class="mt-3">Empty Library</h5>
+                                    <p class="text-muted">No content available at the moment.</p>
+                                </div>
+                            </div>
                         </div>
+                    @endforelse
+
+                </div>
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="col-lg-4">
+                <!-- Related Articles -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-black">Sustainable Homes of the Future</a></li>
+                            <li><a href="#" class="text-black">Electric Cars: Beyond 2030</a></li>
+                            <li><a href="#" class="text-black">How Schools Go Green</a></li>
+                        </ul>
                     </div>
+                </div>
 
-                    <!-- Popular Tags -->
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Popular Tags</h5>
-                            <span class="badge bg-secondary me-1">GreenTech</span>
-                            <span class="badge bg-secondary me-1">Renewable</span>
-                            <span class="badge bg-secondary me-1">Sustainability</span>
-                            <span class="badge bg-secondary me-1">Climate</span>
-                        </div>
+                <!-- Popular Tags -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Popular Tags</h5>
+                        <span class="badge bg-secondary me-1">GreenTech</span>
+                        <span class="badge bg-secondary me-1">Renewable</span>
+                        <span class="badge bg-secondary me-1">Sustainability</span>
+                        <span class="badge bg-secondary me-1">Climate</span>
                     </div>
+                </div>
 
-                    <!-- Share Buttons -->
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body text-center">
-                            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
-                            <a href="#" class="btn btn-outline-theme btn-sm me-2"><i
-                                    class="ti ti-brand-facebook"></i></a>
-                            <a href="#" class="btn btn-outline-theme btn-sm me-2"><i
-                                    class="ti ti-brand-twitter"></i></a>
-                            <a href="#" class="btn btn-outline-theme btn-sm"><i
-                                    class="ti ti-brand-linkedin"></i></a>
-                        </div>
+                <!-- Share Buttons -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
+                        <a href="#" class="btn btn-outline-theme btn-sm me-2"><i class="ti ti-brand-facebook"></i></a>
+                        <a href="#" class="btn btn-outline-theme btn-sm me-2"><i class="ti ti-brand-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-theme btn-sm"><i class="ti ti-brand-linkedin"></i></a>
                     </div>
+                </div>
 
-                </aside>
-            </div>
-        </main>
+            </aside>
+        </div>
+    </main>
 
-        @include('layouts.sections.footer.footer')
+    @include('layouts.sections.footer.footer')
 
-        @push('scripts')
-            <script src="{{ asset('assets/js/loader.js') }}"></script>
-            <script src="{{ asset('assets/js/updateTime.js') }}"></script>
+    @push('scripts')
+        <script src="{{ asset('assets/js/loader.js') }}"></script>
+        <script src="{{ asset('assets/js/updateTime.js') }}"></script>
 
-            </script>
+        </script>
         </div>
     @endpush
 @endsection

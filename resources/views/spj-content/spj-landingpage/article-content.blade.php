@@ -115,7 +115,7 @@
                             <h1 class="fw-bold">{{ $item->title }}</h1>
                             <div class="text-muted small">
                                 Published on {{ $item->date_publish->format('F j, Y') }}
-                                by <span class="fw-semibold">{{ $item->user->penname }}</span>
+                                by <span class="fw-semibold">{{ $item->user->penname ?? $item->user->name }}</span>
                             </div>
                         </header>
 
