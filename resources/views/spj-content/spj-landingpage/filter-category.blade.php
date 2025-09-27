@@ -108,9 +108,9 @@
         <main class="container-xxl my-5">
             <div class="row g-5">
                 <article class="col-lg-8">
-                
 
-                    <h2 class="mt-5 mb-3 text-white">Latest Articles</h2>
+
+                    <h2 class="mt-0 mb-3 text-white">Latest Articles</h2>
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="card shadow-sm h-100 border-0">
@@ -184,35 +184,6 @@
                             <span class="badge bg-secondary me-1">Renewable</span>
                             <span class="badge bg-secondary me-1">Sustainability</span>
                             <span class="badge bg-secondary me-1">Climate</span>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Newsletter Subscription -->
-                    <div class="card border-0 shadow-sm mb-4">
-                        <div class="card-body ">
-                            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Incident Report</h5>
-                            <form>
-                                <div class="mb-2">
-                                    <label for="formFile" class="form-label">Name of Reporter</label>
-                                    <input type="text" class="form-control mb-2" placeholder="Name of Reporter" />
-                                </div>
-                                <div class="mb-2">
-                                    <label for="formFile" class="form-label">Upload Your Student I.D.</label>
-                                    <input class="form-control" type="file" id="formFile">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="formFile" class="form-label">Incident Description</label>
-                                    <textarea class="form-control h-px-75" aria-label="With textarea" placeholder="Type here..."></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="formFile" class="form-label">Upload Proof of the Incident</label>
-                                    <input class="form-control" type="file" id="formFile">
-                                </div>
-
-                                <button type="submit" class="btn btn-theme w-100">Submit Report</button>
-                            </form>
                         </div>
                     </div>
 

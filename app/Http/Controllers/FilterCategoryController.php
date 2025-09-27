@@ -10,49 +10,21 @@ class FilterCategoryController extends Controller
 {
 	public function viewCategory($category)
 	{
-
-		// Helper function to map items
-		$mapItems = function ($items, $type, $category) {
-			return $items->map(function ($item) use ($type, $category) {
-				return (object) [
-					'id'         => $item->id,
-					'title'      => $type === 'Article' ? $item->title_article : $item->title,
-					'type'       => $type,        // keep just 'Article' or 'Media'
-					'category'   => $category,    // keep category separate
-					'user'       => $item->user,
-					'status'     => $item->status,
-					'date'       => $item->date_publish,
-					'created_at' => $item->created_at,
-				];
-			});
-		};
-
 		// Articles
-		$articles = $mapItems(
-			Article::where('status', 'Published')
+		$articles = Article::where('status', 'Published')
 				->where('category', $category)
-				->orderBy('created_at', 'desc')
-				->get(),
-			'Article',
-			$category
-		);
+				->orderBy('date_publish', 'desc')
+				->get();
 
 		// Media
-		$media = $mapItems(
-			Media::where('status', 'Published')
+		$media = Media::where('status', 'Published')
 				->where('type', $category)
-				->orderBy('created_at', 'desc')
-				->get(),
-			'Media',
-			$category
-		);
+				->orderBy('date_publish', 'desc')
+				->get();
 
 		// Merge articles and media
-		$items = $articles->merge($media)->sortByDesc('date')->values();
+		$items = $articles->concat($media)->sortByDesc('date_publish')->values();
 
-
-
-
-		return view('spj-content.spj-landingpage.filter-category', compact('category'));
+		return view('spj-content.spj-landingpage.filter-category', compact('category', 'items'));
 	}
 }
