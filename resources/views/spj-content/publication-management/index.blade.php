@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th>Title</th>
+						<th>Category</th>
                         <th>Type</th>
                         <th>Author</th>
                         <th>Date Created</th>
@@ -27,9 +28,10 @@
                     @forelse ($items as $item)
                         <tr>
                             <td>{{ Str::limit($item->title, 50) }}</td>
-                            <td>{{ $item->type }}</td>
+                            <td>{{ $item->category }}</td>
+							<td>{{ $item->type }}</td>
                             <td>{{ $item->user->name ?? 'N/A' }}</td>
-                            <td>{{ $item->date ? \Carbon\Carbon::parse($item->date)->format('Y-m-d') : '-' }}</td>
+                            <td>{{ $item->date_submitted ? \Carbon\Carbon::parse($item->date_submitted)->format('Y-m-d') : '-' }}</td>
                             <td>
                                 <span
                                     class="badge
