@@ -7,6 +7,8 @@ use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusChangedNotification;
+use App\Models\User;
+
 
 class ArticleManagementController extends Controller
 {
@@ -70,11 +72,17 @@ class ArticleManagementController extends Controller
 
 		// Save article and get the model instance
 		$article = Article::create($data);
-		
+
 		$article->type   = $article->type ?? 'Article';
-		$article->status = $article->status ?? 'Pending';
+		$article->status = $article->status ?? 'Draft';
 
 		$article->author->notify(new StatusChangedNotification($article));
+
+		// Get all users with role 'Admin' or 'EIC'
+		$usersToNotify = User::role(['Admin', 'EIC'])->get();
+foreach ($usersToNotify as $user) {
+    $user->notify(new StatusChangedNotification($article));
+}
 
 
 		return redirect()

@@ -28,44 +28,74 @@
 
             {{-- Notification here --}}
             <li class="nav-item dropdown me-3">
-    <a class="nav-link position-relative" href="#" id="navbarDropdown" role="button"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="mdi mdi-bell-outline mdi-24px"></i>
-        @if(auth()->user()->unreadNotifications->count())
-            <span class="position-absolute mt-1 top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ auth()->user()->unreadNotifications->count() }}
-                <span class="visually-hidden">unread notifications</span>
-            </span>
-        @endif
-    </a>
-
-    <ul class="dropdown-menu dropdown-menu-end p-0 shadow" aria-labelledby="navbarDropdown" style="width: 400px;">
-        <li class="dropdown-header px-3 py-2 bg-light d-flex justify-content-between align-items-center fw-bold">
-    Notifications
-    <a href="#" onclick="markAllNotificationsRead()" class="small text-primary">Mark all as read</a>
-	</li>
-
-        <li>
-            @forelse(auth()->user()->unreadNotifications as $notification)
-                <a class="dropdown-item" href="{{ route('article-management.show', $notification->data['id']) }}">
-                    <div>
-                        <i class="mdi mdi-bullhorn-variant-outline me-2 text-primary"></i>
-                        <span class="small text-muted">{{ $notification->created_at->diffForHumans() }}</span>
-                    </div>
-                    <div>
-                        {{ $notification->data['message'] }}
-                    </div>
+                <a class="nav-link position-relative" href="#" id="navbarDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="mdi mdi-bell-outline mdi-24px"></i>
+                    @if (auth()->user()->unreadNotifications->count() > 0)
+                        <span
+                            class="position-absolute mt-1 top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                            <span class="visually-hidden">unread notifications</span>
+                        </span>
+                    @endif
                 </a>
-            @empty
-                <span class="dropdown-item text-center text-muted">No notifications</span>
-            @endforelse
-        </li>
-        <li><hr class="dropdown-divider"></li>
-        <li>
-            <a class="dropdown-item text-center text-primary fw-bold" href="">View all notifications</a>
-        </li>
-    </ul>
-</li>
+
+                <ul class="dropdown-menu dropdown-menu-end p-0 shadow" aria-labelledby="navbarDropdown"
+                    style="width: 400px;">
+                    <li
+                        class="dropdown-header px-3 py-2 bg-light d-flex justify-content-between align-items-center fw-bold">
+                        Notifications
+                        <a href="#" onclick="markAllNotificationsRead()" class="small text-primary">Mark all as
+                            read</a>
+                    </li>
+
+                    <li>
+                        @forelse(auth()->user()->unreadNotifications as $notification)
+                            @php
+                                // Determine href based on user role and notification type
+                                if (auth()->user()->hasRole('student')) {
+                                    if ($notification->data['type'] === 'Article') {
+                                        $href = route('article-management.show', $notification->data['id']);
+                                    } elseif ($notification->data['type'] === 'Media') {
+                                        $href = route('media-management.show', $notification->data['id']);
+                                    }
+                                } elseif (
+                                    auth()
+                                        ->user()
+                                        ->hasAnyRole(['admin', 'eic'])
+                                ) {
+                                    $href = route('publication-management.show', [
+                                        'type' => $notification->data['type'],
+                                        'id' => $notification->data['id'],
+                                    ]);
+                                } else {
+                                    $href = '#'; // fallback
+                                }
+                            @endphp
+                            <a class="dropdown-item" href="{{ $href }}"
+                                onclick="markNotificationRead('{{ $notification->id }}')">
+                                <div>
+                                    <i class="mdi mdi-bullhorn-variant-outline me-2 text-primary"></i>
+                                    <span
+                                        class="small text-muted">{{ $notification->created_at->diffForHumans() }}</span>
+                                </div>
+                                <div>
+                                    {{ $notification->data['message'] }}
+                                </div>
+                            </a>
+                        @empty
+                            <span class="dropdown-item text-center text-muted">No notifications</span>
+                        @endforelse
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-center text-primary fw-bold" href="">View all
+                            notifications</a>
+                    </li>
+                </ul>
+            </li>
 
 
 
@@ -152,5 +182,48 @@
     @if (!isset($navbarDetached))
 </div>
 @endif
-
 </nav>
+
+@push('scripts')
+    <script>
+        function markAllNotificationsRead() {
+            fetch("{{ route('notifications.markRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json"
+                }
+            }).then(res => {
+                // Remove the badge
+                const badge = document.querySelector('.badge');
+                if (badge) badge.style.display = 'none';
+
+                // Optional: remove unread styling from each dropdown item
+                document.querySelectorAll('.dropdown-item').forEach(item => {
+                    item.classList.remove('fw-bold'); // example
+                });
+            });
+        }
+
+        function markNotificationRead(notificationId) {
+            fetch(`/notifications/${notificationId}/read`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            }).then(res => {
+                // Optional: remove the badge if no unread left
+                const badge = document.querySelector('.badge');
+                if (badge) {
+                    let count = parseInt(badge.textContent);
+                    count = Math.max(count - 1, 0);
+                    badge.textContent = count;
+                    if (count === 0) badge.style.display = 'none';
+                }
+            });
+        }
+
+		
+    </script>
+@endpush

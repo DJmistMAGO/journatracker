@@ -14,6 +14,7 @@ use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\FilterCategoryController;
+use App\Http\Controllers\NotificationController;
 
 // welcome
 Route::get('/', function () {
@@ -30,11 +31,6 @@ Route::controller(IncidentReportController::class)
             Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
 			Route::get('/show/{id}','show')->name('incident-report.show');
 			Route::put('/update-status/{id}','updateStatus')->name('incident-report.update-status');
-            // Route::get('/create', 'create')->name('incident-report.create');
-            // Route::get('/{id}/edit', 'edit')->name('incident-report.edit');
-            // Route::get('/{id}', 'show')->name('incident-report.show');
-            // Route::put('/{id}', 'update')->name('incident-report.update');
-            // Route::delete('/{id}', 'destroy')->name('incident-report.destroy');
         });
 
 // Guest routes
@@ -53,6 +49,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
     Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
+
+	Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name('notifications.markRead');
+	Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name('notifications.markSingleRead');
+
+
 
     Route::controller(PubManagementController::class)
         ->prefix('publication')
