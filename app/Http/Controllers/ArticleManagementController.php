@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\StatusChangedNotification;
 
 class ArticleManagementController extends Controller
 {
@@ -67,8 +68,14 @@ class ArticleManagementController extends Controller
 		// Default type
 		$data['type'] = 'Article';
 
-		// Save article
-		Article::create($data);
+		// Save article and get the model instance
+		$article = Article::create($data);
+		
+		$article->type   = $article->type ?? 'Article';
+		$article->status = $article->status ?? 'Pending';
+
+		$article->author->notify(new StatusChangedNotification($article));
+
 
 		return redirect()
 			->route('article-management')
@@ -137,19 +144,18 @@ class ArticleManagementController extends Controller
 	}
 
 	public function destroy($id)
-{
-    $article = Article::findOrFail($id);
+	{
+		$article = Article::findOrFail($id);
 
-    // Delete image if exists
-    if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
-        Storage::disk('public')->delete($article->image_path);
-    }
+		// Delete image if exists
+		if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
+			Storage::disk('public')->delete($article->image_path);
+		}
 
-    $article->delete();
+		$article->delete();
 
-    return redirect()
-        ->route('article-management')
-        ->with('success', 'Article deleted successfully!');
-}
-
+		return redirect()
+			->route('article-management')
+			->with('success', 'Article deleted successfully!');
+	}
 }
