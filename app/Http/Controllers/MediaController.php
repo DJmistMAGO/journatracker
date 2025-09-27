@@ -16,6 +16,11 @@ class MediaController extends Controller
 	{
 		$user_id = Auth::user()->id;
 
+		$all = Media::where("user_id", $user_id)
+			->whereIn('status', ['Draft', 'Revision'])
+			->latest()
+			->get();
+
 		$photojournalism = Media::where("user_id", $user_id)
 			->where('category', 'Photojournalism')
 			->whereIn('status', ['Draft', 'Revision'])
@@ -42,7 +47,7 @@ class MediaController extends Controller
 
 		// dd($photojournalism, $cartooning, $tv, $radio);
 
-		return view('spj-content.media-management.index', compact('photojournalism', 'cartooning', 'tv', 'radio'));
+		return view('spj-content.media-management.index', compact('all', 'photojournalism', 'cartooning', 'tv', 'radio'));
 	}
 
 	/**
@@ -148,14 +153,16 @@ class MediaController extends Controller
 	/**
 	 * Update the specified resource in storage.
 	 */
-	public function update(Request $request, Media $media)
+	public function update(Request $request, $id)
 	{
+		$media = Media::findOrFail($id);
+
 		$rules = [
-			'category' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
-			'title' => 'required|string|max:255',
+			'category'       => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
+			'title'          => 'required|string|max:255',
 			'date_submitted' => 'required|date',
-			'tags' => 'nullable', // can be string (JSON) or array
-			'description' => 'required|string',
+			'tags'           => 'nullable', // string (JSON) or array
+			'description'    => 'required|string',
 		];
 
 		// Handle tags: decode JSON if string
@@ -199,21 +206,30 @@ class MediaController extends Controller
 			$data['link'] = $matches[1];
 		}
 
-		// Update media
-		$media->update([
-			'category' => $data['category'],
-			'title' => $data['title'],
+		// Prepare update payload
+		$updateData = [
+			'category'       => $data['category'],
+			'title'          => $data['title'],
 			'date_submitted' => $data['date_submitted'],
-			'tags' => $data['tags'], // array -> JSON in DB because of casts
-			'description' => $data['description'] ?? null,
-			'image_path' => $data['image_path'] ?? $media->image_path,
-			'link' => $data['link'] ?? null,
-		]);
+			'tags'           => $data['tags'],
+			'description'    => $data['description'] ?? null,
+			'image_path'     => $data['image_path'] ?? $media->image_path,
+			'status'         => 'Draft',
+		];
+
+		if (isset($data['link'])) {
+			$updateData['link'] = $data['link'];
+		}
+
+
+		// Update record
+		$media->update($updateData);
 
 		return redirect()
 			->route('media-management')
 			->with('success', 'Media updated successfully!');
 	}
+
 
 	/**
 	 * Remove the specified resource from storage.

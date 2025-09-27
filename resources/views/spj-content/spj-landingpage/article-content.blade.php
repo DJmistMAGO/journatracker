@@ -119,11 +119,47 @@
                             </div>
                         </header>
 
-                        <!-- Article Image -->
-                        <figure class="mb-4 text-center">
-                            <img src="{{ asset('/storage/' . $item->image_path) }}" alt="Future of Technology"
-                                class="img-fluid rounded shadow-sm">
-                        </figure>
+                        <!-- Article Image / Link / Video -->
+@if ($item->type === 'Article')
+    <figure class="mb-4 text-center">
+        <img src="{{ asset('/storage/' . $item->image_path) }}" alt="Future of Technology"
+            class="img-fluid rounded shadow-sm">
+    </figure>
+
+@elseif ($item->type === 'Media')
+
+    {{-- Show image if Photojournalism or Cartooning --}}
+    @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
+        @if ($item->image_path)
+            <div class="text-center my-3">
+                <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}"
+                    class="img-fluid rounded shadow-sm" style="max-height: 400px;">
+            </div>
+        @else
+            <p class="text-center">No image available.</p>
+        @endif
+    @endif
+
+    {{-- Show iframe if TV or Radio Broadcasting --}}
+    @if (in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']))
+        @if ($item->link)
+            <div class="ratio ratio-16x9 my-3">
+                <iframe src="{{ $item->link }}"
+                    width="560" height="314"
+                    style="border:none;overflow:hidden"
+                    scrolling="no"
+                    frameborder="0"
+                    allowfullscreen="true"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                </iframe>
+            </div>
+        @endif
+    @endif
+
+@endif
+
+
+
 
                         <!-- Article Content -->
                         <section class="article-body mb-5">

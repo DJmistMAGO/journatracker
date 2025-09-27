@@ -23,6 +23,20 @@ Route::get('/', function () {
 Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
 Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
 
+Route::controller(IncidentReportController::class)
+        ->prefix('incident-report')
+        ->group(function () {
+            Route::get('/', 'index')->name('incident-report');
+            Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
+			Route::get('/show/{id}','show')->name('incident-report.show');
+			Route::put('/update-status/{id}','updateStatus')->name('incident-report.update-status');
+            // Route::get('/create', 'create')->name('incident-report.create');
+            // Route::get('/{id}/edit', 'edit')->name('incident-report.edit');
+            // Route::get('/{id}', 'show')->name('incident-report.show');
+            // Route::put('/{id}', 'update')->name('incident-report.update');
+            // Route::delete('/{id}', 'destroy')->name('incident-report.destroy');
+        });
+
 // Guest routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginBasic::class, 'index'])->name('login');
@@ -102,18 +116,6 @@ Route::middleware('auth')->group(function () {
             Route::delete('/{id}', 'destroy')->name('user-management.destroy');
             Route::get('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
             Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
-        });
-
-    Route::controller(IncidentReportController::class)
-        ->prefix('incident-report')
-        ->group(function () {
-            Route::get('/', 'index')->name('incident-report');
-            // Route::get('/create', 'create')->name('incident-report.create');
-            // Route::post('/', 'store')->name('incident-report.store');
-            // Route::get('/{id}/edit', 'edit')->name('incident-report.edit');
-            // Route::get('/{id}', 'show')->name('incident-report.show');
-            // Route::put('/{id}', 'update')->name('incident-report.update');
-            // Route::delete('/{id}', 'destroy')->name('incident-report.destroy');
         });
 
     Route::controller(ProfileController::class)

@@ -23,8 +23,14 @@
         <div class="card-body pt-0">
             <div class="nav-align-top nav-tabs-shadow">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
+					<li class="nav-item">
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#all" aria-controls="all" aria-selected="true">
+                            All
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link " role="tab" data-bs-toggle="tab"
                             data-bs-target="#photojournalism" aria-controls="photojournalism" aria-selected="true">
                             Photojournalism
                         </button>
@@ -50,7 +56,12 @@
                 </ul>
 
                 <div class="tab-content ps-0 pe-0">
-                    <div class="tab-pane fade show active" id="photojournalism" role="tabpanel">
+					<div class="tab-pane fade show active" id="all" role="tabpanel">
+                        @include('spj-content.media-management.partials.table', [
+                            'items' => $all,
+                        ])
+                    </div>
+                    <div class="tab-pane fade show" id="photojournalism" role="tabpanel">
                         @include('spj-content.media-management.partials.table', [
                             'items' => $photojournalism,
                         ])

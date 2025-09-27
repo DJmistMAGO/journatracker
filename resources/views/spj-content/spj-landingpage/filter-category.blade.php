@@ -115,41 +115,73 @@
                 <h2 class="mt-0 mb-3 text-white">{{ $category }}</h2>
                 <div class="row g-4">
                     @forelse ($items as $item)
-                        <div class="col-md-6">
-                            <div class="card shadow-sm h-100 border-0">
-                                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
-                                    alt="{{ $item->title }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $item->title }}</h5>
-                                    <small class="text-muted">Published on
-                                        {{ $item->date_publish->format('F j, Y') }}</small>
-                                    <p class="card-text">
-                                        {{ \Illuminate\Support\Str::words($item->description, 15, '...') }}
-                                    </p>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <a href="{{ route('article.read', [$item->type, $item->id]) }}"
-                                            class="btn btn-outline-theme btn-sm">
-                                            Read More
-                                        </a>
-                                        <div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
-                                            <i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
-                                            <span class="fw-semibold">{{ $item->publication->views ?? 0 }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-12 empty-library">
-                            <div class="card shadow-sm border-0 text-center py-5">
-                                <div class="card-body">
-                                    <i class="mdi mdi-library-outline text-primary icon-read-article"></i>
-                                    <h5 class="mt-3">Empty Library</h5>
-                                    <p class="text-muted">No content available at the moment.</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforelse
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100 border-0">
+
+            {{-- IMAGE or VIDEO preview --}}
+            @if ($item->type === 'Article')
+                {{-- Article Image --}}
+                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
+                    alt="{{ $item->title }}">
+
+            @elseif ($item->type === 'Media')
+                {{-- Photojournalism / Cartooning --}}
+                @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
+                    @if ($item->image_path)
+                        <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
+                            alt="{{ $item->title }}">
+                    @else
+                        <p class="text-center my-3">No image available</p>
+                    @endif
+                @endif
+
+                {{-- TV / Radio Broadcasting --}}
+                @if (in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']) && $item->link)
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ $item->link }}"
+                            class="card-img-top"
+                            style="border:none;overflow:hidden"
+                            scrolling="no"
+                            frameborder="0"
+                            allowfullscreen="true"
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                        </iframe>
+                    </div>
+                @endif
+            @endif
+
+            <div class="card-body">
+                <h5 class="card-title">{{ $item->title }}</h5>
+                <small class="text-muted">Published on
+                    {{ $item->date_publish->format('F j, Y') }}</small>
+                <p class="card-text">
+                    {{ \Illuminate\Support\Str::words($item->description, 15, '...') }}
+                </p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <a href="{{ route('article.read', [$item->type, $item->id]) }}"
+                        class="btn btn-outline-theme btn-sm">
+                        Read More
+                    </a>
+                    <div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
+                        <i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
+                        <span class="fw-semibold">{{ $item->publication->views ?? 0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@empty
+    <div class="col-12 empty-library">
+        <div class="card shadow-sm border-0 text-center py-5">
+            <div class="card-body">
+                <i class="mdi mdi-library-outline text-primary icon-read-article"></i>
+                <h5 class="mt-3">Empty Library</h5>
+                <p class="text-muted">No content available at the moment.</p>
+            </div>
+        </div>
+    </div>
+@endforelse
+
 
                 </div>
             </article>

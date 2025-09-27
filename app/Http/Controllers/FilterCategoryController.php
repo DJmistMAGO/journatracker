@@ -30,7 +30,7 @@ class FilterCategoryController extends Controller
 
 	public function showContent($type, $id, Request $request)
 	{
-		$sessionKey = "viewed_{$type}_{$id}";
+		$cookieKey = "viewed_{$type}_{$id}";
 
 		if ($type === 'Article') {
 			$item = Article::findOrFail($id);
@@ -40,11 +40,13 @@ class FilterCategoryController extends Controller
 			abort(404);
 		}
 
-		// Increment views only if not already viewed in this session
-		if (!$request->session()->has($sessionKey)) {
+		// Increment views only if no cookie exists
+		if (!$request->cookies->has($cookieKey)) {
 			$publication = $item->publication()->firstOrCreate([]);
 			$publication->increment('views');
-			$request->session()->put($sessionKey, true);
+
+			// Set cookie for 1 year
+			cookie()->queue($cookieKey, true, 60 * 24 * 365);
 		}
 
 		return view('spj-content.spj-landingpage.article-content', compact('item'));
