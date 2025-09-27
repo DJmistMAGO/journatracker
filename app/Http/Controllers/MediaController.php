@@ -9,224 +9,228 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $photojournalism = Media::where('type', 'Photojournalism')
-            ->where('status', 'Draft')
-            ->latest()
-            ->get();
+	/**
+	 * Display a listing of the resource.
+	 */
+	public function index()
+	{
+		$user_id = Auth::user()->id;
 
-        $cartooning = Media::where('type', 'Cartooning')
-            ->where('status', 'Draft')
-            ->latest()
-            ->get();
+		$photojournalism = Media::where("user_id", $user_id)
+			->where('category', 'Photojournalism')
+			->where('status', 'Draft')
+			->latest()
+			->get();
 
-        $tv = Media::where('type', 'TV Broadcasting')
-            ->where('status', 'Draft')
-            ->latest()
-            ->get();
+		$cartooning = Media::where('user_id', $user_id)
+			->where('category', 'Cartooning')
+			->where('status', 'Draft')
+			->latest()
+			->get();
 
-        $radio = Media::where('type', 'Radio Broadcasting')
-            ->where('status', 'Draft')
-            ->latest()
-            ->get();
+		$tv = Media::where('user_id', $user_id)
+			->where('category', 'TV Broadcasting')
+			->where('status', 'Draft')
+			->latest()
+			->get();
 
-        // dd($photojournalism, $cartooning, $tv, $radio);
+		$radio = Media::where('user_id', $user_id)
+			->where('category', 'Radio Broadcasting')
+			->where('status', 'Draft')
+			->latest()
+			->get();
 
-        return view('spj-content.media-management.index', compact('photojournalism', 'cartooning', 'tv', 'radio'));
-    }
+		// dd($photojournalism, $cartooning, $tv, $radio);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('spj-content.media-management.create');
-    }
+		return view('spj-content.media-management.index', compact('photojournalism', 'cartooning', 'tv', 'radio'));
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     */
+	/**
+	 * Show the form for creating a new resource.
+	 */
+	public function create()
+	{
+		return view('spj-content.media-management.create');
+	}
 
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        $rules = [
-            'media_type' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
-            'title' => 'required|string|max:255',
-            'date' => 'nullable|date',
-            'tags' => 'nullable', // still comes as JSON string
-            'description' => 'nullable|string',
-        ];
+	/**
+	 * Store a newly created resource in storage.
+	 */
 
-        // If tags is passed as JSON, decode to array
-        if ($request->has('tags')) {
-            $decoded = json_decode($request->tags, true);
-            $request->merge(['tags' => $decoded ?? []]);
-        }
+	public function store(Request $request)
+	{
+		$rules = [
+			'category' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
+			'title' => 'required|string|max:255',
+			'date_submitted' => 'required|date',
+			'tags' => 'nullable', // still comes as JSON string
+			'description' => 'required|string',
+		];
 
-        // Conditional rules
-        if ($request->isMethod('post') && in_array($request->media_type, ['Photojournalism', 'Cartooning'])) {
-            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
-        }
+		// If tags is passed as JSON, decode to array
+		if ($request->has('tags')) {
+			$decoded = json_decode($request->tags, true);
+			$request->merge(['tags' => $decoded ?? []]);
+		}
 
-        if (in_array($request->media_type, ['TV Broadcasting', 'Radio Broadcasting'])) {
-            $rules['link'] = 'required|string';
-        }
+		// Conditional rules
+		if ($request->isMethod('post') && in_array($request->category, ['Photojournalism', 'Cartooning'])) {
+			$rules['image_path'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
+		}
 
-        $data = $request->validate($rules);
+		if (in_array($request->category, ['TV Broadcasting', 'Radio Broadcasting'])) {
+			$rules['link'] = 'required|string';
+		}
 
-        // Normalize date (default today if missing)
-        $data['date'] = $data['date'] ?? now()->toDateString();
+		$data = $request->validate($rules);
 
-        // Handle image upload for photojournalism/cartooning
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $datePrefix = now()->format('Y-m-d');
-            $extension = $file->getClientOriginalExtension();
+		// Handle image upload for photojournalism/cartooning
+		if ($request->hasFile('image_path')) {
+			$file = $request->file('image_path');
+			$datePrefix = now()->format('Y-m-d');
+			$extension = $file->getClientOriginalExtension();
 
-            $todayCount = collect(Storage::disk('public')->files('media'))
-                ->filter(fn($f) => str_contains(basename($f), "media{$datePrefix}_"))
-                ->count();
+			// Count how many files were uploaded today
+			$todayCount = collect(Storage::disk('public')->files('media'))
+				->filter(fn($f) => str_contains(basename($f), "media_{$datePrefix}_"))
+				->count();
 
-            $filename = "media{$datePrefix}_" . ($todayCount + 1) . ".{$extension}";
-            $data['image_path'] = $file->storeAs('media', $filename, 'public');
-        }
+			// Create a unique filename
+			$filename = "media_{$datePrefix}_" . ($todayCount + 1) . ".{$extension}";
 
-        // Clean Facebook/YouTube embed codes -> extract src if present
-        if (!empty($data['link']) && preg_match('/src="([^"]+)"/', $data['link'], $matches)) {
-            $data['link'] = $matches[1];
-        }
+			// Store in public/media/
+			$data['image_path'] = $file->storeAs('media', $filename, 'public');
+		}
 
-        // Save media
-        Media::create([
-            'user_id' => Auth::id(),
-            'type' => $data['media_type'],
-            'title' => $data['title'],
-            'date' => $data['date'],
-            'tags' => $data['tags'], // stored as array → JSON in DB (because of casts)
-            'description' => $data['description'] ?? null,
-            'image_path' => $data['image_path'] ?? null,
-            'link' => $data['link'] ?? null,
-        ]);
 
-        return redirect()
-            ->route('media-management')
-            ->with('success', 'Media created successfully!');
-    }
+		// Clean Facebook/YouTube embed codes -> extract src if present
+		if (!empty($data['link']) && preg_match('/src="([^"]+)"/', $data['link'], $matches)) {
+			$data['link'] = $matches[1];
+		}
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $media = Media::with('user')->findOrFail($id);
+		// Save media
+		Media::create([
+			'user_id' => Auth::id(),
+			'category' => $data['category'],
+			'title' => $data['title'],
+			'date_submitted' => $data['date_submitted'],
+			'tags' => $data['tags'], // stored as array → JSON in DB (because of casts)
+			'description' => $data['description'] ?? null,
+			'image_path' => $data['image_path'] ?? null,
+			'link' => $data['link'] ?? null,
+		]);
 
-        // dd($media);
-        return view('spj-content.media-management.show', compact('media'));
-    }
+		return redirect()
+			->route('media-management')
+			->with('success', 'Media created successfully!');
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $media = Media::with('user')->findOrFail($id);
-        return view('spj-content.media-management.edit', compact('media'));
-    }
+	/**
+	 * Display the specified resource.
+	 */
+	public function show($id)
+	{
+		$media = Media::with('user')->findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Media $media)
-    {
-        $rules = [
-            'media_type' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
-            'title' => 'required|string|max:255',
-            'date' => 'nullable|date',
-            'tags' => 'nullable', // can be string (JSON) or array
-            'description' => 'nullable|string',
-        ];
+		// dd($media);
+		return view('spj-content.media-management.show', compact('media'));
+	}
 
-        // Handle tags: decode JSON if string
-        if ($request->has('tags')) {
-            $tags = $request->tags;
+	/**
+	 * Show the form for editing the specified resource.
+	 */
+	public function edit($id)
+	{
+		$media = Media::with('user')->findOrFail($id);
+		return view('spj-content.media-management.edit', compact('media'));
+	}
 
-            if (is_string($tags)) {
-                $tags = json_decode($tags, true) ?? [];
-            }
+	/**
+	 * Update the specified resource in storage.
+	 */
+	public function update(Request $request, Media $media)
+	{
+		$rules = [
+			'category' => 'required|in:Photojournalism,Cartooning,TV Broadcasting,Radio Broadcasting',
+			'title' => 'required|string|max:255',
+			'date_submitted' => 'required|date',
+			'tags' => 'nullable', // can be string (JSON) or array
+			'description' => 'required|string',
+		];
 
-            $request->merge(['tags' => $tags]);
-        }
+		// Handle tags: decode JSON if string
+		if ($request->has('tags')) {
+			$tags = $request->tags;
 
-        // Conditional rules
-        if (in_array($request->media_type, ['Photojournalism', 'Cartooning'])) {
-            $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
-        }
+			if (is_string($tags)) {
+				$tags = json_decode($tags, true) ?? [];
+			}
 
-        if (in_array($request->media_type, ['TV Broadcasting', 'Radio Broadcasting'])) {
-            $rules['link'] = 'required|string';
-        }
+			$request->merge(['tags' => $tags]);
+		}
 
-        $data = $request->validate($rules);
+		// Conditional rules
+		if (in_array($request->category, ['Photojournalism', 'Cartooning'])) {
+			$rules['image_path'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048';
+		}
 
-        // Normalize date (default today if missing)
-        $data['date'] = $data['date'] ?? now()->toDateString();
+		if (in_array($request->category, ['TV Broadcasting', 'Radio Broadcasting'])) {
+			$rules['link'] = 'required|string';
+		}
 
-        // Handle image upload if new file uploaded
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $datePrefix = now()->format('Y-m-d');
-            $extension = $file->getClientOriginalExtension();
+		$data = $request->validate($rules);
 
-            $todayCount = collect(Storage::disk('public')->files('media'))
-                ->filter(fn($f) => str_contains(basename($f), "media{$datePrefix}_"))
-                ->count();
+		// Handle image upload if new file uploaded
+		if ($request->hasFile('image_path')) {
+			$file = $request->file('image_path');
+			$datePrefix = now()->format('Y-m-d');
+			$extension = $file->getClientOriginalExtension();
 
-            $filename = "media{$datePrefix}_" . ($todayCount + 1) . ".{$extension}";
-            $data['image_path'] = $file->storeAs('media', $filename, 'public');
-        }
+			$todayCount = collect(Storage::disk('public')->files('media'))
+				->filter(fn($f) => str_contains(basename($f), "media{$datePrefix}_"))
+				->count();
 
-        // Clean Facebook/YouTube embed codes -> extract src if present
-        if (!empty($data['link']) && preg_match('/src="([^"]+)"/', $data['link'], $matches)) {
-            $data['link'] = $matches[1];
-        }
+			$filename = "media{$datePrefix}_" . ($todayCount + 1) . ".{$extension}";
+			$data['image_path'] = $file->storeAs('media', $filename, 'public');
+		}
 
-        // Update media
-        $media->update([
-            'type' => $data['media_type'],
-            'title' => $data['title'],
-            'date' => $data['date'],
-            'tags' => $data['tags'], // array -> JSON in DB because of casts
-            'description' => $data['description'] ?? null,
-            'image_path' => $data['image_path'] ?? $media->image_path,
-            'link' => $data['link'] ?? null,
-        ]);
+		// Clean Facebook/YouTube embed codes -> extract src if present
+		if (!empty($data['link']) && preg_match('/src="([^"]+)"/', $data['link'], $matches)) {
+			$data['link'] = $matches[1];
+		}
 
-        return redirect()
-            ->route('media-management')
-            ->with('success', 'Media updated successfully!');
-    }
+		// Update media
+		$media->update([
+			'category' => $data['category'],
+			'title' => $data['title'],
+			'date_submitted' => $data['date_submitted'],
+			'tags' => $data['tags'], // array -> JSON in DB because of casts
+			'description' => $data['description'] ?? null,
+			'image_path' => $data['image_path'] ?? $media->image_path,
+			'link' => $data['link'] ?? null,
+		]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $media = Media::findOrFail($id);
+		return redirect()
+			->route('media-management')
+			->with('success', 'Media updated successfully!');
+	}
 
-        // Delete image if exists
-        if ($media->image_path && Storage::disk('public')->exists($media->image_path)) {
-            Storage::disk('public')->delete($media->image_path);
-        }
+	/**
+	 * Remove the specified resource from storage.
+	 */
+	public function destroy($id)
+	{
+		$media = Media::findOrFail($id);
 
-        $media->delete();
+		// Delete image if exists
+		if ($media->image_path && Storage::disk('public')->exists($media->image_path)) {
+			Storage::disk('public')->delete($media->image_path);
+		}
 
-        return redirect()
-            ->route('media-management')
-            ->with('success', 'Media deleted successfully!');
-    }
+		$media->delete();
+
+		return redirect()
+			->route('media-management')
+			->with('success', 'Media deleted successfully!');
+	}
 }

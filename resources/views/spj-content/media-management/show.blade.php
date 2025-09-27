@@ -17,10 +17,11 @@
             </div>
 
 					<div class="card-body">
-						<p><strong>Type:</strong> {{ ucfirst(str_replace('_', ' ', $media->type)) }}</p>
+						<p><strong>Status:</strong> {{ ucfirst(str_replace('_', ' ', $media->status)) }}</p>
+						<p><strong>Category:</strong> {{ ucfirst(str_replace('_', ' ', $media->category)) }}</p>
 						<p><strong>Description:</strong> {{ $media->description ?? 'No description provided.' }}</p>
 
-						<p><strong>Date:</strong> {{ \Carbon\Carbon::parse($media->date)->format('M d, Y') }}</p>
+						<p><strong>Date:</strong> {{ \Carbon\Carbon::parse($media->date_submitted)->format('M d, Y') }}</p>
 
 						<!-- Tags -->
 						@if (!empty($media->tags))
@@ -38,7 +39,7 @@
 						@endif
 
 						{{-- Show image if type is photojournalism or cartooning --}}
-						@if (in_array($media->type, ['photojournalism', 'cartooning']))
+						@if (in_array($media->category, ['Photojournalism', 'Cartooning']))
 							@if ($media->image_path)
 								<div class="text-center my-3">
 									<img src="{{ asset('storage/' . $media->image_path) }}" alt="{{ $media->title }}"
@@ -50,7 +51,7 @@
 						@endif
 
 						{{-- Show iframe if type is tv or radio broadcasting --}}
-						@if (in_array($media->type, ['tv_broadcasting', 'radio_broadcasting']))
+						@if (in_array($media->category, ['TV Broadcasting', 'Radio Broadcasting']))
 							@if ($media->link)
 								<div class="ratio ratio-16x9 my-3">
 									<iframe
