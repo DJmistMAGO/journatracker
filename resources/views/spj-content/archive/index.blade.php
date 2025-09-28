@@ -1,17 +1,16 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'SPJ | Editorial Scheduling')
+@section('title', 'SPJ | Archive')
 
 @section('vendor-script')
     <script src="{{ asset('assets/vendor/libs/masonry/masonry.js') }}"></script>
 @endsection
 
 @section('content')
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Editorial Scheduling</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Archive</h4>
     {{-- content --}}
-
     <div class="card">
-        <h5 class="card-header">Editorial Schedule List</h5>
+        <h5 class="card-header">Archive List</h5>
         <div class="table-responsive">
             <table class="table">
                 <thead>
