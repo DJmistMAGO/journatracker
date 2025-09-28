@@ -11,7 +11,7 @@
     {{-- content --}}
 
     <div class="card">
-        <h5 class="card-header">Editorial Schedule List</h5>
+        <h5 class="card-header">Archive List</h5>
         <div class="table-responsive">
             <table class="table">
                 <thead>
