@@ -54,7 +54,6 @@ Route::middleware('auth')->group(function () {
 	Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name('notifications.markSingleRead');
 
 
-
     Route::controller(PubManagementController::class)
         ->prefix('publication')
         ->group(function () {

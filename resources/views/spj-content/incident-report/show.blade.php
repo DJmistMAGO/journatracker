@@ -19,7 +19,7 @@
         </div>
 
         <div class="card-body">
-            <p><strong>Status: {{ $incident->status }} </strong> on
+            <p><strong>Status: {{ $incident->status }} </strong> as of
                 <strong>{{ $incident->date_status->format('F d, Y') }}</strong></p>
             <hr>
             {{-- Incident description --}}
@@ -55,11 +55,13 @@
         </div>
         {{-- Card Footer --}}
         <div class="card-footer d-flex justify-content-end align-items-center">
+			@role('admin|eic')
             @if ($incident->status !== 'Resolved')
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#statusModal">
                     Manage Status
                 </button>
             @endif
+			@endrole
         </div>
     </div>
 

@@ -37,14 +37,17 @@ class StatusChangedNotification extends Notification
 	 */
 	public function toDatabase($notifiable)
 	{
-		$isAdmin = $notifiable->hasAnyRole(['admin', 'eic']);
-
 		return [
-			'type' => $this->item->type,
+			'type' => $this->item->type ?? 'Incident Report',
 			'id' => $this->item->id,
-			'message' => $isAdmin
-            ? "{$this->item->author->name} submitted {$this->item->type} for Publication."
-            : "Your {$this->item->type} has been {$this->item->status} for Publication.",
+			'status' => $this->item->status ?? null,
+			'message' => ($this->item->type === 'Incident Report')
+				? "An Incident Report has been Submitted."
+				: (
+					$notifiable->hasAnyRole(['admin', 'eic'])
+					? "{$this->item->author->name} submitted {$this->item->type} for Publication."
+					: "Your {$this->item->type} has been {$this->item->status} for Publication."
+				),
 			'created_at' => now(),
 		];
 	}
