@@ -52,6 +52,6 @@ class ArchiveController extends Controller
 		return view("spj-content.archive.index", compact('items'));
 	}
 
-	
+
 
 }
