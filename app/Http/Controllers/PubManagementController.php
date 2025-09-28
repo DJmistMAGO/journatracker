@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Media;
 use App\Mail\StatusUpdateNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\StatusChangedNotification;
 
 class PubManagementController extends Controller
 {
@@ -78,14 +79,12 @@ class PubManagementController extends Controller
 			'remarks' => 'required_if:status,Revision,Rejected|nullable|string|max:1000',
 		]);
 
-
-		// Save updated values for status, date_publish, and remarks
 		$item->status = $validated['status'];
 		$item->date_publish = $validated['date_publish'] ?? null;
 		$item->remarks = $validated['remarks'] ?? null;
 		$item->save();
 
-
+		$item->author->notify(new StatusChangedNotification($item));
 
 		// // Send email to author
 		// if ($item->user && $item->user->email) {
