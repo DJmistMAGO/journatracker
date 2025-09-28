@@ -19,7 +19,7 @@
 						<th>Category</th>
                         <th>Type</th>
                         <th>Author</th>
-                        <th>Date Created</th>
+                        <th>Date Submitted</th>
                         <th>Status</th>
                         <th>Manage</th>
                     </tr>

@@ -84,7 +84,6 @@ class ArticleManagementController extends Controller
 			$user->notify(new StatusChangedNotification($article));
 		}
 
-
 		return redirect()
 			->route('article-management')
 			->with('success', 'Article created successfully!');
