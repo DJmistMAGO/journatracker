@@ -31,7 +31,7 @@
                 <a class="nav-link position-relative" href="#" id="navbarDropdown" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="mdi mdi-bell-outline mdi-24px"></i>
-                    @if (auth()->user()->unreadNotifications->count() > 0)
+                    @if (auth()->user()->unreadNotifications->count() > 0 )
                         <span
                             class="position-absolute mt-1 top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {{ auth()->user()->unreadNotifications->count() }}
@@ -52,26 +52,35 @@
                     <li>
                         @forelse(auth()->user()->unreadNotifications as $notification)
                             @php
-                                // Determine href based on user role and notification type
-                                if (auth()->user()->hasRole('student')) {
-                                    if ($notification->data['type'] === 'Article') {
-                                        $href = route('article-management.show', $notification->data['id']);
-                                    } elseif ($notification->data['type'] === 'Media') {
-                                        $href = route('media-management.show', $notification->data['id']);
-                                    }
-                                } elseif (
-                                    auth()
-                                        ->user()
-                                        ->hasAnyRole(['admin', 'eic'])
-                                ) {
-                                    $href = route('publication-management.show', [
-                                        'type' => $notification->data['type'],
-                                        'id' => $notification->data['id'],
-                                    ]);
-                                } else {
-                                    $href = '#'; // fallback
-                                }
-                            @endphp
+								$data = $notification->data ?? [];
+								$type = $data['type'] ?? null;
+								$id = $data['id'] ?? null;
+
+								if (auth()->user()->hasRole('student')) {
+									if ($type === 'Article') {
+										$href = route('article-management.show', $id);
+									} elseif ($type === 'Media') {
+										$href = route('media-management.show', $id);
+									} elseif ($type === 'Incident Report') {
+										$href = route('incident-report.show', $id); // Student incident report route
+									} else {
+										$href = '#';
+									}
+								} elseif (auth()->user()->hasAnyRole(['admin', 'eic'])) {
+									if ($type === 'Incident Report') {
+										$href = route('incident-report.show', $id); // Admin/EIC incident report route
+									} elseif ($type) {
+										$href = route('publication-management.show', [
+											'type' => $type,
+											'id' => $id,
+										]);
+									} else {
+										$href = '#';
+									}
+								} else {
+									$href = '#';
+								}
+							@endphp
                             <a class="dropdown-item" href="{{ $href }}"
                                 onclick="markNotificationRead('{{ $notification->id }}')">
                                 <div>
@@ -223,5 +232,11 @@
         }
 
 
+
+
     </script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
 @endpush

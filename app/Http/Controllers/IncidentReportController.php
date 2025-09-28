@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\IncidentReport;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\IncidentReportNotification;
+use App\Notifications\StatusChangedNotification;
+use App\Models\User;
 
 class IncidentReportController extends Controller
 {
@@ -69,7 +72,14 @@ class IncidentReportController extends Controller
 			$data['image_proof'] = $file->storeAs('image_proofs', $filename, 'public');
 		}
 
-		IncidentReport::create($data);
+		$incident = IncidentReport::create($data);
+
+		$incident->type = 'Incident Report';
+
+		$usersToNotify = User::role(['admin', 'eic', 'student'])->get();
+		foreach ($usersToNotify as $user) {
+			$user->notify(new StatusChangedNotification($incident));
+		}
 
 		return redirect()->route('welcome')->with('success', 'Incident report submitted successfully.');
 	}
