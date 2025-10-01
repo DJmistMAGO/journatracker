@@ -40,6 +40,7 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
 
     public function content(): Content
     {
+
         return new Content(
             view: 'spj-content.publication-management.email.email-status',
             with: [
