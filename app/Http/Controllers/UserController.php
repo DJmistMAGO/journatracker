@@ -52,12 +52,12 @@ class UserController extends Controller
 
 		$user = User::create($validated + $user)->assignRole('student');
 
-		//send email with credentials
-		// Mail::to($user['email'])->queue(new SendUserCredentials(
-		// 	$user['name'],
-		// 	$user['email'],
-		// 	$randomPassword
-		// ));
+		// send email with credentials
+		Mail::to($user['email'])->queue(new SendUserCredentials(
+			$user['name'],
+			$user['email'],
+			$randomPassword
+		));
 
 
 		return redirect()

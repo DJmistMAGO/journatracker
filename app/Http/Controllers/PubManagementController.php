@@ -87,16 +87,16 @@ class PubManagementController extends Controller
 		$item->author->notify(new StatusChangedNotification($item));
 
 		// // Send email to author
-		// if ($item->user && $item->user->email) {
-		// 	Mail::to($item->user->email)->queue(new StatusUpdateNotification(
-		// 		$item->user->first_name,           // or $item->user->name if you defined accessor
-		// 		$itemMapped['type'],               // Article or Media
-		// 		$itemMapped['title'] ?? 'Untitled',
-		// 		$validated['status'],
-		// 		$validated['remarks'] ?? null,
-		// 		$validated['date_publish'] ?? null
-		// 	));
-		// }
+		if ($item->user && $item->user->email) {
+			Mail::to($item->user->email)->queue(new StatusUpdateNotification(
+				$item->user->penname,           // or $item->user->name if you defined accessor
+				$item->type,               // Article or Media
+				$item->title ?? 'Untitled',
+				$item->status,
+				$item->remarks ?? null,
+				$item->date_publish
+			));
+		}
 
 		return redirect()->route('publication-management.index')->with('success', ucfirst($type) . ' status updated successfully.');
 	}
