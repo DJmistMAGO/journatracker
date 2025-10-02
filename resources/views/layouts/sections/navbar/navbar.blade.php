@@ -100,7 +100,7 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item text-center text-primary fw-bold" href="">View all
+                        <a class="dropdown-item text-center text-primary fw-bold" href="{{ route('notifications.index') }}">View all
                             notifications</a>
                     </li>
                 </ul>

@@ -1,0 +1,32 @@
+.snackbar {
+    position: fixed;
+    bottom: -100px; /* hide initially below screen */
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 280px;
+    max-width: 400px;
+    background-color: #28a745;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1055;
+    transition: bottom 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+}
+
+.snackbar.show {
+    bottom: 20px; /* slide in from bottom */
+    opacity: 1;
+}
+
+.snackbar .btn-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
