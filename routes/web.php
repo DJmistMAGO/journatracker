@@ -1,37 +1,50 @@
 <?php
 
+use App\Models\Article;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\ArchiveController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\dashboard\Analytics;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PubManagementController;
+use App\Http\Controllers\FilterCategoryController;
 use App\Http\Controllers\IncidentReportController;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\ArticleManagementController;
 use App\Http\Controllers\authentications\RegisterBasic;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
-use App\Http\Controllers\ArchiveController;
-use App\Http\Controllers\FilterCategoryController;
-use App\Http\Controllers\NotificationController;
 
 // welcome
 Route::get('/', function () {
-    return view('welcome');
+    $articles = Article::where('status', 'Published')
+        ->orderBy('date_publish', 'desc')
+        ->get();
+
+    $tags = $articles
+        ->pluck('tags')
+        ->flatten() // if JSON array
+        ->unique()
+        ->take(10); // limit to 10 tags
+
+    return view('welcome', compact('articles', 'tags'));
 })->name('welcome');
+
+Route::get('/articles/{article}', [ArticleManagementController::class, 'publicShow'])->name('articles.show');
 
 Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
 Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
 
 Route::controller(IncidentReportController::class)
-        ->prefix('incident-report')
-        ->group(function () {
-            Route::get('/', 'index')->name('incident-report');
-            Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
-			Route::get('/show/{id}','show')->name('incident-report.show');
-			Route::put('/update-status/{id}','updateStatus')->name('incident-report.update-status');
-        });
+    ->prefix('incident-report')
+    ->group(function () {
+        Route::get('/', 'index')->name('incident-report');
+        Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
+        Route::get('/show/{id}', 'show')->name('incident-report.show');
+        Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
+    });
 
 // Guest routes
 Route::middleware('guest')->group(function () {
@@ -50,9 +63,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
     Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
 
-	Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name('notifications.markRead');
-	Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name('notifications.markSingleRead');
-
+    Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name(
+        'notifications.markRead'
+    );
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name(
+        'notifications.markSingleRead'
+    );
 
     Route::controller(PubManagementController::class)
         ->prefix('publication')
@@ -60,6 +76,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('publication-management.index');
             Route::get('show/{type}/{id}', 'show')->name('publication-management.show');
             Route::put('update-status/{type}/{id}', 'updateStatus')->name('publication-management.update-status');
+            Route::post('/articles/{id}/publish', 'publish')->name('publication-management.publish');
+            Route::post('/articles/{id}/unpublish', 'unpublish')->name('publication-management.unpublish');
+            Route::post('/articles/{id}/reschedule', 'reschedule')->name('publication-management.reschedule');
         });
 
     Route::controller(ArticleManagementController::class)
@@ -71,7 +90,10 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', 'edit')->name('article-management.edit');
             Route::get('show/{id}', 'show')->name('article-management.show');
             Route::put('update/{id}', 'update')->name('article-management.update');
-            Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
+            // Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
+            Route::put('{id}/approve', 'approve')->name('article-management.approve');
+            Route::put('{id}/disapprove', 'disapprove')->name('article-management.disapprove');
+            Route::put('{id}/archive', 'archive')->name('article-management.archive');
         });
 
     Route::controller(MediaController::class)
@@ -97,12 +119,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('editorial-scheduling');
         });
 
-	Route::controller(ArchiveController::class)
-	->prefix('archive')
-	->group(function () {
-		Route::get('/','index')->name('archive');
-		Route::get('view/{type}/{id}','view')->name('archive.view');
-	});
+    Route::controller(ArchiveController::class)
+        ->prefix('archive')
+        ->group(function () {
+            Route::get('/', 'index')->name('archive');
+            Route::get('view/{type}/{id}', 'view')->name('archive.view');
+        });
 
     Route::controller(UserController::class)
         ->prefix('user-management')
