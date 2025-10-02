@@ -1,19 +1,24 @@
 
     {{-- Top Articles --}}
     <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
-            <ul class="list-unstyled">
-                @foreach($items->take(5) as $article)
-                    <li>
-                        <a href="{{ route('article.read', [$article->type, $article->id]) }}" class="text-black">
-                            {{ $article->title }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
+		<div class="card-body">
+			<h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
+			<ul class="list-styled mb-0">
+				@foreach($items->take(5) as $article)
+					<li>
+						<a href="{{ route('article.read', [$article->type, $article->id]) }}"
+						   class="text-black"
+						   style="text-decoration: none; transition: all 0.3s;"
+						   onmouseover="this.style.textDecoration='underline';"
+						   onmouseout="this.style.textDecoration='none';">
+							{{ $article->title }}
+						</a>
+					</li>
+				@endforeach
+			</ul>
+		</div>
+	</div>
+
 
     {{-- Popular Tags --}}
     @php

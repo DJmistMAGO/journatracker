@@ -68,8 +68,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginBasic::class, 'index'])->name('login');
     Route::post('/login', [LoginBasic::class, 'authenticate'])->name('login.post');
 
-    Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
-    Route::post('/register', [RegisterBasic::class, 'store'])->name('register.post');
+    // Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
+    // Route::post('/register', [RegisterBasic::class, 'store'])->name('register.post');
 
     // Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('forgot-password');
     // Route::post('/forgot-password', [ForgotPasswordBasic::class, 'sendResetLink'])->name('forgot-password.post');
@@ -174,4 +174,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/', 'index')->name('profile.index');
             Route::put('/update', 'update')->name('profile.update');
         });
+});
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
 });
