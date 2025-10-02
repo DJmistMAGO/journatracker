@@ -37,32 +37,72 @@
                             <td>{{ $article->user->name ?? 'Unknown' }}</td>
                             <td>{{ $article->date_submitted->format('F d, Y') }}</td>
                             <td>
-                                <span
-                                    class="badge {{ $article->status == 'Published' ? 'bg-label-secondary' : 'bg-label-success' }}">
-                                    {{ ucfirst($article->status) }}
-                                </span>
+								<span
+									class="badge
+										@if($article->status == 'Draft')
+											bg-label-secondary
+										@elseif($article->status == 'Approved')
+											bg-label-warning
+										@elseif($article->status == 'Published')
+											bg-label-success
+										@else
+											bg-label-secondary
+										@endif
+									">
+									{{ ucfirst($article->status) }}
+								</span>
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <!-- View Button -->
-                                    <a href="{{ route('article-management.show', $article->id) }}"
-                                        class="btn btn-sm btn-info">
-                                        <i class="mdi mdi-file-eye"></i>
-                                    </a>
 
-                                    <!-- Edit -->
-                                    <a href="{{ route('article-management.edit', $article->id) }}"
-                                        class="btn btn-sm btn-warning">
-                                        <i class="mdi mdi-file-edit"></i>
-                                    </a>
+									<!-- View Button -->
+									<a href="{{ route('article-management.show', $article->id) }}" class="btn btn-sm btn-info" title="View">
+										<i class="mdi mdi-file-eye"></i>
+									</a>
 
-                                    <!-- Delete Button (Trigger Modal) -->
-                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal" data-id="{{ $article->id }}"
-                                        data-title="{{ $article->title }}">
-                                        <i class="mdi mdi-delete"></i>
-                                    </button>
-                                </div>
+									<!-- Edit Button -->
+									<a href="{{ route('article-management.edit', $article->id) }}" class="btn btn-sm btn-warning" title="Edit">
+										<i class="mdi mdi-file-edit"></i>
+									</a>
+
+									@if(Auth::user()->isRole('admin'))
+
+									<!-- Approve -->
+									@if($article->status != 'Approved' && $article->status != 'Published')
+										<form action="{{ route('article-management.approve', $article->id) }}" method="POST" class="d-inline">
+											@csrf
+											@method('PUT')
+											<button type="submit" class="btn btn-sm btn-success" title="Approve">
+												<i class="mdi mdi-check"></i>
+											</button>
+										</form>
+									@endif
+
+									<!-- Disapprove -->
+									@if(in_array($article->status, ['Draft', 'Approved']))
+										<form action="{{ route('article-management.disapprove', $article->id) }}" method="POST" class="d-inline">
+											@csrf
+											@method('PUT')
+											<button type="submit" class="btn btn-sm btn-danger" title="Disapprove">
+												<i class="mdi mdi-close"></i>
+											</button>
+										</form>
+									@endif
+
+								@endif
+
+
+									<!-- Archive (Instead of Delete) -->
+									<form action="{{ route('article-management.archive', $article->id) }}" method="POST" class="d-inline">
+										@csrf
+										@method('PUT')
+										<button type="submit" class="btn btn-sm btn-secondary" title="Archive">
+											<i class="mdi mdi-archive"></i>
+										</button>
+									</form>
+
+								</div>
+
                             </td>
                         </tr>
                     @empty

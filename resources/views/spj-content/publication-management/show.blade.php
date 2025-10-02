@@ -27,15 +27,11 @@
                 <h4 class="mb-0">{{ $item->title }}</h4>
             </div>
             <div class="back-button">
-                @if ($item->status == 'Draft')
+
                     <a href="{{ route('publication-management.index') }}" class="btn btn-primary btn-sm">
                         <i class="mdi mdi-arrow-left me-1"></i> Back to List
                     </a>
-                @else
-                    <a href="{{ route('archive') }}" class="btn btn-primary btn-sm">
-                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
-                    </a>
-                @endif
+
 
             </div>
         </div>

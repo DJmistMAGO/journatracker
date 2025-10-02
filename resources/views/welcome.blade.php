@@ -106,70 +106,67 @@
     @include('_partials.loader')
     @include('layouts.sections.navbar.public-navbar')
     <main class="container-xxl my-5">
+
+		@php
+			$featured = $articles->first();
+		@endphp
         <div class="row g-5">
             <article class="col-lg-8">
-                <div class="card w-100">
-                    <img src="https://picsum.photos/600/400?random=1" class="card-img-top h-20" alt="..."
-                        style="height: 250px;">
-                    <div class="card-body">
-                        <h1 class="fw-bold display-6 mb-2">The Future of Green Technology</h1>
-                        <div class="d-flex align-items-center mb-2">
-                            <img src="https://picsum.photos/50" alt="Author" class="rounded-circle me-2" width="40" />
-                            <small class="text-muted">By Jane Doe • Sept 8, 2025</small>
-                        </div>
-                    </div>
-                </div>
+                @if($featured)
+					<div class="card w-100">
+						<img src="{{ $featured->image_path
+						? asset('storage/' . $featured->image_path)
+						: 'https://picsum.photos/600/400' }}"
+						class="card-img-top h-20"
+						alt="{{ $featured->title }}"
+						style="height: 250px;"
+						onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+
+							@php
+								$author = $featured->user;
+								$initials = strtoupper(substr($author->name, 0, 2)); // first 2 letters
+							@endphp
+						<div class="card-body">
+							<h1 class="fw-bold display-6 mb-2">
+								<a href="
+									{{ route('articles.show', $featured->id) }}">
+									{{ $featured->title }}
+								</a>
+
+							<div class="d-flex align-items-center mb-2">
+								@if($author->profile_photo_path)
+									<img src="{{ asset('storage/' . $author->profile_photo_path) }}"
+										alt="Author" class="rounded-circle me-2" width="40" height="40">
+								@else
+									<div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+										style="width: 40px; height: 40px; font-weight: bold;">
+										{{ $initials }}
+									</div>
+								@endif
+								<small class="text-muted">By {{ $featured->author->name ?? 'Unknown' }} •
+									{{ $featured->date_publish->format('M d, Y') }}
+								</small>
+							</div>
+						</div>
+					</div>
+				@endif
 
                 <h2 class="mt-5 mb-3 text-white">Latest Articles</h2>
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="card shadow-sm h-100 border-0">
-                            <img src="https://picsum.photos/600/400?random=1" class="card-img-top" alt="News 1">
-                            <div class="card-body">
-                                <h5 class="card-title">Solar Farms Powering Cities</h5>
-                                <p class="card-text">Entire urban districts are now running on renewable solar energy
-                                    thanks to massive solar farms.</p>
-                                <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="card shadow-sm h-100 border-0">
-                            <img src="https://picsum.photos/600/400?random=2" class="card-img-top" alt="News 2">
-                            <div class="card-body">
-                                <h5 class="card-title">Electric Cars Beyond 2030</h5>
-                                <p class="card-text">Governments plan to phase out fossil fuel vehicles in favor of
-                                    electric alternatives.</p>
-                                <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="card shadow-sm h-100 border-0">
-                            <img src="https://picsum.photos/600/400?random=3" class="card-img-top" alt="News 3">
-                            <div class="card-body">
-                                <h5 class="card-title">Smart Cities of the Future</h5>
-                                <p class="card-text">Urban landscapes are evolving with green infrastructure and
-                                    AI-driven planning.</p>
-                                <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="card shadow-sm h-100 border-0">
-                            <img src="https://picsum.photos/600/400?random=4" class="card-img-top" alt="News 4">
-                            <div class="card-body">
-                                <h5 class="card-title">Schools Going Green</h5>
-                                <p class="card-text">From solar panels to zero-waste programs, schools are leading the
-                                    eco-friendly movement.</p>
-                                <a href="#" class="btn btn-outline-theme btn-sm">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+				<div class="row g-4">
+					@foreach($articles->skip(1) as $article)
+						<div class="col-md-6">
+							<div class="card shadow-sm h-100 border-0">
+								<img src="{{ 'storage/' . $article->image_path ?? 'https://picsum.photos/600/400' }}"
+									class="card-img-top" alt="{{ $article->title }}">
+								<div class="card-body">
+									<h5 class="card-title">{{ $article->title }}</h5>
+									<p class="card-text">{{ Str::limit($article->content, 100) }}</p>
+									<a href="{{ route('articles.show', $article->id) }}" class="btn btn-outline-theme btn-sm">Read More</a>
+								</div>
+							</div>
+						</div>
+					@endforeach
+				</div>
             </article>
 
             <!-- Sidebar -->
@@ -178,24 +175,30 @@
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body">
                         <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-black">Sustainable Homes of the Future</a></li>
-                            <li><a href="#" class="text-black">Electric Cars: Beyond 2030</a></li>
-                            <li><a href="#" class="text-black">How Schools Go Green</a></li>
-                        </ul>
+						<ul class="list-styled">
+							@foreach($articles->take(5) as $article)
+								<li>
+									<a href="{{ route('articles.show', $article->id) }}" class="text-black">
+										{{ $article->title }}
+									</a>
+								</li>
+							@endforeach
+						</ul>
                     </div>
                 </div>
 
                 <!-- Popular Tags -->
                 <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Popular Tags</h5>
-                        <span class="badge bg-secondary me-1">GreenTech</span>
-                        <span class="badge bg-secondary me-1">Renewable</span>
-                        <span class="badge bg-secondary me-1">Sustainability</span>
-                        <span class="badge bg-secondary me-1">Climate</span>
-                    </div>
-                </div>
+					<div class="card-body">
+						<h5 class="fw-bold mb-3" style="color: var(--theme-color)">Popular Tags</h5>
+						@forelse($tags as $tag)
+							<span class="badge bg-secondary me-1">{{ $tag }}</span>
+						@empty
+							<small class="text-muted">No tags yet</small>
+						@endforelse
+					</div>
+				</div>
+
 
 
 
