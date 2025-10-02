@@ -1,237 +1,224 @@
 @extends('layouts/commonMaster')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
+<style>
+    :root {
+        --theme-color: #00A23F;
+    }
 
-    <style>
-        :root {
-            --theme-color: #00A23F;
-        }
+    .btn-theme {
+        background-color: var(--theme-color);
+        border: none;
+        color: #fff;
+    }
 
-        .btn-theme {
-            background-color: var(--theme-color);
-            border: none;
-            color: #fff;
-        }
+    .btn-theme:hover {
+        background-color: #008a36;
+        color: #fff;
+    }
 
-        .btn-theme:hover {
-            background-color: #008a36;
-            color: #fff;
-        }
+    .btn-outline-theme {
+        border: 1px solid var(--theme-color);
+        color: var(--theme-color);
+    }
 
-        .btn-outline-theme {
-            border: 1px solid var(--theme-color);
-            color: var(--theme-color);
-        }
+    .btn-outline-theme:hover {
+        background-color: var(--theme-color);
+        color: #fff;
+    }
 
-        .btn-outline-theme:hover {
-            background-color: var(--theme-color);
-            color: #fff;
-        }
+    h2.section-title {
+        border-left: 6px solid var(--theme-color);
+        padding-left: 12px;
+        color: #222;
+    }
 
-        h2.section-title {
-            border-left: 6px solid var(--theme-color);
-            padding-left: 12px;
-            color: #222;
-        }
+    .card {
+        display: block;
+        background-color: #fff;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
 
-        .card {
-            display: block;
-            background-color: #fff;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
+    .card-body {
+        padding: 1rem;
+    }
 
-        .card .card-body {
-            padding: 1rem;
-        }
+    .card-img-top {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
-        .hero-img {
-            height: 400px;
-            width: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
+    @media (max-width: 575.98px) {
         .card-img-top {
-            height: 200px;
-            width: 100%;
-            object-fit: cover;
-            display: block;
+            height: 140px;
         }
+    }
 
-        @media (max-width: 575.98px) {
-            .hero-img {
-                height: 220px;
-            }
+    aside.col-lg-4 {
+        position: sticky;
+        top: 100px;
+    }
 
-            .card-img-top {
-                height: 140px;
-            }
-        }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+    }
 
-        @media (min-width: 992px) {
-            aside.col-lg-4 {
-                position: sticky;
-                top: 100px;
-            }
-        }
+    .hover-underline:hover {
+        text-decoration: underline;
+    }
 
+    .landing-page {
+        background-image: linear-gradient(rgba(22,97,14,0.8), rgba(124,220,113,0.8)), url('{{ asset('assets/img/spj/snhsbg.jpg') }}');
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 
-        .landing-page {
-            background-image: linear-gradient(rgba(22, 97, 14, 0.8), rgba(124, 220, 113, 0.8)), url('{{ asset('assets/img/spj/snhsbg.jpg') }}');
-            background-size: cover;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            background-position: center;
-            "
+    .navtop {
+        background-image: url('{{ asset('assets/img/spj/bgnav.jpg') }}');
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
 
-        }
-
-        .navtop {
-            background-image: url('{{ asset('assets/img/spj/bgnav.jpg') }}');
-            background-size: cover;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        /*mobile responsive for novtop*/
-
-		.article-content .empty-library .mdi:before, .mdi-set{
-			font-size: 50px;
-		}
-    </style>
+    .empty-library .mdi {
+        font-size: 50px;
+    }
+</style>
 @endpush
 
 @section('layoutContent')
-    @include('_partials.loader')
-    @include('layouts.sections.navbar.public-navbar')
-    <main class="container-xxl my-5">
-        <div class="row g-5">
-            <article class="col-lg-8 article-content">
-                <h2 class="mt-0 mb-3 text-white">{{ $category }}</h2>
-                <div class="row g-4">
-                    @forelse ($items as $item)
-    <div class="col-md-6">
-        <div class="card shadow-sm h-100 border-0">
+@include('_partials.loader')
+@include('layouts.sections.navbar.public-navbar')
 
-            {{-- IMAGE or VIDEO preview --}}
-            @if ($item->type === 'Article')
-                {{-- Article Image --}}
-                <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
-                    alt="{{ $item->title }}">
+<main class="container-xxl my-5 landing-page">
+    <div class="row g-5">
+        {{-- Main Content --}}
+        <article class="col-lg-8">
+            <h2 class="section-title text-white mb-4">{{ $category }}</h2>
 
-            @elseif ($item->type === 'Media')
-                {{-- Photojournalism / Cartooning --}}
-                @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
-                    @if ($item->image_path)
-                        <img src="{{ asset('/storage/' . $item->image_path) }}" class="card-img-top"
-                            alt="{{ $item->title }}">
-                    @else
-                        <p class="text-center my-3">No image available</p>
-                    @endif
-                @endif
+            <div class="row g-4">
+                @forelse($items as $item)
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-0 rounded-4 overflow-hidden h-100 hover-shadow">
 
-                {{-- TV / Radio Broadcasting --}}
-                @if (in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']) && $item->link)
-                    <div class="ratio ratio-16x9">
-                        <iframe src="{{ $item->link }}"
-                            class="card-img-top"
-                            style="border:none;overflow:hidden"
-                            scrolling="no"
-                            frameborder="0"
-                            allowfullscreen="true"
-                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
-                        </iframe>
-                    </div>
-                @endif
-            @endif
+                        {{-- Image or Video --}}
+                        @if ($item->type === 'Article' || ($item->type === 'Media' && in_array($item->category, ['Photojournalism', 'Cartooning'])))
+                            <div class="position-relative">
+                                <img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://picsum.photos/600/400' }}"
+                                     class="card-img-top"
+                                     alt="{{ $item->title }}"
+                                     onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+                                <div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-bottom opacity-25"></div>
+                            </div>
+                        @elseif ($item->type === 'Media' && in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']) && $item->link)
+                            <div class="ratio ratio-16x9">
+                                <iframe src="{{ $item->link }}"
+                                        class="card-img-top"
+                                        style="border:none;overflow:hidden"
+                                        scrolling="no"
+                                        frameborder="0"
+                                        allowfullscreen
+                                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                                </iframe>
+                            </div>
+                        @endif
 
-            <div class="card-body">
-                <h5 class="card-title">{{ $item->title }}</h5>
-                <small class="text-muted">Published on
-                    {{ $item->date_publish->format('F j, Y') }}</small>
-                <p class="card-text">
-                    {{ \Illuminate\Support\Str::words($item->description, 15, '...') }}
-                </p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <a href="{{ route('article.read', [$item->type, $item->id]) }}"
-                        class="btn btn-outline-theme btn-sm">
-                        Read More
-                    </a>
-                    <div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
-                        <i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
-                        <span class="fw-semibold">{{ $item->publication->views ?? 0 }}</span>
+                        {{-- Card Body --}}
+                        @php
+                            $author = $item->user;
+                            $initials = strtoupper(substr($author->name ?? 'U', 0, 2));
+                        @endphp
+                        <div class="card-body d-flex flex-column px-3 py-3">
+
+                            {{-- Title --}}
+                            <h5 class="card-title fw-bold mb-2">
+                                <a href="{{ route('article.read', [$item->type, $item->id]) }}"
+                                   class="text-dark text-decoration-none hover-underline">
+                                   {{ $item->title }}
+                                </a>
+                            </h5>
+
+                            {{-- Author Info --}}
+                            <div class="d-flex align-items-center mb-2">
+                                @if($author && $author->profile_photo_path)
+                                    <img src="{{ asset('storage/' . $author->profile_photo_path) }}"
+                                         alt="Author"
+                                         class="rounded-circle me-2"
+                                         width="36"
+                                         height="36">
+                                @else
+                                    <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-2"
+                                         style="width: 36px; height: 36px; font-weight: 600;">
+                                        {{ $initials }}
+                                    </div>
+                                @endif
+                                <div class="small text-muted">
+                                    By {{ $author->name ?? 'Unknown' }} • {{ $item->date_publish->format('F j, Y') }}
+                                </div>
+                            </div>
+
+                            {{-- Excerpt --}}
+                            <p class="card-text mb-3">{{ \Illuminate\Support\Str::words($item->description, 15, '...') }}</p>
+
+                            {{-- Read More + Views --}}
+                            <div class="d-flex align-items-center justify-content-between mt-auto">
+                                <a href="{{ route('article.read', [$item->type, $item->id]) }}"
+                                   class="btn btn-success btn-sm rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+                                    <i class="mdi mdi-book-open-variant me-2"></i>
+                                    Read More
+                                </a>
+                                <div class="d-flex align-items-center text-muted">
+                                    <i class="mdi mdi-eye-outline me-1"></i>
+                                    <span>{{ $item->publication->views ?? 0 }}</span>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
+                @empty
+                <div class="col-12 empty-library">
+                    <div class="card shadow-sm border-0 text-center py-5">
+                        <div class="card-body">
+                            <i class="mdi mdi-library-outline text-primary icon-read-article"></i>
+                            <h5 class="mt-3">Empty Library</h5>
+                            <p class="text-muted">No content available at the moment.</p>
+                        </div>
+                    </div>
+                </div>
+                @endforelse
             </div>
-        </div>
+
+            {{-- Pagination --}}
+            {{-- <div class="row mt-5">
+                <div class="col-12 d-flex justify-content-center">
+                    {{ $items->links() }}
+                </div>
+            </div> --}}
+        </article>
+
+        {{-- Sidebar --}}
+        <aside class="col-lg-4">
+				@include('_partials.sidebar')
+        </aside>
     </div>
-@empty
-    <div class="col-12 empty-library">
-        <div class="card shadow-sm border-0 text-center py-5">
-            <div class="card-body">
-                <i class="mdi mdi-library-outline text-primary icon-read-article"></i>
-                <h5 class="mt-3">Empty Library</h5>
-                <p class="text-muted">No content available at the moment.</p>
-            </div>
-        </div>
-    </div>
-@endforelse
+</main>
 
+@include('layouts.sections.footer.footer')
 
-                </div>
-            </article>
+@push('scripts')
+	<script src="{{ asset('assets/js/loader.js') }}"></script>
+	<script src="{{ asset('assets/js/updateTime.js') }}"></script> </script>
+@endpush
 
-            <!-- Sidebar -->
-            <aside class="col-lg-4">
-                <!-- Related Articles -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-black">Sustainable Homes of the Future</a></li>
-                            <li><a href="#" class="text-black">Electric Cars: Beyond 2030</a></li>
-                            <li><a href="#" class="text-black">How Schools Go Green</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Popular Tags -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Popular Tags</h5>
-                        <span class="badge bg-secondary me-1">GreenTech</span>
-                        <span class="badge bg-secondary me-1">Renewable</span>
-                        <span class="badge bg-secondary me-1">Sustainability</span>
-                        <span class="badge bg-secondary me-1">Climate</span>
-                    </div>
-                </div>
-
-                <!-- Share Buttons -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body text-center">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
-                        <a href="#" class="btn btn-outline-theme btn-sm me-2"><i class="ti ti-brand-facebook"></i></a>
-                        <a href="#" class="btn btn-outline-theme btn-sm me-2"><i class="ti ti-brand-twitter"></i></a>
-                        <a href="#" class="btn btn-outline-theme btn-sm"><i class="ti ti-brand-linkedin"></i></a>
-                    </div>
-                </div>
-
-            </aside>
-        </div>
-    </main>
-
-    @include('layouts.sections.footer.footer')
-
-    @push('scripts')
-        <script src="{{ asset('assets/js/loader.js') }}"></script>
-        <script src="{{ asset('assets/js/updateTime.js') }}"></script>
-
-        </script>
-        </div>
-    @endpush
 @endsection

@@ -16,6 +16,7 @@ use App\Http\Controllers\ArticleManagementController;
 use App\Http\Controllers\authentications\RegisterBasic;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
+use App\Models\Media;
 
 // Public routes
 Route::middleware('guest')->group(function () {
@@ -24,13 +25,32 @@ Route::middleware('guest')->group(function () {
             ->orderBy('date_publish', 'desc')
             ->get();
 
-        $tags = $articles
-            ->pluck('tags')
-            ->flatten() // if JSON array
-            ->unique()
-            ->take(10); // limit to 10 tags
+        $media = Media::where('status', 'Published')
+            ->orderBy('date_publish', 'desc')
+            ->get();
 
-        return view('welcome', compact('articles', 'tags'));
+        // Merge articles and media collections
+        $items = $articles
+            ->concat($media)
+            ->sortByDesc('date_publish')
+            ->values();
+
+        $articleTags = $articles
+            ->pluck('tags')
+            ->flatten()
+            ->unique();
+
+        $mediaTags = $media
+            ->pluck('tags')
+            ->flatten()
+            ->unique();
+
+        $tags = $articleTags
+            ->merge($mediaTags)
+            ->unique()
+            ->take(10);
+
+        return view('welcome', compact('items', 'tags'));
     })->name('welcome');
 
     Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');

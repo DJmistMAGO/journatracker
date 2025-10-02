@@ -1,6 +1,7 @@
 @extends('layouts/commonMaster')
 
 @push('styles')
+
     <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
@@ -106,158 +107,191 @@
     @include('_partials.loader')
     @include('layouts.sections.navbar.public-navbar')
     <main class="container-xxl my-5">
-
 		@php
-			$featured = $articles->first();
+			$featured = $items->first();
 		@endphp
         <div class="row g-5">
             <article class="col-lg-8">
                 @if($featured)
-					<div class="card w-100">
-						<img src="{{ $featured->image_path
-						? asset('storage/' . $featured->image_path)
-						: 'https://picsum.photos/600/400' }}"
-						class="card-img-top h-20"
-						alt="{{ $featured->title }}"
-						style="height: 250px;"
-						onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+				<div class="card w-100 shadow-sm border-0 rounded-4 overflow-hidden">
+					{{-- Featured image --}}
+					<div class="position-relative">
+						<img src="{{ $featured->image_path ? asset('storage/' . $featured->image_path) : 'https://picsum.photos/600/400' }}"
+							 class="card-img-top"
+							 alt="{{ $featured->title }}"
+							 style="height: 250px; object-fit: cover;"
+							 onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
 
-							@php
-								$author = $featured->user;
-								$initials = strtoupper(substr($author->name, 0, 2)); // first 2 letters
-							@endphp
-						<div class="card-body">
-							<h1 class="fw-bold display-6 mb-2">
-								<a href="
-									{{ route('article.read', [$featured->type, $featured->id]) }}">
-									{{ $featured->title }}
-								</a>
+						{{-- Optional overlay for effect --}}
+						<div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-bottom opacity-25"></div>
+					</div>
 
-							<div class="d-flex align-items-center mb-2">
-								@if($author->profile_photo_path)
-									<img src="{{ asset('storage/' . $author->profile_photo_path) }}"
-										alt="Author" class="rounded-circle me-2" width="40" height="40">
-								@else
-									<div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
-										style="width: 40px; height: 40px; font-weight: bold;">
-										{{ $initials }}
-									</div>
-								@endif
-								<small class="text-muted">By {{ $featured->author->name ?? 'Unknown' }} •
-									{{ $featured->date_publish->format('M d, Y') }}
-								</small>
-							</div>
-							<div class="d-flex align-items-center justify-content-between mt-3">
-								<a href="{{ route('article.read', [$featured->type, $featured->id]) }}" class="btn btn-theme btn-sm">Read More</a>
-								<div class="d-flex align-items-center ms-2 px-2 py-1  rounded">
-									<i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
-									<span class="fw-semibold">{{ $featured->publication->views ?? 0 }}</span>
+					{{-- Card body --}}
+					@php
+						$author = $featured->user;
+						$initials = strtoupper(substr($author->name, 0, 2));
+					@endphp
+					<div class="card-body px-3 py-3">
+						{{-- Title --}}
+						<h3 class="card-title fw-bold mb-3" style="font-size: 1.5rem;">
+							<a href="{{ route('article.read', [$featured->type, $featured->id]) }}"
+							   class="text-dark text-decoration-none hover-underline">
+							   {{ $featured->title }}
+							</a>
+						</h3>
+
+						{{-- Author info --}}
+						<div class="d-flex align-items-center mb-3">
+							@if($author->profile_photo_path)
+								<img src="{{ asset('storage/' . $author->profile_photo_path) }}"
+									alt="Author"
+									class="rounded-circle me-2"
+									width="40"
+									height="40">
+							@else
+								<div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-2"
+									style="width: 40px; height: 40px; font-weight: 600;">
+									{{ $initials }}
 								</div>
+							@endif
+							<div class="small text-muted">
+								By {{ $featured->author->name ?? 'Unknown' }} •
+								{{ $featured->date_publish->format('M d, Y') }}
+							</div>
+						</div>
+
+						<div class="d-flex align-items-center justify-content-between mt-3">
+							<a href="{{ route('article.read', [$featured->type, $featured->id]) }}"
+								class="btn btn-success btn-sm rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+								<i class="mdi mdi-book-open-variant me-2"></i>
+								Read More
+							</a>
+
+							<div class="d-flex align-items-center text-muted">
+								<i class="mdi mdi-eye-outline me-1"></i>
+								<span>{{ $featured->publication->views ?? 0 }}</span>
 							</div>
 						</div>
 					</div>
+				</div>
+
 				@endif
 
-                <h2 class="mt-5 mb-3 text-white">Latest Articles</h2>
+				<h2 class="mt-5 mb-3 text-white">Latest Articles</h2>
 				<div class="row g-4">
-					@foreach($articles->skip(1) as $article)
+					@foreach($items->skip(1) as $item)
 						<div class="col-md-6">
-							<div class="card shadow-sm h-100 border-0">
-								<img src="{{ 'storage/' . $article->image_path ?? 'https://picsum.photos/600/400' }}"
-									class="card-img-top" alt="{{ $article->title }}">
-								<div class="card-body">
-									<h5 class="card-title">{{ $article->title }}</h5>
-									<p class="card-text">{{ Str::limit($article->content, 100) }}</p>
-									<div class="d-flex align-items-center justify-content-between">
-										<a href="{{ route('article.read', [$article->type, $article->id]) }}" class="btn btn-outline-theme btn-sm">Read More</a>
-										<div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
-											<i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
-											<span class="fw-semibold">{{ $article->publication->views ?? 0 }}</span>
+							<div class="card shadow-sm border-0 rounded-4 overflow-hidden h-100 hover-shadow" style="transition: transform 0.2s;">
+
+								{{-- Uniform Media Container --}}
+								<div class="position-relative" style="height: 250px; overflow: hidden;">
+									@if($item->type === 'Article')
+										{{-- Article Image --}}
+										<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://picsum.photos/600/400' }}"
+											class="w-100 h-100"
+											style="object-fit: cover;"
+											alt="{{ $item->title }}"
+											onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+									@elseif($item->type === 'Media')
+										{{-- Photojournalism / Cartooning --}}
+										@if(in_array($item->category, ['Photojournalism', 'Cartooning']))
+											<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://picsum.photos/600/400' }}"
+												class="w-100 h-100"
+												style="object-fit: cover;"
+												alt="{{ $item->title }}"
+												onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+										@endif
+
+										{{-- TV / Radio --}}
+										@if(in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']) && $item->link)
+											<iframe src="{{ $item->link }}"
+													style="width: 100%; height: 100%; border:0; position: absolute; top:0; left:0;"
+													allowfullscreen
+													allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+											</iframe>
+										@endif
+									@endif
+
+									{{-- Gradient Overlay --}}
+									<div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-bottom opacity-25"></div>
+								</div>
+
+								{{-- Card Body --}}
+								@php
+									$author = $item->user;
+									$initials = strtoupper(substr($author->name ?? 'U', 0, 2));
+								@endphp
+								<div class="card-body px-3 py-3 d-flex flex-column">
+
+									{{-- Title --}}
+									<h5 class="card-title fw-bold mb-2">
+										<a href="{{ route('article.read', [$item->type, $item->id]) }}"
+										class="text-dark text-decoration-none hover-underline">
+										{{ $item->title }}
+										</a>
+									</h5>
+
+									{{-- Author Info --}}
+									<div class="d-flex align-items-center mb-3">
+										@if($author && $author->profile_photo_path)
+											<img src="{{ asset('storage/' . $author->profile_photo_path) }}"
+												alt="Author"
+												class="rounded-circle me-2"
+												width="36"
+												height="36">
+										@else
+											<div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-2"
+												style="width: 36px; height: 36px; font-weight: 600;">
+												{{ $initials }}
+											</div>
+										@endif
+										<div class="small text-muted">
+											By {{ $author->name ?? 'Unknown' }} • {{ $item->date_publish->format('M d, Y') }}
 										</div>
 									</div>
+
+									{{-- Excerpt --}}
+									<p class="card-text mb-3">{{ Str::limit($item->content, 100) }}</p>
+
+									{{-- Read More + Views --}}
+									<div class="d-flex align-items-center justify-content-between mt-auto">
+										<a href="{{ route('article.read', [$item->type, $item->id]) }}"
+										class="btn btn-success btn-sm rounded-pill px-3 py-1 shadow-sm d-flex align-items-center">
+											<i class="mdi mdi-book-open-variant me-2"></i>
+											Read More
+										</a>
+
+										<div class="d-flex align-items-center text-muted">
+											<i class="mdi mdi-eye-outline me-1"></i>
+											<span>{{ $item->publication->views ?? 0 }}</span>
+										</div>
+									</div>
+
 								</div>
 							</div>
 						</div>
 					@endforeach
 				</div>
+
+
+
+				{{-- Hover lift effect --}}
+				<style>
+				.hover-shadow:hover {
+					transform: translateY(-5px);
+					box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+				}
+				.hover-underline:hover {
+					text-decoration: underline;
+				}
+				</style>
+
+
             </article>
 
             <!-- Sidebar -->
             <aside class="col-lg-4">
-                <!-- Related Articles -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Top Articles</h5>
-						<ul class="list-styled">
-							@foreach($articles->take(5) as $article)
-								<li>
-									<a href="{{ route('article.read', [$article->type, $article->id]) }}" class="text-black">
-										{{ $article->title }}
-									</a>
-								</li>
-							@endforeach
-						</ul>
-                    </div>
-                </div>
-
-                <!-- Popular Tags -->
-                <div class="card border-0 shadow-sm mb-4">
-					<div class="card-body">
-						<h5 class="fw-bold mb-3" style="color: var(--theme-color)">Popular Tags</h5>
-						@forelse($tags as $tag)
-							<span class="badge bg-secondary me-1">{{ $tag }}</span>
-						@empty
-							<small class="text-muted">No tags yet</small>
-						@endforelse
-					</div>
-				</div>
-
-
-
-
-                <!-- Incident Report -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body ">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Incident Report</h5>
-                        <form action="{{ route('incident-report.store-report') }}" method="POST" enctype="multipart/form-data"
-                            onsubmit="prepareTags()">
-                            @csrf
-                            @include('_partials.errors')
-							 @include('_partials.success')
-                            <div class="mb-2">
-                                <label for="formFile" class="form-label">Name of Reporter</label>
-                                <input type="text" class="form-control mb-2" name="student_name" placeholder="Name of Reporter" />
-                            </div>
-                            <div class="mb-2">
-                                <label for="formFile" class="form-label">Upload Your Student I.D.</label>
-                                <input class="form-control" type="file" id="formFile" name="student_id_image">
-                            </div>
-                            <div class="mb-2">
-                                <label for="formFile" class="form-label">Incident Description</label>
-                                <textarea class="form-control h-px-75" aria-label="With textarea" name="incident_description" placeholder="Type here..."></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="formFile" class="form-label">Upload Proof of the Incident</label>
-                                <input class="form-control" type="file" id="formFile" name="image_proof">
-                            </div>
-
-                            <button type="submit" class="btn btn-theme w-100">Submit Report</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Share Buttons -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body text-center">
-                        <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
-                        <a href="#" class="btn btn-outline-theme btn-sm me-2"><i
-                                class="ti ti-brand-facebook"></i></a>
-                        <a href="#" class="btn btn-outline-theme btn-sm me-2"><i
-                                class="ti ti-brand-twitter"></i></a>
-                        <a href="#" class="btn btn-outline-theme btn-sm"><i class="ti ti-brand-linkedin"></i></a>
-                    </div>
-                </div>
-
+                @include('_partials.sidebar')
             </aside>
         </div>
     </main>
