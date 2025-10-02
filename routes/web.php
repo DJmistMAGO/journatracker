@@ -17,45 +17,42 @@ use App\Http\Controllers\authentications\RegisterBasic;
 use App\Http\Controllers\EditorialSchedulingController;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
 
-// welcome
-Route::get('/', function () {
-    $articles = Article::where('status', 'Published')
-        ->orderBy('date_publish', 'desc')
-        ->get();
-
-    $tags = $articles
-        ->pluck('tags')
-        ->flatten() // if JSON array
-        ->unique()
-        ->take(10); // limit to 10 tags
-
-    return view('welcome', compact('articles', 'tags'));
-})->name('welcome');
-
-Route::get('/articles/{article}', [ArticleManagementController::class, 'publicShow'])->name('articles.show');
-
-Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
-Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
-
-Route::controller(IncidentReportController::class)
-    ->prefix('incident-report')
-    ->group(function () {
-        Route::get('/', 'index')->name('incident-report');
-        Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
-        Route::get('/show/{id}', 'show')->name('incident-report.show');
-        Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
-    });
-
-// Guest routes
+// Public routes
 Route::middleware('guest')->group(function () {
+    Route::get('/', function () {
+        $articles = Article::where('status', 'Published')
+            ->orderBy('date_publish', 'desc')
+            ->get();
+
+        $tags = $articles
+            ->pluck('tags')
+            ->flatten() // if JSON array
+            ->unique()
+            ->take(10); // limit to 10 tags
+
+        return view('welcome', compact('articles', 'tags'));
+    })->name('welcome');
+
+    Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
+    Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
+
+    Route::controller(IncidentReportController::class)
+        ->prefix('incident-report')
+        ->group(function () {
+            // Route::get('/', 'index')->name('incident-report');
+            Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
+            // Route::get('/show/{id}', 'show')->name('incident-report.show');
+            // Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
+        });
+
     Route::get('/login', [LoginBasic::class, 'index'])->name('login');
     Route::post('/login', [LoginBasic::class, 'authenticate'])->name('login.post');
 
     Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
     Route::post('/register', [RegisterBasic::class, 'store'])->name('register.post');
 
-    Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('forgot-password');
-    Route::post('/forgot-password', [ForgotPasswordBasic::class, 'sendResetLink'])->name('forgot-password.post');
+    // Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('forgot-password');
+    // Route::post('/forgot-password', [ForgotPasswordBasic::class, 'sendResetLink'])->name('forgot-password.post');
 });
 
 // Protected routes
@@ -69,6 +66,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name(
         'notifications.markSingleRead'
     );
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
     Route::controller(PubManagementController::class)
         ->prefix('publication')
@@ -108,9 +107,18 @@ Route::middleware('auth')->group(function () {
             Route::delete('delete/{id}', 'destroy')->name('media-management.destroy');
         });
 
-    Route::middleware('auth')->group(function () {
-        Route::resource('media', MediaController::class);
-    });
+    Route::controller(IncidentReportController::class)
+        ->prefix('incident-report')
+        ->group(function () {
+            Route::get('/', 'index')->name('incident-report');
+            // Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
+            Route::get('/show/{id}', 'show')->name('incident-report.show');
+            Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
+        });
+
+    // Route::middleware('auth')->group(function () {
+    //     Route::resource('media', MediaController::class);
+    // });
 
     // editorial scheduling
     Route::controller(EditorialSchedulingController::class)

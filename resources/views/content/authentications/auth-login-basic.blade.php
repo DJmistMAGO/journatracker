@@ -53,9 +53,9 @@
                     Remember Me
                     </label>
                 </div>
-                <a href="{{url('auth/forgot-password-basic')}}" class="float-end mb-1">
+                {{-- <a href="{{url('auth/forgot-password-basic')}}" class="float-end mb-1">
                     <span>Forgot Password?</span>
-                </a>
+                </a> --}}
                 </div>
                 <div class="mb-3">
                 <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>

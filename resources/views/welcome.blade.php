@@ -129,7 +129,7 @@
 						<div class="card-body">
 							<h1 class="fw-bold display-6 mb-2">
 								<a href="
-									{{ route('articles.show', $featured->id) }}">
+									{{ route('article.read', [$featured->type, $featured->id]) }}">
 									{{ $featured->title }}
 								</a>
 
@@ -147,6 +147,13 @@
 									{{ $featured->date_publish->format('M d, Y') }}
 								</small>
 							</div>
+							<div class="d-flex align-items-center justify-content-between mt-3">
+								<a href="{{ route('article.read', [$featured->type, $featured->id]) }}" class="btn btn-theme btn-sm">Read More</a>
+								<div class="d-flex align-items-center ms-2 px-2 py-1  rounded">
+									<i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
+									<span class="fw-semibold">{{ $featured->publication->views ?? 0 }}</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				@endif
@@ -161,7 +168,13 @@
 								<div class="card-body">
 									<h5 class="card-title">{{ $article->title }}</h5>
 									<p class="card-text">{{ Str::limit($article->content, 100) }}</p>
-									<a href="{{ route('articles.show', $article->id) }}" class="btn btn-outline-theme btn-sm">Read More</a>
+									<div class="d-flex align-items-center justify-content-between">
+										<a href="{{ route('article.read', [$article->type, $article->id]) }}" class="btn btn-outline-theme btn-sm">Read More</a>
+										<div class="d-flex align-items-center ms-2 px-2 py-1 border border-primary rounded">
+											<i class="menu-icon tf-icons mdi mdi-eye-circle-outline text-primary me-1"></i>
+											<span class="fw-semibold">{{ $article->publication->views ?? 0 }}</span>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -178,7 +191,7 @@
 						<ul class="list-styled">
 							@foreach($articles->take(5) as $article)
 								<li>
-									<a href="{{ route('articles.show', $article->id) }}" class="text-black">
+									<a href="{{ route('article.read', [$article->type, $article->id]) }}" class="text-black">
 										{{ $article->title }}
 									</a>
 								</li>

@@ -9,7 +9,6 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-
 class StatusUpdateNotification extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
@@ -20,27 +19,33 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
     public $status;
     public $remarks;
     public $datePublish;
+    public $timePublish;
 
-    public function __construct($userName, $itemType, $itemTitle, $status, $remarks = null, $datePublish = null)
-    {
+    public function __construct(
+        $userName,
+        $itemType,
+        $itemTitle,
+        $status,
+        $remarks = null,
+        $datePublish = null,
+        $timePublish = null
+    ) {
         $this->userName = $userName;
         $this->itemType = $itemType;
         $this->itemTitle = $itemTitle;
         $this->status = $status;
         $this->remarks = $remarks;
         $this->datePublish = $datePublish;
+        $this->timePublish = $timePublish;
     }
 
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: ucfirst($this->itemType) . ' Status Update',
-        );
+        return new Envelope(subject: ucfirst($this->itemType) . ' Status Update');
     }
 
     public function content(): Content
     {
-
         return new Content(
             view: 'spj-content.publication-management.email.email-status',
             with: [
@@ -50,7 +55,8 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
                 'status' => $this->status,
                 'remarks' => $this->remarks,
                 'datePublish' => $this->datePublish,
-            ],
+                'timePublish' => $this->timePublish,
+            ]
         );
     }
 

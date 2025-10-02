@@ -7,159 +7,130 @@
 @endsection
 
 @section('content')
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Publication Management</h4>
+<h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ /</span> Publication Management</h4>
 
-	@include('_partials.errors')
-	@include('_partials.success')
+@include('_partials.errors')
+@include('_partials.success')
 
-    <div class="card">
-        <h5 class="card-header">Publication List</h5>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
+<div class="card">
+    <h5 class="card-header">Publication List</h5>
+
+    {{-- Table for larger screens --}}
+    <div class="table-responsive d-none d-sm-block">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th class="d-none d-md-table-cell">Category</th>
+                    <th class="d-none d-md-table-cell">Type</th>
+                    <th>Author</th>
+                    <th class="d-none d-md-table-cell">Date Submitted</th>
+                    <th>Status</th>
+                    <th>Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($items as $item)
                     <tr>
-                        <th>Title</th>
-						<th>Category</th>
-                        <th>Type</th>
-                        <th>Author</th>
-                        <th>Date Submitted</th>
-                        <th>Status</th>
-                        <th>Manage</th>
+                        <td class="text-truncate" style="max-width: 200px;" title="{{ $item->title }}">
+                            {{ $item->title }}
+                        </td>
+                        <td class="d-none d-md-table-cell">{{ $item->category }}</td>
+                        <td class="d-none d-md-table-cell">{{ $item->type }}</td>
+                        <td>{{ $item->user->name ?? 'N/A' }}</td>
+                        <td class="d-none d-md-table-cell">
+                            {{ $item->date_submitted ? \Carbon\Carbon::parse($item->date_submitted)->format('Y-m-d') : '-' }}
+                        </td>
+                        <td>
+                            <span class="badge
+                                @if ($item->status === 'Draft') bg-secondary
+                                @elseif($item->status === 'Approved') bg-warning
+                                @elseif($item->status === 'Published') bg-success
+                                @elseif($item->status === 'Revision') bg-warning
+                                @elseif($item->status === 'Rejected') bg-danger
+                                @elseif($item->status === 'Scheduled') bg-primary
+                                @else bg-info @endif">
+
+                                @if ($item->status === 'Scheduled' && $item->publish_at)
+                                    {{ $item->status }} <br>
+                                    <small>{{ \Carbon\Carbon::parse($item->publish_at)->format('M d, Y h:i A') }}</small>
+                                @else
+                                    {{ $item->status }}
+                                @endif
+                            </span>
+                        </td>
+                        <td class="text-nowrap">
+                            <a href="{{ route('publication-management.show', ['id' => $item->id, 'type' => strtolower($item->type)]) }}"
+                               class="btn btn-sm btn-info d-inline-block me-1 mb-1 mb-md-0" title="View">
+                                <i class="mdi mdi-eye"></i> View
+                            </a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody class="table-border-bottom-0">
-                    @forelse ($items as $item)
-                        <tr>
-                            <td>{{ Str::limit($item->title, 50) }}</td>
-                            <td>{{ $item->category }}</td>
-							<td>{{ $item->type }}</td>
-                            <td>{{ $item->user->name ?? 'N/A' }}</td>
-                            <td>{{ $item->date_submitted ? \Carbon\Carbon::parse($item->date_submitted)->format('Y-m-d') : '-' }}</td>
-							<td>
-								<span
-									class="badge
-										@if ($item->status === 'Draft') bg-secondary
-										@elseif($item->status === 'Approved') bg-warning
-										@elseif($item->status === 'Published') bg-success
-										@elseif($item->status === 'Revision') bg-warning
-										@elseif($item->status === 'Rejected') bg-danger
-										@elseif($item->status === 'Scheduled') bg-primary
-										@else bg-info @endif">
-
-									@if ($item->status === 'Scheduled' && $item->publish_at)
-										{{ $item->status }} <br>
-										<small>{{ \Carbon\Carbon::parse($item->publish_at)->format('M d, Y h:i A') }}</small>
-									@else
-										{{ $item->status }}
-									@endif
-
-								</span>
-							</td>
-
-                            <td>
-								@if ($item->status === 'Approved')
-									<!-- Publish Button -->
-									<button type="button" class="btn btn-sm btn-success"
-										data-bs-toggle="modal"
-										data-bs-target="#publishModal-{{ $item->id }}">
-										Publish
-									</button>
-
-									<!-- Publish Modal -->
-									<div class="modal fade" id="publishModal-{{ $item->id }}" tabindex="-1" aria-labelledby="publishLabel-{{ $item->id }}" aria-hidden="true">
-										<div class="modal-dialog">
-											<form action="{{ route('publication-management.publish', $item->id) }}" method="POST">
-												@csrf
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="publishLabel-{{ $item->id }}">Schedule Publication</h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-													</div>
-													<div class="modal-body">
-														<div class="mb-3">
-															<label class="form-label">Publish Date</label>
-															<input type="date" class="form-control" name="publish_date" required>
-														</div>
-														<div class="mb-3">
-															<label class="form-label">Publish Time</label>
-															<input type="time" class="form-control" name="publish_time" required>
-														</div>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-														<button type="submit" class="btn btn-success">Schedule</button>
-													</div>
-												</div>
-											</form>
-										</div>
-									</div>
-
-
-								@endif
-
-								@if ($item->status === 'Scheduled')
-									<!-- Reschedule Button -->
-									<button type="button" class="btn btn-sm btn-warning"
-										data-bs-toggle="modal"
-										data-bs-target="#rescheduleModal-{{ $item->id }}">
-										Reschedule
-									</button>
-
-									<!-- Reschedule Modal -->
-									<div class="modal fade" id="rescheduleModal-{{ $item->id }}" tabindex="-1" aria-labelledby="rescheduleLabel-{{ $item->id }}" aria-hidden="true">
-										<div class="modal-dialog">
-											<form action="{{ route('publication-management.reschedule', $item->id) }}" method="POST">
-												@csrf
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="rescheduleLabel-{{ $item->id }}">Reschedule Publication</h5>
-														<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-													</div>
-													<div class="modal-body">
-														<div class="mb-3">
-															<label class="form-label">Publish Date</label>
-															<input type="date" class="form-control" name="publish_date" required>
-														</div>
-														<div class="mb-3">
-															<label class="form-label">Publish Time</label>
-															<input type="time" class="form-control" name="publish_time" required>
-														</div>
-													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-														<button type="submit" class="btn btn-success">Reschedule</button>
-													</div>
-												</div>
-											</form>
-										</div>
-									</div>
-								@endif
-
-								@if ($item->status === 'Published')
-									<!-- Unpublish Button -->
-									<form action="{{ route('publication-management.unpublish', $item->id) }}" method="POST" class="d-inline">
-										@csrf
-										<button type="submit" class="btn btn-sm btn-danger">Unpublish</button>
-									</form>
-								@endif
-
-
-
-								{{-- View Button --}}
-                                <a href="{{ route('publication-management.show', ['id' => $item->id, 'type' => strtolower($item->type)]) }}"
-                                    class="btn btn-sm btn-info">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">No records found.</td>
-                        </tr>
-                    @endforelse
-
-                </tbody>
-            </table>
-        </div>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center">No records found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
+
+    {{-- Card layout for mobile --}}
+    <div class="d-block d-sm-none">
+        @forelse ($items as $item)
+            <div class="card mb-4 mt-3 shadow-lg">
+                <div class="card-body d-flex flex-column gap-2">
+                    <h5 class="card-title text-truncate" title="{{ $item->title }}">
+                        {{ $item->title }}
+                    </h5>
+                    <p class="mb-0"><strong>Category:</strong> {{ $item->category }}</p>
+                    <p class="mb-0"><strong>Type:</strong> {{ $item->type }}</p>
+                    <p class="mb-0"><strong>Author:</strong> {{ $item->user->name ?? 'N/A' }}</p>
+                    <p class="mb-0"><strong>Date Submitted:</strong>
+                        {{ $item->date_submitted ? \Carbon\Carbon::parse($item->date_submitted)->format('Y-m-d') : '-' }}
+                    </p>
+                    <p class="mb-0"><strong>Status:</strong>
+                        <span class="badge
+                            @if ($item->status === 'Draft') bg-secondary
+                            @elseif($item->status === 'Approved') bg-warning
+                            @elseif($item->status === 'Published') bg-success
+                            @elseif($item->status === 'Revision') bg-warning
+                            @elseif($item->status === 'Rejected') bg-danger
+                            @elseif($item->status === 'Scheduled') bg-primary
+                            @else bg-info @endif">
+
+                            @if ($item->status === 'Scheduled' && $item->publish_at)
+                                {{ $item->status }} <br>
+                                <small>{{ \Carbon\Carbon::parse($item->publish_at)->format('M d, Y h:i A') }}</small>
+                            @else
+                                {{ $item->status }}
+                            @endif
+                        </span>
+                    </p>
+
+                    <div class="d-flex gap-2 mt-2 flex-wrap">
+                        <a href="{{ route('publication-management.show', ['id' => $item->id, 'type' => strtolower($item->type)]) }}"
+                           class="btn btn-sm btn-info flex-fill" title="View">
+                            <i class="mdi mdi-eye me-1"></i> View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p class="text-center">No records found.</p>
+        @endforelse
+    </div>
+</div>
+
+@push('styles')
+<style>
+    /* Truncate long titles inside cards */
+    .card-title.text-truncate {
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+@endpush
 @endsection

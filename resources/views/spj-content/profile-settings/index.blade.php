@@ -15,7 +15,7 @@
 	<div class="col-md-12">
 		<ul class="nav nav-pills flex-column flex-md-row mb-4 gap-2 gap-lg-0">
 		<li class="nav-item"><a class="nav-link active" href="{{ route('profile.index') }}"><i class="mdi mdi-account-outline mdi-20px me-1"></i>Account</a></li>
-		<li class="nav-item"><a class="nav-link" href="#"><i class="mdi mdi-bell-outline mdi-20px me-1"></i>Notifications</a></li>
+		<li class="nav-item"><a class="nav-link" href="{{ route('notifications.index') }}"><i class="mdi mdi-bell-outline mdi-20px me-1"></i>Notifications</a></li>
 		</ul>
 		@include('_partials.errors')
 		@include('_partials.success')
