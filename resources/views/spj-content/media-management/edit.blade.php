@@ -107,6 +107,9 @@
                 <!-- Submit -->
                 <div class="mt-3">
                     <button type="submit" class="btn btn-primary">Update</button>
+					<div class="ms-2 d-inline">
+						<a href="{{ route('media-management') }}" class="btn btn-secondary">Cancel</a>
+					</div>
                 </div>
             </form>
         </div>
