@@ -8,44 +8,44 @@ use App\Models\PubManagement;
 
 class Media extends Model
 {
-	use HasFactory;
+    use HasFactory;
 
-	protected $fillable = [
-		'user_id',
-		'title',
-		'description',
-		'image_path',
-		'link',
-		'category',
-		'tags',
-		'date_submitted',
-		'date_publish',
-		'status',
-		'remarks',
-	];
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'image_path',
+        'link',
+        'category',
+        'tags',
+        'date_submitted',
+        'date_publish',
+        'status',
+        'remarks',
+        'publish_at',
+    ];
 
-	protected $casts = [
-		'tags'          => 'array',
-		'date_submitted' => 'date',
-		'date_publish'  => 'date',
-	];
+    protected $casts = [
+        'tags' => 'array',
+        'date_submitted' => 'date',
+        'date_publish' => 'date',
+    ];
 
+    /**
+     * Relation: Media belongs to a user (who submitted it)
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
-	/**
-	 * Relation: Media belongs to a user (who submitted it)
-	 */
-	public function user()
-	{
-		return $this->belongsTo(User::class, 'user_id', 'id');
-	}
+    public function publication()
+    {
+        return $this->morphOne(PubManagement::class, 'content');
+    }
 
-	public function publication()
-	{
-		return $this->morphOne(PubManagement::class, 'content');
-	}
-
-		public function author()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

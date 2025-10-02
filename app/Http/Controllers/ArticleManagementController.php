@@ -175,13 +175,4 @@ class ArticleManagementController extends Controller
 
         return back()->with('info', 'Article archived successfully.');
     }
-
-    public function publicShow(Article $article)
-    {
-        if ($article->status !== 'Published') {
-            abort(404);
-        }
-
-        return view('spj-content.article-management.public-article', compact('article'));
-    }
 }

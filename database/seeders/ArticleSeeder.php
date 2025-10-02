@@ -16,7 +16,7 @@ class ArticleSeeder extends Seeder
     {
         $articleData = [
             [
-                'user_id' => 1,
+                'user_id' => 3,
                 'title' => 'The Rise of Student Journalism',
                 'description' => 'In recent years, student journalism has seen a significant rise...',
                 'image_path' => 'articles/article_2025-10-02_2.png',
@@ -28,7 +28,7 @@ class ArticleSeeder extends Seeder
                 'remarks' => null,
             ],
             [
-                'user_id' => 1,
+                'user_id' => 3,
                 'title' => 'Exploring the World of Digital Media',
                 'description' => 'Digital media is transforming the way we consume information...',
                 'image_path' => 'articles/article_2025-10-02_1.png',

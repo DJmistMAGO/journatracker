@@ -34,6 +34,20 @@ class PublishScheduledArticles extends Command
             Log::info("📄 Published Article: {$article->title} (ID: {$article->id}) at {$now}");
         }
 
+        // ✅ Publish Scheduled Media
+        $mediaItems = Media::where('status', 'Scheduled')
+            ->whereNotNull('publish_at')
+            ->where('publish_at', '<=', $now)
+            ->get();
+        Log::info("Found {$mediaItems->count()} scheduled media items to publish at {$now}");
+        foreach ($mediaItems as $media) {
+            $media->status = 'Published';
+            $media->date_publish = $now;
+            $media->save();
+            $this->info("🖼️ Published Media: {$media->filename} (ID: {$media->id})");
+            Log::info("🖼️ Published Media: {$media->filename} (ID: {$media->id}) at {$now}");
+        }
+
         Log::info('Scheduler ran at ' . now());
 
         return Command::SUCCESS;

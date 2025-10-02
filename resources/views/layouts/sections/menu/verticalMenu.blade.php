@@ -28,7 +28,7 @@
             <div>Dashboards</div>
             </a>
         </li>
-		@role('admin')
+		@unlessrole('student')
         <li class="menu-item {{ request()->is('publication*') ? 'active' : '' }}">
             <a href="{{ url('/publication') }}" class="menu-link">
             <i class="menu-icon tf-icons mdi mdi-bookshelf"></i>
@@ -50,7 +50,7 @@
             <div>Media Management</div>
             </a>
         </li>
-{{-- 
+{{--
         <li class="menu-item {{ request()->is('editorial-scheduling*') ? 'active' : '' }}">
             <a href="{{ url('/editorial-scheduling') }}" class="menu-link">
             <i class="menu-icon tf-icons mdi mdi-book-clock-outline"></i>

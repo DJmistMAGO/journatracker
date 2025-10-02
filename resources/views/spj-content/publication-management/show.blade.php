@@ -92,7 +92,7 @@
 			@endif
 
         </div>
-        @if ($item->status == 'Draft')
+        @if ($item->status == 'Draft' || $item->status == 'Approved')
             <div class="card-footer">
                 <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
                     data-bs-target="#statusModal-{{ $item->id }}">
@@ -118,18 +118,24 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="status-{{ $item->id }}" class="form-label">Status</label>
-                            <select name="status" id="status-{{ $item->id }}" class="form-select"
-                                onchange="toggleFields({{ $item->id }})" required>
-                                <option value="">-- Select --</option>
-                                <option value="Published">Published</option>
-                                <option value="Revision">Revision</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
+                            <select name="status" id="status-{{ $item->id }}" class="form-select" onchange="toggleFields({{ $item->id }})" required>
+								<option value="">-- Select --</option>
+								<option value="publish_now">Publish Now</option>
+								<option value="schedule_later">Schedule Later</option>
+								<option value="Revision">Revision</option>
+								<option value="Rejected">Rejected</option>
+							</select>
+
                         </div>
 
                         <div class="mb-3 d-none" id="publishDate-{{ $item->id }}">
                             <label class="form-label">Publication Date</label>
                             <input type="date" name="date_publish" class="form-control">
+                        </div>
+
+						<div class="mb-3 d-none" id="publishTime-{{ $item->id }}">
+                            <label class="form-label">Publication Time</label>
+                            <input type="time" name="time_publish" class="form-control">
                         </div>
 
                         <div class="mb-3 d-none" id="remarks-{{ $item->id }}">
@@ -139,7 +145,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-success">Save</button>
                     </div>
                 </div>
             </form>
@@ -149,20 +155,51 @@
 
     <script>
         function toggleFields(id) {
-            const status = document.getElementById('status-' + id).value;
-            const publishDate = document.getElementById('publishDate-' + id);
-            const remarks = document.getElementById('remarks-' + id);
+			const status = document.getElementById('status-' + id).value;
+			const publishDate = document.getElementById('publishDate-' + id);
+			const publishTime = document.getElementById('publishTime-' + id);
+			const remarks = document.getElementById('remarks-' + id);
 
-            if (status === 'Published') {
-                publishDate.classList.remove('d-none');
-                remarks.classList.add('d-none');
-            } else if (status === 'Revision' || status === 'Rejected') {
-                remarks.classList.remove('d-none');
-                publishDate.classList.add('d-none');
-            } else {
-                publishDate.classList.add('d-none');
-                remarks.classList.add('d-none');
-            }
-        }
+			if (status === 'publish_now') {
+				publishDate.classList.add('d-none');
+				publishTime.classList.add('d-none');
+				remarks.classList.add('d-none');
+
+				// Set hidden fields or auto-fill date/time
+				const form = document.querySelector(`#statusModal-${id} form`);
+				const now = new Date();
+				let dateInput = form.querySelector('input[name="date_publish"]');
+				let timeInput = form.querySelector('input[name="time_publish"]');
+
+				if (!dateInput) {
+					dateInput = document.createElement('input');
+					dateInput.type = 'hidden';
+					dateInput.name = 'date_publish';
+					form.appendChild(dateInput);
+				}
+				if (!timeInput) {
+					timeInput = document.createElement('input');
+					timeInput.type = 'hidden';
+					timeInput.name = 'time_publish';
+					form.appendChild(timeInput);
+				}
+
+				dateInput.value = now.toISOString().split('T')[0]; // yyyy-mm-dd
+				timeInput.value = now.toTimeString().split(' ')[0].slice(0,5); // hh:mm
+			} else if (status === 'schedule_later') {
+				publishDate.classList.remove('d-none');
+				publishTime.classList.remove('d-none');
+				remarks.classList.add('d-none');
+			} else if (status === 'Revision' || status === 'Rejected') {
+				remarks.classList.remove('d-none');
+				publishDate.classList.add('d-none');
+				publishTime.classList.add('d-none');
+			} else {
+				publishDate.classList.add('d-none');
+				publishTime.classList.add('d-none');
+				remarks.classList.add('d-none');
+			}
+		}
+
     </script>
 @endsection
