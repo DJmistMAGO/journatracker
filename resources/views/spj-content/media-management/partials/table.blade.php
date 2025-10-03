@@ -1,5 +1,26 @@
 {{-- Desktop Table --}}
 <div class="table-responsive d-none d-sm-block">
+	<form method="GET" action="{{ route('media-management') }}" class="row px-3 mb-3 align-items-center">
+            <!-- Search Input -->
+            <div class="col-12 col-md-3">
+                <input type="text" name="search" class="form-control" placeholder="Search title..."
+                    value="{{ request('search') }}">
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-12 col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                </select>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
     <table class="table mb-0">
         <thead>
             <tr>
