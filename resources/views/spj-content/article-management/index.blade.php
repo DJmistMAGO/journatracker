@@ -28,6 +28,29 @@
 
     {{-- Table for larger screens --}}
     <div class="table-responsive d-none d-sm-block">
+		<div class="">
+			<form method="GET" action="{{ route('article-management') }}" class="col-12 row mb-3 align-items-center">
+            <!-- Search Input -->
+            <div class="col-12 col-md-3">
+                <input type="text" name="search" class="form-control ms-3" placeholder="Search title..."
+                    value="{{ request('search') }}">
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-12 col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="Revision" {{ request('status') == 'Revision' ? 'selected' : '' }}>Revision</option>
+                </select>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+		</div>
         <table class="table table-hover align-middle">
             <thead>
                 <tr>
