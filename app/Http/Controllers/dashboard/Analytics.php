@@ -19,19 +19,11 @@ class Analytics extends Controller
     {
         $user = Auth::user();
 
-        if ($user->isRole('admin')) {
-            // Admin: get all notifications (no duplicates)
-            $notifications = DatabaseNotification::query()
-                ->orderBy('created_at', 'desc')
-                ->paginate(5);
-        } else {
-            // Non-admin: only their own notifications, excluding IncidentReportNotification
-            $notifications = $user
+        $notifications = $user
                 ->notifications()
                 ->where('type', '!=', IncidentReportNotification::class)
                 ->orderBy('created_at', 'desc')
                 ->paginate(5);
-        }
 
         if ($user->isRole('admin')) {
             // Admin sees everything

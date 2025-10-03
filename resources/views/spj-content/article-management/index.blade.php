@@ -21,7 +21,7 @@
         <h5 class="card-header  mb-0">Article List</h5>
         @unlessrole('admin')
             <a href="{{ route('article-management.create') }}" class="btn btn-success btn-md">
-                <i class="mdi mdi-text-box-plus-outline me-1"></i> Write Article
+                <i class="mdi mdi-text-box-plus-outline me-1"></i> Submit Article
             </a>
         @endunless
     </div>
