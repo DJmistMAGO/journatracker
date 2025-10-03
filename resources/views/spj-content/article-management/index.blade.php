@@ -41,7 +41,7 @@
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
                     <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                    <option value="Revision" {{ request('status') == 'Revision' ? 'selected' : '' }}>Revision</option>
                 </select>
             </div>
 

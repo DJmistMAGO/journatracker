@@ -20,6 +20,7 @@ class ArticleManagementController extends Controller
     if ($authUser->hasRole('admin')) {
         // Admin can view all articles, optionally filtered
         $articles = Article::with('user')
+            ->whereIn('status', ['Draft', 'Revision'])
             ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
             ->when($status, fn($query) => $query->where('status', $status))
             ->orderBy('created_at', 'desc')
