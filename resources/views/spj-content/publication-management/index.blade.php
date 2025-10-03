@@ -21,6 +21,29 @@
 
     {{-- Table for larger screens --}}
     <div class="table-responsive d-none d-sm-block">
+		<div class="col-12">
+			<form method="GET" action="{{ route('publication-management.index') }}" class="row mb-3 align-items-center col-12">
+            <!-- Search Input -->
+            <div class="col-12 col-md-3">
+                <input type="text" name="search" class="form-control ms-3" placeholder="Search title..."
+                    value="{{ request('search') }}">
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-12 col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="Scheduled" {{ request('status') == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
+                </select>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+		</div>
         <table class="table table-hover align-middle">
             <thead>
                 <tr>

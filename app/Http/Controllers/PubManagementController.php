@@ -12,27 +12,36 @@ use App\Notifications\StatusChangedNotification;
 
 class PubManagementController extends Controller
 {
-    public function index()
-    {
-        // Get articles & media that are draft, approved, or scheduled
-        $articles = Article::with('user')
-            ->whereIn('status', ['Draft', 'Approved', 'Scheduled'])
-            ->orderByDesc('date_submitted')
-            ->get();
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+    $status = $request->input('status');
 
-        $media = Media::with('user')
-            ->whereIn('status', ['Draft', 'Approved', 'Scheduled'])
-            ->orderByDesc('date_submitted')
-            ->get();
+    // Articles
+    $articles = Article::with('user')
+        ->whereIn('status', ['Draft', 'Approved', 'Scheduled'])
+        ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+        ->when($status, fn($query) => $query->where('status', $status))
+        ->orderByDesc('date_submitted')
+        ->get();
 
-        // Merge & sort by submission date
-        $items = $articles
-            ->concat($media)
-            ->sortByDesc('date_submitted')
-            ->values();
+    // Media
+    $media = Media::with('user')
+        ->whereIn('status', ['Draft', 'Approved', 'Scheduled'])
+        ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+        ->when($status, fn($query) => $query->where('status', $status))
+        ->orderByDesc('date_submitted')
+        ->get();
 
-        return view('spj-content.publication-management.index', compact('items'));
-    }
+    // Merge & sort by submission date
+    $items = $articles
+        ->concat($media)
+        ->sortByDesc('date_submitted')
+        ->values();
+
+    return view('spj-content.publication-management.index', compact('items'));
+}
+
 
     public function show($type, $id)
     {
