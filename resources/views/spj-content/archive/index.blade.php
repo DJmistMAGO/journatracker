@@ -47,6 +47,7 @@
                             <i class="mdi mdi-eye"></i>
                         </a>
 
+						@unlessrole('student')
                         {{-- Unpublish --}}
                         @if ($item->status === 'Published')
                         <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
@@ -54,6 +55,7 @@
                             <i class="mdi mdi-close-circle-outline"></i> Unpublish
                         </button>
                         @endif
+						@endunless
                     </td>
                 </tr>
 
@@ -111,38 +113,41 @@
                            class="btn btn-sm btn-primary flex-fill" title="View">
                             <i class="mdi mdi-eye me-1"></i> View
                         </a>
+						@unlessrole('student')
 
                         @if ($item->status === 'Published')
-                        <button type="button" class="btn btn-sm btn-danger flex-fill" data-bs-toggle="modal"
-                                data-bs-target="#unpublishModalMobile-{{ $item->id }}">
-                            <i class="mdi mdi-close-circle-outline me-1"></i> Unpublish
-                        </button>
+							<button type="button" class="btn btn-sm btn-danger flex-fill" data-bs-toggle="modal"
+									data-bs-target="#unpublishModalMobile-{{ $item->id }}">
+								<i class="mdi mdi-close-circle-outline me-1"></i> Unpublish
+							</button>
 
-                        {{-- Mobile modal --}}
-                        <div class="modal fade" id="unpublishModalMobile-{{ $item->id }}" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <form method="POST"
-                                          action="{{ route('publication-management.update-status', ['type' => $item->type, 'id' => $item->id]) }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="unpublish" value="1">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Confirm Unpublish</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to unpublish <strong>{{ $item->title }}</strong>?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-danger">Unpublish</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+							{{-- Mobile modal --}}
+							<div class="modal fade" id="unpublishModalMobile-{{ $item->id }}" tabindex="-1" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<form method="POST"
+											action="{{ route('publication-management.update-status', ['type' => $item->type, 'id' => $item->id]) }}">
+											@csrf
+											@method('PUT')
+											<input type="hidden" name="unpublish" value="1">
+											<div class="modal-header">
+												<h5 class="modal-title">Confirm Unpublish</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												Are you sure you want to unpublish <strong>{{ $item->title }}</strong>?
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+												<button type="submit" class="btn btn-danger">Unpublish</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
                         @endif
+						@endunless
+
                     </div>
                 </div>
             </div>
