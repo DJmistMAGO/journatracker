@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Notifications\IncidentReportNotification;
 
 class NotificationController extends Controller
 {
@@ -30,13 +31,11 @@ class NotificationController extends Controller
     {
         $user = $request->user();
 
-        if ($user->hasRole('admin')) {
-            // Show all notifications for all users
-            $notifications = \Illuminate\Notifications\DatabaseNotification::paginate(10);
-        } else {
-            // Show only the user's notifications
-            $notifications = $user->notifications()->paginate(10);
-        }
+        $notifications = $user
+                ->notifications()
+                ->where('type', '!=', IncidentReportNotification::class)
+                ->orderBy('created_at', 'desc')
+                ->paginate(5);
 
         return view('spj-content.profile-settings.notifications.index', compact('notifications'));
     }

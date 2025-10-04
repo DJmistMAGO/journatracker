@@ -11,6 +11,27 @@
 
 <div class="card">
     <h5 class="card-header">Archive List</h5>
+	<form method="GET" action="{{ route('archive') }}" class="row px-3 mb-3 align-items-center">
+            <!-- Search Input -->
+            <div class="col-12 col-md-3">
+                <input type="text" name="search" class="form-control" placeholder="Search title..."
+                    value="{{ request('search') }}">
+            </div>
+
+            <!-- Status Filter -->
+            <div class="col-12 col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Published" {{ request('status') == 'Published' ? 'selected' : '' }}>Published</option>
+                    <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                </select>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
 
     @include('_partials.errors')
     @include('_partials.success')

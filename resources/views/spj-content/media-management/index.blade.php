@@ -15,9 +15,11 @@
 <div class="card">
     <div class="card-title d-flex justify-content-between align-items-center ps-0 p-3 pb-0">
         <h5 class="card-header mb-0">Media Library</h5>
+		@unlessrole('admin')
         <a href="{{ route('media-management.create') }}" class="btn btn-success btn-md">
             <i class="mdi mdi-text-box-plus-outline me-1"></i> Submit Media
         </a>
+		@endunless
     </div>
 
     <div class="card-body pt-0">

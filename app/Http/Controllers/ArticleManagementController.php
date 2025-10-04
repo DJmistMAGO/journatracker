@@ -11,24 +11,34 @@ use App\Models\User;
 
 class ArticleManagementController extends Controller
 {
-    public function index()
-    {
-        $authUser = Auth::user();
+    public function index(Request $request)
+{
+    $authUser = Auth::user();
+    $search = $request->input('search');
+    $status = $request->input('status');
 
-        if ($authUser->hasRole('admin')) {
-            // Admin can view all articles
-            $articles = Article::with('user')
-                ->orderBy('created_at', 'desc')
-                ->get();
-        } else {
-            // Non-admin users only see their own Draft/Revision articles
-            $articles = Article::with('user')
-                ->where('user_id', $authUser->id)
-                ->orderBy('created_at', 'desc')
-                ->get();
-        }
-        return view('spj-content.article-management.index', compact('articles'));
+    if ($authUser->hasRole('admin')) {
+        // Admin can view all articles, optionally filtered
+        $articles = Article::with('user')
+            ->whereIn('status', ['Draft', 'Revision'])
+            ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+            ->when($status, fn($query) => $query->where('status', $status))
+            ->orderBy('created_at', 'desc')
+            ->get();
+    } else {
+        // Non-admin users only see their own Draft/Revision articles
+        $articles = Article::with('user')
+            ->where('user_id', $authUser->id)
+            ->whereIn('status', ['Draft', 'Revision'])
+            ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+            ->when($status, fn($query) => $query->where('status', $status))
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
+
+    return view('spj-content.article-management.index', compact('articles'));
+}
+
 
     public function create()
     {

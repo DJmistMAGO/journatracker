@@ -12,6 +12,25 @@
     <div class="card">
         <h5 class="card-header">Incident Report List</h5>
         <div class="table-responsive">
+			<div class="col-12">
+				<form method="GET" action="{{ route('incident-report') }}" class="row mb-3 align-items-center col-12">
+            <!-- Status Filter -->
+            <div class="col-12 col-md-3">
+                <select name="status" class="form-select ms-3" >
+                    <option value="">All Statuses</option>
+                    <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="Under Review" {{ request('status') == 'Under Review' ? 'selected' : '' }}>Under Review</option>
+					<option value="Resolved" {{ request('status') == 'Resolved' ? 'selected' : '' }}>Resolved</option>
+                    <option value="Rejected" {{ request('status') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                </select>
+            </div>
+
+            <!-- Filter Button -->
+            <div class="col-12 col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+			</div>
             <table class="table">
                 <thead>
                     <tr>

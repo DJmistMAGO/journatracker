@@ -14,43 +14,54 @@ class MediaController extends Controller
 	/**
 	 * Display a listing of the resource.
 	 */
-	public function index()
-	{
-		$user_id = Auth::user()->id;
+	public function index(Request $request)
+{
+    $user_id = Auth::user()->id;
 
-		$all = Media::where("user_id", $user_id)
-			->whereIn('status', ['Draft', 'Revision'])
-			->latest()
-			->get();
+    // Get search and status from request
+    $search = $request->input('search');
+    $status = $request->input('status');
 
-		$photojournalism = Media::where("user_id", $user_id)
-			->where('category', 'Photojournalism')
-			->whereIn('status', ['Draft', 'Revision'])
-			->latest()
-			->get();
+    // Filtered $all query
+    $all = Media::where('user_id', $user_id)
+        ->whereIn('status', ['Draft', 'Revision'])
+        ->when($search, function($query, $search) {
+            $query->where('title', 'like', "%{$search}%");
+        })
+        ->when($status, function($query, $status) {
+            $query->where('status', $status);
+        })
+        ->latest()
+        ->get();
 
-		$cartooning = Media::where('user_id', $user_id)
-			->where('category', 'Cartooning')
-			->whereIn('status', ['Draft', 'Revision'])
-			->latest()
-			->get();
+    // Other category queries remain the same
+    $photojournalism = Media::where("user_id", $user_id)
+        ->where('category', 'Photojournalism')
+        ->whereIn('status', ['Draft', 'Revision'])
+        ->latest()
+        ->get();
 
-		$tv = Media::where('user_id', $user_id)
-			->where('category', 'TV Broadcasting')
-			->whereIn('status', ['Draft', 'Revision'])
-			->latest()
-			->get();
+    $cartooning = Media::where('user_id', $user_id)
+        ->where('category', 'Cartooning')
+        ->whereIn('status', ['Draft', 'Revision'])
+        ->latest()
+        ->get();
 
-		$radio = Media::where('user_id', $user_id)
-			->where('category', 'Radio Broadcasting')
-			->whereIn('status', ['Draft', 'Revision'])
-			->latest()
-			->get();
+    $tv = Media::where('user_id', $user_id)
+        ->where('category', 'TV Broadcasting')
+        ->whereIn('status', ['Draft', 'Revision'])
+        ->latest()
+        ->get();
 
-		// dd($photojournalism, $cartooning, $tv, $radio);
+    $radio = Media::where('user_id', $user_id)
+        ->where('category', 'Radio Broadcasting')
+        ->whereIn('status', ['Draft', 'Revision'])
+        ->latest()
+        ->get();
 
-		return view('spj-content.media-management.index', compact('all', 'photojournalism', 'cartooning', 'tv', 'radio'));
-	}
+    return view('spj-content.media-management.index', compact('all', 'photojournalism', 'cartooning', 'tv', 'radio'));
+}
+
 
 	/**
 	 * Show the form for creating a new resource.
@@ -125,7 +136,7 @@ class MediaController extends Controller
 			'image_path' => $data['image_path'] ?? null,
 			'link' => $data['link'] ?? null,
 		]);
-		
+
 		$media->type   = $media->type ?? 'Media';
 		$media->status = $media->status ?? 'Draft';
 

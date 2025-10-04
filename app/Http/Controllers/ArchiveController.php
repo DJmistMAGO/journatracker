@@ -12,44 +12,59 @@ use Illuminate\Support\Facades\DB;
 
 class ArchiveController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-        $auth_id = $user->id;
+    public function index(Request $request)
+{
+    $user = Auth::user();
+    $auth_id = $user->id;
+    $user_role = $user->getRoleNames()->first();
 
-        // Get first role of the user
-        $user_role = $user->getRoleNames()->first();
+    $search = $request->input('search'); // search input
+    $status = $request->input('status'); // status filter from select input
 
-        if ($user_role === 'admin' || $user_role === 'eic') {
-            $articles = Article::with('user')
-                ->where('status', 'Published')
-                ->orderBy('date_publish', 'desc')
-                ->get();
+    // Default allowed statuses
+    $allowedStatuses = ['Published', 'Rejected'];
 
-            $media = Media::with('user')
-                ->where('status', 'Published')
-                ->orderBy('date_publish', 'desc')
-                ->get();
-        } else {
-            $articles = Article::with('user')
-                ->where('user_id', $auth_id)
-                ->where('status', 'Published')
-                ->orderBy('date_publish', 'desc')
-                ->get();
-
-            $media = Media::with('user')
-                ->where('user_id', $auth_id)
-                ->where('status', 'Published')
-                ->orderBy('date_publish', 'desc')
-                ->get();
-        }
-
-        // Merge articles and media
-        $items = $articles
-            ->concat($media)
-            ->sortByDesc('date')
-            ->values();
-
-        return view('spj-content.archive.index', compact('items'));
+    if ($status && in_array($status, $allowedStatuses)) {
+        $filterStatus = [$status];
+    } else {
+        $filterStatus = $allowedStatuses; // fallback to both if none selected
     }
+
+    if ($user_role === 'admin' || $user_role === 'eic') {
+        $articles = Article::with('user')
+            ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+            ->whereIn('status', $filterStatus)
+            ->orderBy('date_publish', 'desc')
+            ->get();
+
+        $media = Media::with('user')
+            ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+            ->whereIn('status', $filterStatus)
+            ->orderBy('date_publish', 'desc')
+            ->get();
+    } else {
+        $articles = Article::with('user')
+            ->where('user_id', $auth_id)
+            ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+            ->whereIn('status', $filterStatus)
+            ->orderBy('date_publish', 'desc')
+            ->get();
+
+        $media = Media::with('user')
+            ->where('user_id', $auth_id)
+            ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+            ->whereIn('status', $filterStatus)
+            ->orderBy('date_publish', 'desc')
+            ->get();
+    }
+
+    // Merge articles and media
+    $items = $articles
+        ->concat($media)
+        ->sortByDesc('date_publish')
+        ->values();
+
+    return view('spj-content.archive.index', compact('items'));
+}
+
 }
