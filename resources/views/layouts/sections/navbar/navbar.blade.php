@@ -153,14 +153,14 @@
                         <div class="dropdown-divider my-1"></div>
                     </li>
 
-                    @unless (Auth::user()->roles->first()->name == 'admin')
+                    {{-- @unless (Auth::user()->roles->first()->name == 'admin')
                         <li>
                             <a class="dropdown-item" href="javascript:void(0);">
                                 <i class="mdi mdi-account-outline me-1 mdi-20px"></i>
                                 <span class="align-middle">My Profile</span>
                             </a>
                         </li>
-                    @endunless
+                    @endunless --}}
 
                     <li>
                         <a class="dropdown-item" href="{{ route('profile.index') }}">

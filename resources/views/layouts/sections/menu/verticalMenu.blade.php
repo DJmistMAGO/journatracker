@@ -81,7 +81,7 @@
             </li>
         @endrole
 
-		<li class="menu-item {{ request()->is('settings') ? 'active' : '' }}">
+		<li class="menu-item {{ request()->is(['settings', 'notifications']) ? 'active' : '' }}">
 			<a href="{{ url('/settings') }}" class="menu-link">
 			<i class="menu-icon tf-icons mdi mdi-cog-outline"></i>
 			<div>Settings</div>
