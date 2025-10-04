@@ -18,7 +18,7 @@
 
 <div class="card">
     <div class="card-title d-flex justify-content-between align-items-center ps-0 p-3">
-        <h5 class="card-header  mb-0">Article List</h5>
+        <h5 class="card-header mb-0">Article List</h5>
         @unlessrole('admin')
             <a href="{{ route('article-management.create') }}" class="btn btn-success btn-md">
                 <i class="mdi mdi-text-box-plus-outline me-1"></i> Submit Article
