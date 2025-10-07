@@ -69,8 +69,9 @@
                     </div>
                     <span class="navbar-text">
                         <div id="datetime" style="color: black;"></div>
-                    </span>
+					</span>
                 </div>
             </div>
         </nav>
     </div>
+</div>
