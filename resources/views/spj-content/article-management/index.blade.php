@@ -86,11 +86,19 @@
                                 <a href="{{ route('article-management.edit', $article->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                     <i class="mdi mdi-file-edit"></i>
                                 </a>
-                                <button type="button" class="btn btn-sm btn-danger"
-                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        data-id="{{ $article->id }}" data-title="{{ $article->title }}">
-                                    <i class="mdi mdi-delete"></i>
-                                </button>
+
+								@role('student')
+									@if($article->status === 'Draft' || $article->status === 'Pending')
+										<button type="button"
+												class="btn btn-sm btn-danger"
+												data-bs-toggle="modal"
+												data-bs-target="#deleteModal"
+												data-id="{{ $article->id }}"
+												data-title="{{ $article->title }}">
+											<i class="mdi mdi-delete"></i>
+										</button>
+									@endif
+								@endrole
                             </div>
                         </td>
                     </tr>

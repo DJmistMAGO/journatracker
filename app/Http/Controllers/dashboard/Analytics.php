@@ -67,6 +67,29 @@ class Analytics extends Controller
 
             // Students don't see other users' analytics
             $usersCount = $adminsCount = $editorsCount = $writersCount = $activeUsersCount = null;
+        } elseif ($user->isRole('eic')) {
+            $articles = Article::all();
+            $media = Media::all();
+            $users = User::all();
+
+            $articlesCount = $articles->count();
+            $articlesPublishedCount = $articles->where('status', 'Published')->count();
+            $articlesDraftCount = $articles->where('status', 'Draft')->count();
+            $articlesArchivedCount = $articles->where('status', 'Archived')->count();
+
+            $mediaCount = $media->count();
+            $mediaPublishedCount = $media->where('status', 'Published')->count();
+            $mediaDraftCount = $media->where('status', 'Draft')->count();
+            $mediaArchivedCount = $media->where('status', 'Archived')->count();
+
+            $usersCount = $users->count();
+            $adminsCount = $users->where('role', 'admin')->count();
+            $editorsCount = $users->where('role', 'eic')->count();
+            $writersCount = $users->where('role', 'student')->count();
+
+            $draftCount = $articles->where('status', 'Draft')->count() + $media->where('status', 'Draft')->count();
+
+            $activeUsersCount = $users->where('status', 'active')->count();
         }
 
         return view(

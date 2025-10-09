@@ -15,6 +15,9 @@
 						</a>
 					</li>
 				@endforeach
+				@if($items->isEmpty())
+					<li><small class="text-muted">No articles available.</small></li>
+				@endif
 			</ul>
 		</div>
 	</div>
