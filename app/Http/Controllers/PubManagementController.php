@@ -19,7 +19,7 @@ class PubManagementController extends Controller
 
 		// Articles
 		$articles = Article::with('user')
-			->whereIn('status', ['Draft', 'Approved', 'Scheduled'])
+			->whereIn('status', ['Draft', 'Approved', 'Scheduled', 'For Publish'])
 			->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
 			->when($status, fn($query) => $query->where('status', $status))
 			->orderByDesc('date_submitted')
@@ -27,7 +27,7 @@ class PubManagementController extends Controller
 
 		// Media
 		$media = Media::with('user')
-			->whereIn('status', ['Draft', 'Approved', 'Scheduled'])
+			->whereIn('status', ['Draft', 'Approved', 'Scheduled', 'For Publish'])
 			->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
 			->when($status, fn($query) => $query->where('status', $status))
 			->orderByDesc('date_submitted')

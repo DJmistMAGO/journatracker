@@ -93,7 +93,7 @@
 
         </div>
 		@role('admin')
-        @if ($item->status == 'Draft' || $item->status == 'Approved')
+        @if ($item->status == 'For Publish')
             <div class="card-footer">
                 <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
                     data-bs-target="#statusModal-{{ $item->id }}">
@@ -103,16 +103,16 @@
         @endif
 		@endrole
 		@role('eic')
-        @if ($item->status == 'Draft')
+        @if ($item->status == 'Draft' || $item->status == 'For Publish')
             <div class="card-footer">
 				@if($item->type == 'Article')
                 <a href="{{ route('publication-management.article.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
-                    Edit
+                    Review
                 </a>
 				@endif
 				@if($item->type == 'Media')
                 <a href="{{ route('publication-management.media.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
-                    Edit
+                    Review
                 </a>
 				@endif
             </div>
