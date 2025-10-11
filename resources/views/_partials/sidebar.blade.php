@@ -47,7 +47,7 @@
     </div>
 
     {{-- Incident Report Form --}}
-    <div class="card border-0 shadow-sm mb-4">
+    {{-- <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
             <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Incident Report</h5>
             <form action="{{ route('incident-report.store-report') }}" method="POST" enctype="multipart/form-data" onsubmit="prepareTags()">
@@ -78,7 +78,7 @@
                 <button type="submit" class="btn btn-theme w-100">Submit Report</button>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Share Buttons --}}
     <div class="card border-0 shadow-sm mb-4 text-center p-3">

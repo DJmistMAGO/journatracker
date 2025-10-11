@@ -89,13 +89,13 @@ class ArticleManagementController extends Controller
         $article->type = $article->type ?? 'Article';
         $article->status = $article->status ?? 'Draft';
 
-        $article->author->notify(new StatusChangedNotification($article));
+        // $article->author->notify(new StatusChangedNotification($article));
 
-        // Get all users with role 'Admin' or 'EIC'
-        $usersToNotify = User::role(['admin', 'eic'])->get();
-        foreach ($usersToNotify as $user) {
-            $user->notify(new StatusChangedNotification($article));
-        }
+        // // Get all users with role 'Admin' or 'EIC'
+        // $usersToNotify = User::role(['admin', 'eic'])->get();
+        // foreach ($usersToNotify as $user) {
+        //     $user->notify(new StatusChangedNotification($article));
+        // }
 
         return redirect()
             ->route('article-management')

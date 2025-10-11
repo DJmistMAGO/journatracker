@@ -20,162 +20,163 @@ use App\Models\Media;
 
 // Public routes
 Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        $articles = Article::where('status', 'Published')
-            ->orderBy('date_publish', 'desc')
-            ->get();
+	Route::get('/', function () {
+		$articles = Article::where('status', 'Published')
+			->orderBy('date_publish', 'desc')
+			->get();
 
-        $media = Media::where('status', 'Published')
-            ->orderBy('date_publish', 'desc')
-            ->get();
+		$media = Media::where('status', 'Published')
+			->orderBy('date_publish', 'desc')
+			->get();
 
-        // Merge articles and media collections
-        $items = $articles
-            ->concat($media)
-            ->sortByDesc('date_publish')
-            ->values();
+		// Merge articles and media collections
+		$items = $articles
+			->concat($media)
+			->sortByDesc('date_publish')
+			->values();
 
-        $articleTags = $articles
-            ->pluck('tags')
-            ->flatten()
-            ->unique();
+		$articleTags = $articles
+			->pluck('tags')
+			->flatten()
+			->unique();
 
-        $mediaTags = $media
-            ->pluck('tags')
-            ->flatten()
-            ->unique();
+		$mediaTags = $media
+			->pluck('tags')
+			->flatten()
+			->unique();
 
-        $tags = $articleTags
-            ->merge($mediaTags)
-            ->unique()
-            ->take(10);
+		$tags = $articleTags
+			->merge($mediaTags)
+			->unique()
+			->take(10);
 
-        return view('welcome', compact('items', 'tags'));
-    })->name('welcome');
+		return view('welcome', compact('items', 'tags'));
+	})->name('welcome');
 
-    Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
-    Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
+	Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');
+	Route::get('/read-article/{type}/{id}', [FilterCategoryController::class, 'showContent'])->name('article.read');
 
-    Route::controller(IncidentReportController::class)
-        ->prefix('incident-report')
-        ->group(function () {
-            // Route::get('/', 'index')->name('incident-report');
-            Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
-            // Route::get('/show/{id}', 'show')->name('incident-report.show');
-            // Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
-        });
+	Route::controller(IncidentReportController::class)
+		->prefix('incident-report')
+		->group(function () {
+			// Route::get('/', 'index')->name('incident-report');
+			Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
+			// Route::get('/show/{id}', 'show')->name('incident-report.show');
+			// Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
+		});
 
-    Route::get('/login', [LoginBasic::class, 'index'])->name('login');
-    Route::post('/login', [LoginBasic::class, 'authenticate'])->name('login.post');
+	Route::get('/login', [LoginBasic::class, 'index'])->name('login');
+	Route::post('/login', [LoginBasic::class, 'authenticate'])->name('login.post');
 
-    // Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
-    // Route::post('/register', [RegisterBasic::class, 'store'])->name('register.post');
+	// Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
+	// Route::post('/register', [RegisterBasic::class, 'store'])->name('register.post');
 
-    // Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('forgot-password');
-    // Route::post('/forgot-password', [ForgotPasswordBasic::class, 'sendResetLink'])->name('forgot-password.post');
+	// Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('forgot-password');
+	// Route::post('/forgot-password', [ForgotPasswordBasic::class, 'sendResetLink'])->name('forgot-password.post');
 });
 
 // Protected routes
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
-    Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
+	Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
+	Route::post('/logout', [LoginBasic::class, 'logout'])->name('logout');
 
-    Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name(
-        'notifications.markRead'
-    );
-    Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name(
-        'notifications.markSingleRead'
-    );
+	Route::post('/notifications/mark-read', [NotificationController::class, 'markRead'])->name(
+		'notifications.markRead'
+	);
+	Route::post('/notifications/{id}/read', [NotificationController::class, 'markSingleRead'])->name(
+		'notifications.markSingleRead'
+	);
 
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+	Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
-    Route::controller(PubManagementController::class)
-        ->prefix('publication')
-        ->group(function () {
-            Route::get('/', 'index')->name('publication-management.index');
-            Route::get('show/{type}/{id}', 'show')->name('publication-management.show');
-            Route::put('update-status/{type}/{id}', 'updateStatus')->name('publication-management.update-status');
-            Route::post('/articles/{id}/publish', 'publish')->name('publication-management.publish');
-            Route::post('/articles/{id}/unpublish', 'unpublish')->name('publication-management.unpublish');
-            Route::post('/articles/{id}/reschedule', 'reschedule')->name('publication-management.reschedule');
-        });
+	Route::controller(PubManagementController::class)
+		->prefix('publication')
+		->group(function () {
+			Route::get('/', 'index')->name('publication-management.index');
+			Route::get('show/{type}/{id}', 'show')->name('publication-management.show');
+			Route::put('update-status/{type}/{id}', 'updateStatus')->name('publication-management.update-status');
+			Route::post('/articles/{id}/publish', 'publish')->name('publication-management.publish');
+			Route::post('/articles/{id}/unpublish', 'unpublish')->name('publication-management.unpublish');
+			Route::post('/articles/{id}/reschedule', 'reschedule')->name('publication-management.reschedule');
+			Route::get('article/{id}/edit', 'editArticle')->name('publication-management.article.edit');
+		});
 
-    Route::controller(ArticleManagementController::class)
-        ->prefix('article-management')
-        ->group(function () {
-            Route::get('/', 'index')->name('article-management');
-            Route::get('/create', 'create')->name('article-management.create');
-            Route::post('/', 'store')->name('article-management.store');
-            Route::get('edit/{id}', 'edit')->name('article-management.edit');
-            Route::get('show/{id}', 'show')->name('article-management.show');
-            Route::put('update/{id}', 'update')->name('article-management.update');
-            // Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
-            Route::put('{id}/approve', 'approve')->name('article-management.approve');
-            Route::put('{id}/disapprove', 'disapprove')->name('article-management.disapprove');
-            Route::put('{id}/archive', 'archive')->name('article-management.archive');
-        });
+	Route::controller(ArticleManagementController::class)
+		->prefix('article-management')
+		->group(function () {
+			Route::get('/', 'index')->name('article-management');
+			Route::get('/create', 'create')->name('article-management.create');
+			Route::post('/', 'store')->name('article-management.store');
+			Route::get('edit/{id}', 'edit')->name('article-management.edit');
+			Route::get('show/{id}', 'show')->name('article-management.show');
+			Route::put('update/{id}', 'update')->name('article-management.update');
+			// Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
+			Route::put('{id}/approve', 'approve')->name('article-management.approve');
+			Route::put('{id}/disapprove', 'disapprove')->name('article-management.disapprove');
+			Route::put('{id}/archive', 'archive')->name('article-management.archive');
+		});
 
-    Route::controller(MediaController::class)
-        ->prefix('media-management')
-        ->group(function () {
-            Route::get('/', 'index')->name('media-management');
-            Route::get('/create', 'create')->name('media-management.create');
-            Route::post('/', 'store')->name('media-management.store');
-            Route::get('edit/{id}', 'edit')->name('media-management.edit');
-            Route::get('show/{id}', 'show')->name('media-management.show');
-            Route::put('update/{id}', 'update')->name('media-management.update');
-            Route::delete('delete/{id}', 'destroy')->name('media-management.destroy');
-        });
+	Route::controller(MediaController::class)
+		->prefix('media-management')
+		->group(function () {
+			Route::get('/', 'index')->name('media-management');
+			Route::get('/create', 'create')->name('media-management.create');
+			Route::post('/', 'store')->name('media-management.store');
+			Route::get('edit/{id}', 'edit')->name('media-management.edit');
+			Route::get('show/{id}', 'show')->name('media-management.show');
+			Route::put('update/{id}', 'update')->name('media-management.update');
+			Route::delete('delete/{id}', 'destroy')->name('media-management.destroy');
+		});
 
-    Route::controller(IncidentReportController::class)
-        ->prefix('incident-report')
-        ->group(function () {
-            Route::get('/', 'index')->name('incident-report');
-            // Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
-            Route::get('/show/{id}', 'show')->name('incident-report.show');
-            Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
-        });
+	Route::controller(IncidentReportController::class)
+		->prefix('incident-report')
+		->group(function () {
+			Route::get('/', 'index')->name('incident-report');
+			// Route::post('/store-report', 'storeReport')->name('incident-report.store-report');
+			Route::get('/show/{id}', 'show')->name('incident-report.show');
+			Route::put('/update-status/{id}', 'updateStatus')->name('incident-report.update-status');
+		});
 
-    // Route::middleware('auth')->group(function () {
-    //     Route::resource('media', MediaController::class);
-    // });
+	// Route::middleware('auth')->group(function () {
+	//     Route::resource('media', MediaController::class);
+	// });
 
-    // editorial scheduling
-    Route::controller(EditorialSchedulingController::class)
-        ->prefix('editorial-scheduling')
-        ->group(function () {
-            Route::get('/', 'index')->name('editorial-scheduling');
-        });
+	// editorial scheduling
+	Route::controller(EditorialSchedulingController::class)
+		->prefix('editorial-scheduling')
+		->group(function () {
+			Route::get('/', 'index')->name('editorial-scheduling');
+		});
 
-    Route::controller(ArchiveController::class)
-        ->prefix('archive')
-        ->group(function () {
-            Route::get('/', 'index')->name('archive');
-            Route::get('view/{type}/{id}', 'view')->name('archive.view');
-        });
+	Route::controller(ArchiveController::class)
+		->prefix('archive')
+		->group(function () {
+			Route::get('/', 'index')->name('archive');
+			Route::get('view/{type}/{id}', 'view')->name('archive.view');
+		});
 
-    Route::controller(UserController::class)
-        ->prefix('user-management')
-        ->group(function () {
-            Route::get('/', 'index')->name('user-management');
-            Route::get('/create', 'create')->name('user-management.create');
-            Route::post('/', 'store')->name('user-management.store');
-            Route::get('/{id}/edit', 'edit')->name('user-management.edit');
-            Route::get('/{id}', 'show')->name('user-management.show');
-            Route::put('/{id}', 'update')->name('user-management.update');
-            Route::delete('/{id}', 'destroy')->name('user-management.destroy');
-            Route::get('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
-            Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
-        });
+	Route::controller(UserController::class)
+		->prefix('user-management')
+		->group(function () {
+			Route::get('/', 'index')->name('user-management');
+			Route::get('/create', 'create')->name('user-management.create');
+			Route::post('/', 'store')->name('user-management.store');
+			Route::get('/{id}/edit', 'edit')->name('user-management.edit');
+			Route::get('/{id}', 'show')->name('user-management.show');
+			Route::put('/{id}', 'update')->name('user-management.update');
+			Route::delete('/{id}', 'destroy')->name('user-management.destroy');
+			Route::get('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
+			Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
+		});
 
-    Route::controller(ProfileController::class)
-        ->prefix('settings')
-        ->group(function () {
-            Route::get('/', 'index')->name('profile.index');
-            Route::put('/update', 'update')->name('profile.update');
-        });
+	Route::controller(ProfileController::class)
+		->prefix('settings')
+		->group(function () {
+			Route::get('/', 'index')->name('profile.index');
+			Route::put('/update', 'update')->name('profile.update');
+		});
 });
 
 Route::fallback(function () {
-    return response()->view('errors.404', [], 404);
+	return response()->view('errors.404', [], 404);
 });

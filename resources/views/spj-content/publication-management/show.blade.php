@@ -88,10 +88,11 @@
 
 			@if($item->status == 'Published')
 			<p><strong>Date Published:</strong> {{ $item->date_publish->format('F j, Y') }}</p>
-
 			@endif
+			<p><strong>Remarks:</strong> {{ $item->remarks ?? 'N/A' }}</p>
 
         </div>
+		@role('admin')
         @if ($item->status == 'Draft' || $item->status == 'Approved')
             <div class="card-footer">
                 <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
@@ -100,6 +101,23 @@
                 </button>
             </div>
         @endif
+		@endrole
+		@role('eic')
+        @if ($item->status == 'Draft')
+            <div class="card-footer">
+				@if($item->type == 'Article')
+                <a href="{{ route('publication-management.article.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
+                    Edit
+                </a>
+				@endif
+				@if($item->type == 'Media')
+                <a href="{{ route('publication-management.article.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
+                    Edit
+                </a>
+				@endif
+            </div>
+        @endif
+		@endrole
     </div>
 
     <!-- Modal -->
