@@ -1,6 +1,6 @@
 {{-- Desktop Table --}}
 <div class="table-responsive d-none d-sm-block">
-	<form method="GET" action="{{ route('media-management') }}" class="row px-3 mb-3 align-items-center">
+	<form method="GET" action="{{ route('media-management') }}" class="row px-3 mb-3 align-items-center col-12">
             <!-- Search Input -->
             <div class="col-12 col-md-3">
                 <input type="text" name="search" class="form-control" placeholder="Search title..."

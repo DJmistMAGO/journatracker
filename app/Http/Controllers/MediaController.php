@@ -15,52 +15,52 @@ class MediaController extends Controller
 	 * Display a listing of the resource.
 	 */
 	public function index(Request $request)
-{
-    $user_id = Auth::user()->id;
+	{
+		$user_id = Auth::user()->id;
 
-    // Get search and status from request
-    $search = $request->input('search');
-    $status = $request->input('status');
+		// Get search and status from request
+		$search = $request->input('search');
+		$status = $request->input('status');
 
-    // Filtered $all query
-    $all = Media::where('user_id', $user_id)
-        ->whereIn('status', ['Draft', 'Revision'])
-        ->when($search, function($query, $search) {
-            $query->where('title', 'like', "%{$search}%");
-        })
-        ->when($status, function($query, $status) {
-            $query->where('status', $status);
-        })
-        ->latest()
-        ->get();
+		// Filtered $all query
+		$all = Media::where('user_id', $user_id)
+			->whereIn('status', ['Draft', 'Revision'])
+			->when($search, function ($query, $search) {
+				$query->where('title', 'like', "%{$search}%");
+			})
+			->when($status, function ($query, $status) {
+				$query->where('status', $status);
+			})
+			->latest()
+			->get();
 
-    // Other category queries remain the same
-    $photojournalism = Media::where("user_id", $user_id)
-        ->where('category', 'Photojournalism')
-        ->whereIn('status', ['Draft', 'Revision'])
-        ->latest()
-        ->get();
+		// Other category queries remain the same
+		$photojournalism = Media::where("user_id", $user_id)
+			->where('category', 'Photojournalism')
+			->whereIn('status', ['Draft', 'Revision'])
+			->latest()
+			->get();
 
-    $cartooning = Media::where('user_id', $user_id)
-        ->where('category', 'Cartooning')
-        ->whereIn('status', ['Draft', 'Revision'])
-        ->latest()
-        ->get();
+		$cartooning = Media::where('user_id', $user_id)
+			->where('category', 'Cartooning')
+			->whereIn('status', ['Draft', 'Revision'])
+			->latest()
+			->get();
 
-    $tv = Media::where('user_id', $user_id)
-        ->where('category', 'TV Broadcasting')
-        ->whereIn('status', ['Draft', 'Revision'])
-        ->latest()
-        ->get();
+		$tv = Media::where('user_id', $user_id)
+			->where('category', 'TV Broadcasting')
+			->whereIn('status', ['Draft', 'Revision'])
+			->latest()
+			->get();
 
-    $radio = Media::where('user_id', $user_id)
-        ->where('category', 'Radio Broadcasting')
-        ->whereIn('status', ['Draft', 'Revision'])
-        ->latest()
-        ->get();
+		$radio = Media::where('user_id', $user_id)
+			->where('category', 'Radio Broadcasting')
+			->whereIn('status', ['Draft', 'Revision'])
+			->latest()
+			->get();
 
-    return view('spj-content.media-management.index', compact('all', 'photojournalism', 'cartooning', 'tv', 'radio'));
-}
+		return view('spj-content.media-management.index', compact('all', 'photojournalism', 'cartooning', 'tv', 'radio'));
+	}
 
 
 	/**
@@ -140,13 +140,13 @@ class MediaController extends Controller
 		$media->type   = $media->type ?? 'Media';
 		$media->status = $media->status ?? 'Draft';
 
-		$media->author->notify(new StatusChangedNotification($media));
+		// $media->author->notify(new StatusChangedNotification($media));
 
-		// Get all users with role 'Admin' or 'EIC'
-		$usersToNotify = User::role(['admin', 'eic'])->get();
-		foreach ($usersToNotify as $user) {
-			$user->notify(new StatusChangedNotification($media));
-		}
+		// // Get all users with role 'Admin' or 'EIC'
+		// $usersToNotify = User::role(['admin', 'eic'])->get();
+		// foreach ($usersToNotify as $user) {
+		// 	$user->notify(new StatusChangedNotification($media));
+		// }
 
 
 		return redirect()
@@ -171,6 +171,9 @@ class MediaController extends Controller
 	public function edit($id)
 	{
 		$media = Media::with('user')->findOrFail($id);
+
+
+
 		return view('spj-content.media-management.edit', compact('media'));
 	}
 
@@ -245,13 +248,25 @@ class MediaController extends Controller
 			$updateData['link'] = $data['link'];
 		}
 
+		$user = Auth::user();
+		$user_role = $user->getRoleNames()->first();
 
-		// Update record
+		if ($user_role == "eic") {
+			$updateData['status'] = 'For Publish';
+		}
+
 		$media->update($updateData);
 
-		return redirect()
-			->route('media-management')
-			->with('success', 'Media updated successfully!');
+
+		if ($user_role == "eic") {
+			return redirect()
+				->route('publication-management.index')
+				->with('success', 'Media updated successfully!');
+		} else {
+			return redirect()
+				->route('media-management')
+				->with('success', 'Media updated successfully!');
+		}
 	}
 
 

@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->date('date_submitted');
             $table->string('date_publish')->nullable();
             $table
-                ->enum('status', ['Draft', 'Approved', 'Scheduled', 'Published', 'Revision', 'Rejected'])
+                ->enum('status', ['Draft', 'Approved', 'Scheduled', 'Published', 'Revision', 'Rejected', 'For Publish'])
                 ->default('Draft');
             $table->string('remarks')->nullable();
             $table->timestamp('publish_at')->nullable();

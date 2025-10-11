@@ -23,9 +23,8 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('media.store') }}" enctype="multipart/form-data" onsubmit="prepareTags()">
+            <form method="POST" action="{{ route('media-management.store') }}" enctype="multipart/form-data" onsubmit="prepareTags()">
                 @csrf
-
                 <!-- Media Type -->
                 <div class="mb-3 col-12">
                     <label for="mediaType" class="form-label">Select Media Type</label>
