@@ -99,6 +99,7 @@ Route::middleware('auth')->group(function () {
 			Route::post('/articles/{id}/unpublish', 'unpublish')->name('publication-management.unpublish');
 			Route::post('/articles/{id}/reschedule', 'reschedule')->name('publication-management.reschedule');
 			Route::get('article/{id}/edit', 'editArticle')->name('publication-management.article.edit');
+			Route::get('media/{id}/edit', 'editMedia')->name('publication-management.media.edit');
 		});
 
 	Route::controller(ArticleManagementController::class)

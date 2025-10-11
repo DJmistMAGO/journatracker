@@ -210,10 +210,11 @@ class PubManagementController extends Controller
 
 	public function editMedia($id)
 	{
-		$article = Article::findOrFail($id);
+		$media = Media::findOrFail($id);
 		return view('spj-content.media-management.edit', [
-			'article' => $article,
+			'media' => $media,
 			'fromPublication' => true,
 		]);
 	}
+
 }

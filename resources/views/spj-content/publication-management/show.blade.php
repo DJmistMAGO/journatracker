@@ -111,7 +111,7 @@
                 </a>
 				@endif
 				@if($item->type == 'Media')
-                <a href="{{ route('publication-management.article.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
+                <a href="{{ route('publication-management.media.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
                     Edit
                 </a>
 				@endif
