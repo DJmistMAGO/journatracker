@@ -154,6 +154,7 @@ Route::middleware('auth')->group(function () {
 		->group(function () {
 			Route::get('/', 'index')->name('archive');
 			Route::get('view/{type}/{id}', 'view')->name('archive.view');
+			Route::get('show/{type}/{id}', 'show')->name('archive.show');
 		});
 
 	Route::controller(UserController::class)
