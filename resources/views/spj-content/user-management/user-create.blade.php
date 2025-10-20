@@ -30,6 +30,8 @@
 					<label for="penName">Pen Name</label>
 				</div>
 			</div>
+		</div>
+		<div class="row">
 			<div class="col-md-12 mb-3">
 				<div class="form-floating form-floating-outline">
 					<input class="form-control" type="email" id="email" name="email" value="{{ old('email') }}" placeholder="" required />
@@ -37,11 +39,25 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-4 mb-3">
+				<div class="form-floating form-floating-outline">
+					<input class="form-control" type="text" id="penName" name="penname" value="{{ old('penname') }}" placeholder="" />
+					<label for="penName">Position</label>
+				</div>
+			</div>
+			<div class="col-md-4 mb-3">
+				<div class="form-floating form-floating-outline">
+                        <select class="form-select" id="category" name="category" required>
+                            <option disabled {{ old('category') ? '' : 'selected' }}>Select User Role</option>
+                            <option value="admin" {{ old('category') == 'admin' ? 'selected' : '' }}>admin</option>
+                            <option value="admin" {{ old('category') == 'admin' ? 'selected' : '' }}>eic</option>
+							<option value="admin" {{ old('category') == 'admin' ? 'selected' : '' }}>student</option>
+                        </select>
+				</div>
+			</div>
+		</div>
 
-		{{-- <div class="mb-3">
-			<label for="password" class="form-label">Password</label>
-			<input type="password" name="password" class="form-control" id="password" required>
-		</div> --}}
 		<button type="submit" class="btn btn-success">Create User</button>
 		<a href="{{ route('user-management') }}" class="btn btn-secondary">Cancel</a>
 	</form>
