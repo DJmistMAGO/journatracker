@@ -55,7 +55,7 @@
                 <!-- Broadcast Link (TV/Radio) -->
                 <div class="mb-3 d-none" id="linkField">
                     <label for="link" class="form-label">Video/Audio Link</label>
-                    <input type="url" class="form-control" name="link" id="link" value="{{ old('link') }}"
+                    <input type="text" class="form-control" name="link" id="link" value="{{ old('link') }}"
                         placeholder="Enter video or audio link">
                 </div>
 
