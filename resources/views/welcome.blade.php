@@ -118,7 +118,17 @@
 			@endphp
 			<div class="row g-5">
 				<article class="col-lg-8">
-					@if($featured)
+					@if($items->count() <= 1 && !$featured)
+						<div class="col-12 empty-library">
+							<div class="card shadow-sm border-0 text-center py-5">
+								<div class="card-body">
+									<i class="mdi mdi-library-outline text-primary icon-read-article"></i>
+									<h5 class="mt-3">Empty Library</h5>
+									<p class="text-muted">No content available at the moment.</p>
+								</div>
+							</div>
+						</div>
+					@elseif($items->count() >= 1)
 					<div class="card w-100 shadow-sm border-0 rounded-4 overflow-hidden">
 						{{-- Featured image --}}
 						<div class="position-relative">
@@ -182,6 +192,8 @@
 					</div>
 
 					@endif
+
+					@if($items->count() >= 1)
 
 					<h2 class="mt-5 mb-3 text-white" id="latestArticles">Latest Articles</h2>
 					<div class="row g-4">
@@ -279,7 +291,7 @@
 						@endforeach
 					</div>
 
-
+					@endif
 
 					{{-- Hover lift effect --}}
 					<style>
