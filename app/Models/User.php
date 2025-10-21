@@ -23,6 +23,7 @@ class User extends Authenticatable
         'has_changed_password',
         'profile_photo_path',
         'status',
+        'position',
     ];
 
     protected $hidden = ['password', 'remember_token', 'default_password'];

@@ -49,13 +49,22 @@
                         <a href="{{ route('media-management.show', $item->id) }}" class="btn btn-sm btn-info">
                             <i class="mdi mdi-file-eye"></i>
                         </a>
-                        <a href="{{ route('media-management.edit', $item->id) }}" class="btn btn-sm btn-warning">
-                            <i class="mdi mdi-file-edit"></i>
-                        </a>
-                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal" data-id="{{ $item->id }}" data-title="{{ $item->title }}">
-                            <i class="mdi mdi-delete"></i>
-                        </button>
+                        @if ($item->status !== 'published')
+							<a href="{{ route('media-management.edit', $item->id) }}" class="btn btn-sm btn-warning">
+								<i class="mdi mdi-file-edit"></i>
+							</a>
+							<button
+								type="button"
+								class="btn btn-sm btn-danger"
+								data-bs-toggle="modal"
+								data-bs-target="#deleteModal"
+								data-id="{{ $item->id }}"
+								data-title="{{ $item->title }}"
+							>
+								<i class="mdi mdi-delete"></i>
+							</button>
+						@endif
+
                     </div>
                 </td>
             </tr>

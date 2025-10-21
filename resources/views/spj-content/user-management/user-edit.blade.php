@@ -37,6 +37,33 @@
 					<label for="email">Email</label>
 				</div>
 			</div>
+			<div class="row">
+				<div class="col-md-4 mb-3">
+					<div class="form-floating form-floating-outline">
+						<input class="form-control" type="text" id="position" name="position" value="{{ old('position', $user->position) }}" placeholder="" />
+						<label for="position">Position</label>
+					</div>
+				</div>
+				<div class="col-md-4 mb-3">
+					<div class="form-floating form-floating-outline">
+						<select class="form-select" id="role" name="role" required>
+							<option disabled {{ old('role', $user->getRoleNames()->first()) ? '' : 'selected' }}>
+								Select User Role
+							</option>
+							@foreach($roles as $role)
+								<option
+									value="{{ $role->name }}"
+									{{ old('role', $user->getRoleNames()->first()) == $role->name ? 'selected' : '' }}
+								>
+									{{ ucfirst($role->name) }}
+								</option>
+							@endforeach
+						</select>
+						<label for="role">Select User Role</label>
+					</div>
+				</div>
+
+			</div>
 		</div>
 		<button type="submit" class="btn btn-success">Update User</button>
 		{{-- cancel --}}
