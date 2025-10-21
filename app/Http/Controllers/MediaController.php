@@ -140,13 +140,13 @@ class MediaController extends Controller
 		$media->type   = $media->type ?? 'Media';
 		$media->status = $media->status ?? 'Draft';
 
-		// $media->author->notify(new StatusChangedNotification($media));
+		$media->author->notify(new StatusChangedNotification($media));
 
-		// // Get all users with role 'Admin' or 'EIC'
-		// $usersToNotify = User::role(['admin', 'eic'])->get();
-		// foreach ($usersToNotify as $user) {
-		// 	$user->notify(new StatusChangedNotification($media));
-		// }
+		// Get all users with role 'Admin' or 'EIC'
+		$usersToNotify = User::role(['admin', 'eic'])->get();
+		foreach ($usersToNotify as $user) {
+			$user->notify(new StatusChangedNotification($media));
+		}
 
 
 		return redirect()

@@ -76,12 +76,12 @@ class IncidentReportController extends Controller
 
 		$incident = IncidentReport::create($data);
 
-		// $incident->type = 'Incident Report';
+		$incident->type = 'Incident Report';
 
-		// $usersToNotify = User::role(['admin', 'eic'])->get();
-		// foreach ($usersToNotify as $user) {
-		// 	$user->notify(new StatusChangedNotification($incident));
-		// }
+		$usersToNotify = User::role(['admin', 'eic'])->get();
+		foreach ($usersToNotify as $user) {
+			$user->notify(new StatusChangedNotification($incident));
+		}
 
 		return redirect()
 			->route('welcome')
