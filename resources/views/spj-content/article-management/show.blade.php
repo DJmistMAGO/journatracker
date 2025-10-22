@@ -8,11 +8,11 @@
 </h4>
 
 <div class="card">
+	<a href="{{ route('article-management') }}" class="btn btn-primary btn-sm">
+		<i class="mdi mdi-arrow-left me-1"></i> Back to List
+	</a>
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">{{ $article->title }}</h5>
-        <a href="{{ route('article-management') }}" class="btn btn-primary btn-sm">
-            <i class="mdi mdi-arrow-left me-1"></i> Back to List
-        </a>
     </div>
 
     <div class="card-body">

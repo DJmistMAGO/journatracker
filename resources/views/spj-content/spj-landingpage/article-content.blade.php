@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/loader.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-
     <style>
         :root {
             --theme-color: #00A23F;
@@ -111,7 +110,6 @@
                 <article class="col-lg-8">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <!-- Article Header -->
                             <header class="mb-4">
                                 <h1 class="fw-bold">{{ $item->title }}</h1>
                                 @php
@@ -135,14 +133,12 @@
                                 </div>
                             </header>
 
-                            <!-- Article Image / Link / Video -->
                             @if ($item->type === 'Article')
                                 <figure class="mb-4 text-center">
                                     <img src="{{ asset('/storage/' . $item->image_path) }}" alt="Article Image"
                                         class="img-fluid rounded shadow-sm">
                                 </figure>
                             @elseif ($item->type === 'Media')
-                                {{-- Show image if Photojournalism or Cartooning --}}
                                 @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
                                     @if ($item->image_path)
                                         <div class="text-center my-3">
@@ -155,7 +151,6 @@
                                     @endif
                                 @endif
 
-                                {{-- Show iframe if TV or Radio Broadcasting --}}
                                 @if (in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']))
                                     @if ($item->link)
                                         <div class="ratio ratio-16x9 my-3">
@@ -170,12 +165,10 @@
 
                             @endif
 
-                            <!-- Article Content -->
                             <section class="article-body mb-5">
                                 {{ $item->description }}
                             </section>
 
-                            <!-- Tags Section -->
                             <div class="mb-4">
                                 <strong>Tags: </strong>
                                 @php
@@ -191,7 +184,6 @@
                                 @endif
                             </div>
 
-                            <!-- Back Button with publication views count -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <a href="{{ url()->previous() }}" class="btn btn-outline-theme">
                                     <i class="ti ti-arrow-left me-1"></i> Back
@@ -239,24 +231,23 @@
         </div>
     </div>
 
-    {{-- Share Buttons --}}
     <div class="card border-0 shadow-sm mb-4 text-center p-3">
         <div class="card-body">
             <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
             <div class="d-flex justify-content-center gap-2">
                 <a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
-                   onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
-                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
+                    onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
                     <i class="mdi mdi-facebook"></i>
                 </a>
                 <a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
-                   onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
-                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
+                    onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
                     <i class="mdi mdi-twitter"></i>
                 </a>
                 <a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
-                   onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
-                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
+                    onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
                     <i class="mdi mdi-linkedin"></i>
                 </a>
             </div>

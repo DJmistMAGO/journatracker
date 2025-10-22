@@ -22,103 +22,169 @@
 
 
     <div class="card shadow-sm">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div class="card-title">
-                <h4 class="mb-0">{{ $item->title }}</h4>
-            </div>
-            <div class="back-button">
+		<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+			{{-- Header Section --}}
+			<div class="p-4" style="background-color: #D6EFD8;">
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<span class="badge px-3 py-2 rounded-pill text-white"
+						style="
+							background-color:
+							@if ($item->status === 'Draft') #6c757d;      /* gray */
+							@elseif ($item->status === 'Approved') #80AF81; /* light green */
+							@elseif ($item->status === 'Published') #1A5319; /* dark green */
+							@elseif ($item->status === 'Revision') #ffc107; /* yellow */
+							@elseif ($item->status === 'Rejected') #dc3545; /* red */
+							@elseif ($item->status === 'Scheduled') #508D4E; /* mid green */
+							@else #17a2b8; /* info blue */
+							@endif
+						">
+						{{ ucfirst($item->status) }}
+					</span>
 
-                    <a href="{{ route('publication-management.index') }}" class="btn btn-primary btn-sm">
-                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
-                    </a>
+					<a href="{{ route('publication-management.index') }}"
+					class="btn btn-sm px-3 py-2 text-white fw-semibold btn-primary"
+					style="border-radius: 50px;">
+						<i class="mdi mdi-arrow-left me-1"></i> Back to Publications
+					</a>
+				</div>
 
+				<h2 class="fw-bold mb-1" style="color: #1A5319;">{{ $item->title ?? 'Untitled' }}</h2>
+				<div class="text-black small">
+					<span><i class="mdi mdi-account me-1"></i>Author: {{ $item->user->name }}</span> •
+					<span><i class="mdi mdi-calendar me-1"></i>Date submitted: {{ $item->date_submitted->format('F j, Y') }}</span>
+				</div>
+			</div>
 
-            </div>
-        </div>
+			{{-- Body Section --}}
+			<div class="card-body p-4">
 
-        <div class="card-body">
-            <p><strong>Type:</strong> {{ $item->type }}</p>
-            <p><strong>Author:</strong> {{ $item->user->name }}</p>
-            <p><strong>Date Submitted:</strong> {{ $item->date_submitted->format('F j, Y') }}</p>
-            <p><strong>Status:</strong> {{ $item->status }}</p>
+				{{-- Type Badge --}}
+				<div class="mb-3">
+					<span class="badge rounded-pill px-3 py-2 text-white bg-primary">
+						{{ ucfirst($item->type) }}
+					</span>
+				</div>
 
-            {{-- Article specific fields --}}
-            @if ($type === 'article')
-                <p><strong>Category:</strong> {{ $item->category ?? 'N/A' }}</p>
-                <p><strong>Thumbnail:</strong></p>
-                @if ($item->image_path)
-                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="Thumbnail" class="img-fluid mb-3"
-                        style="max-height: 250px;">
-                @endif
-                <p><strong>Content:</strong></p>
-                <div class="border p-2 mb-3">{!! nl2br(e($item->description)) !!}</div>
-            @endif
+				{{-- Article-specific Content --}}
+				@if ($type === 'article')
+					<div class="mb-3">
+						<p class="mb-1 text-muted text-uppercase fw-semibold small">Category</p>
+						<p class="fw-medium">{{ $item->category ?? 'N/A' }}</p>
+					</div>
 
-            {{-- Media specific fields --}}
-            @if ($type === 'media')
-                <p><strong>Category:</strong> {{ ucfirst(str_replace('_', ' ', $item->category)) }}</p>
+					@if ($item->image_path)
+						<div class="mb-4 text-center">
+							<img src="{{ asset('storage/' . $item->image_path) }}"
+								 alt="Thumbnail"
+								 class="img-fluid rounded-4 shadow-sm"
+								 style="max-height: 350px; object-fit: cover;">
+						</div>
+					@endif
 
-                @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
-                    <p><strong>Image:</strong></p>
-                    @if ($item->image_path)
-                        <img src="{{ asset('storage/' . $item->image_path) }}" alt="Media Image" class="img-fluid mb-3"
-                            style="max-height: 250px;">
-                    @endif
-                @else
-                    <p><strong>Link:</strong></p>
-                    @if ($item->link)
-                        <iframe src="{{ $item->link }}"></iframe>
-                    @endif
-                @endif
-                <p><strong>Description:</strong> {{ $item->description ?? 'No description provided.' }}</p>
-            @endif
-            <p><strong>Tags:</strong>
-                @php
-                    $tags = is_array($item->tags) ? $item->tags : json_decode($item->tags, true);
-                @endphp
-
-                @if (!empty($tags))
-                    @foreach ($tags as $tag)
-                        <span class="badge bg-secondary me-1 mb-1">{{ $tag }}</span>
-                    @endforeach
-                @else
-                    None
-                @endif
-            </p>
-
-			@if($item->status == 'Published')
-			<p><strong>Date Published:</strong> {{ $item->date_publish->format('F j, Y') }}</p>
-			@endif
-			<p><strong>Remarks:</strong> {{ $item->remarks ?? 'N/A' }}</p>
-
-        </div>
-		@role('admin')
-        @if ($item->status == 'For Publish')
-            <div class="card-footer">
-                <button class="btn btn-lg col-12 btn-info" data-bs-toggle="modal"
-                    data-bs-target="#statusModal-{{ $item->id }}">
-                    Manage
-                </button>
-            </div>
-        @endif
-		@endrole
-		@role('eic')
-        @if ($item->status == 'Draft' || $item->status == 'For Publish')
-            <div class="card-footer">
-				@if($item->type == 'Article')
-                <a href="{{ route('publication-management.article.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
-                    Review
-                </a>
+					<div class="border-start border-4 ps-3 mb-4" style="border-color: #80AF81;">
+						<div class="lh-lg" style="color: #1A5319;">
+							{!! nl2br(e($item->description)) !!}
+						</div>
+					</div>
 				@endif
-				@if($item->type == 'Media')
-                <a href="{{ route('publication-management.media.edit', $item->id) }}" class="btn btn-lg col-12 btn-info text-white">
-                    Review
-                </a>
+
+				{{-- Media-specific Content --}}
+				@if ($type === 'media')
+					<div class="mb-3">
+						<p class="mb-1 text-muted text-uppercase fw-semibold small">Category</p>
+						<p class="fw-medium">{{ ucfirst(str_replace('_', ' ', $item->category)) }}</p>
+					</div>
+
+					@if (in_array($item->category, ['Photojournalism', 'Cartooning']))
+						@if ($item->image_path)
+							<div class="text-center mb-4">
+								<img src="{{ asset('storage/' . $item->image_path) }}"
+									 alt="Media Image"
+									 class="img-fluid rounded-4 shadow-sm"
+									 style="max-height: 350px; object-fit: cover;">
+							</div>
+						@endif
+					@else
+						@if ($item->link)
+							<div class="ratio ratio-16x9 mb-4 rounded-4 overflow-hidden">
+								<iframe src="{{ $item->link }}" frameborder="0" allowfullscreen></iframe>
+							</div>
+						@endif
+					@endif
+
+					<div class="lh-lg" style="color: #1A5319;">
+						{{ $item->description ?? 'No description provided.' }}
+					</div>
 				@endif
-            </div>
-        @endif
-		@endrole
-    </div>
+
+				{{-- Tags --}}
+				<div class="mt-4">
+					<p class="mb-2 text-muted text-uppercase fw-semibold small">Tags</p>
+					@php
+						$tags = is_array($item->tags) ? $item->tags : json_decode($item->tags, true);
+					@endphp
+					@if (!empty($tags))
+						@foreach ($tags as $tag)
+							<span class="badge rounded-pill me-1 mb-1 text-white bg-primary">
+								{{ $tag }}
+							</span>
+						@endforeach
+					@else
+						<span class="text-muted">None</span>
+					@endif
+				</div>
+
+				{{-- Publication Info --}}
+				@if($item->status == 'Published')
+					<div class="mt-4 text-muted small">
+						<i class="mdi mdi-calendar-check me-1"></i>
+						Published on {{ $item->date_publish->format('F j, Y') }}
+					</div>
+				@endif
+
+				{{-- Remarks --}}
+				<div class="mt-3">
+					<p class="mb-1 text text-uppercase fw-semibold small text-warning">Remarks</p>
+					<p class="fw-medium">{{ $item->remarks ?? 'N/A' }}</p>
+				</div>
+			</div>
+
+			{{-- Footer Actions --}}
+			@role('admin')
+				@if ($item->status == 'For Publish')
+					<div class="card-footer bg-light border-0">
+						<button class="btn btn-lg w-100 text-white"
+								style="background-color: #508D4E;"
+								data-bs-toggle="modal"
+								data-bs-target="#statusModal-{{ $item->id }}">
+							<i class="mdi mdi-cog me-1"></i> Manage
+						</button>
+					</div>
+				@endif
+			@endrole
+
+			@role('eic')
+				@if ($item->status == 'Draft' || $item->status == 'For Publish')
+					<div class="card-footer bg-light border-0">
+						@if($item->type == 'Article')
+							<a href="{{ route('publication-management.article.edit', $item->id) }}"
+							   class="btn btn-lg w-100 text-white"
+							   style="background-color: #508D4E;">
+								<i class="mdi mdi-pencil me-1"></i> Review Article
+							</a>
+						@endif
+						@if($item->type == 'Media')
+							<a href="{{ route('publication-management.media.edit', $item->id) }}"
+							   class="btn btn-lg w-100 text-white"
+							   style="background-color: #508D4E;">
+								<i class="mdi mdi-pencil me-1"></i> Review Media
+							</a>
+						@endif
+					</div>
+				@endif
+			@endrole
+		</div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="statusModal-{{ $item->id }}" tabindex="-1"
