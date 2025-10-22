@@ -13,21 +13,22 @@ class LoginBasic extends Controller
         return view('content.authentications.auth-login-basic');
     }
 
-    //   add other methods such as handling login post request
     public function authenticate(Request $request)
     {
+        // Validate login input
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // Attempt login
-        if (Auth::attempt($credentials, $request->remember)) {
+        // Attempt login with remember me option
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $user = Auth::user();
 
             // Check if account is deactivated
             if ($user->status === 'deactivated') {
                 Auth::logout();
+
                 return back()
                     ->withErrors([
                         'email' => 'Your account has been deactivated. Please contact an administrator.',
@@ -35,10 +36,14 @@ class LoginBasic extends Controller
                     ->onlyInput('email');
             }
 
+            // Regenerate session for security
             $request->session()->regenerate();
+
+            // Redirect to intended page or dashboard
             return redirect()->intended('/dashboard');
         }
 
+        // Invalid credentials
         return back()
             ->withErrors([
                 'email' => 'Invalid email or password.',
