@@ -76,7 +76,7 @@
                                             <i class="mdi mdi-close-circle-outline"></i> Unpublish
                                         </button>
                                     @endif --}}
-                                @endunless
+                                @endunlessrole
                             </td>
                         </tr>
 

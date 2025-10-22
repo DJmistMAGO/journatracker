@@ -159,7 +159,7 @@
 								{{ $mediaPublishedCount }} published media files
 							</span> this month
 						</p>
-					@endunless
+					@endunlessrole
 				</div>
 				<div class="card-body">
 					<div class="row g-3">

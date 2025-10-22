@@ -23,7 +23,7 @@
             <a href="{{ route('article-management.create') }}" class="btn btn-success btn-md">
                 <i class="mdi mdi-text-box-plus-outline me-1"></i> Submit Article
             </a>
-        @endunless
+        @endunlessrole
     </div>
 
     {{-- Table for larger screens --}}

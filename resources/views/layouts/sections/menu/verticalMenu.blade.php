@@ -64,13 +64,14 @@
                 <div>Archive</div>
             </a>
         </li>
-
-        <li class="menu-item {{ request()->is('incident-report*') ? 'active' : '' }}">
-            <a href="{{ url('/incident-report') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-sticker-alert-outline"></i>
-                <div>Incident Report</div>
-            </a>
-        </li>
+		@unlessrole('student')
+			<li class="menu-item {{ request()->is('incident-report*') ? 'active' : '' }}">
+				<a href="{{ url('/incident-report') }}" class="menu-link">
+					<i class="menu-icon tf-icons mdi mdi-sticker-alert-outline"></i>
+					<div>Incident Report</div>
+				</a>
+			</li>
+		@endunlessrole
 
         @role('admin')
             <li class="menu-item {{ request()->is('user-management*') ? 'active' : '' }}">
