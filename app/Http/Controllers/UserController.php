@@ -80,6 +80,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $defaultPassword = 'P@ssw0rd'; // Set your default password here
         $user->password = bcrypt($defaultPassword);
+        $user->default_password = bcrypt($defaultPassword);
         $user->save();
 
         return redirect()

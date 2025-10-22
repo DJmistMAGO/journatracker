@@ -12,6 +12,7 @@
             text-overflow: ellipsis;
         }
     </style>
+	<link rel="stylesheet" href="{{ asset('assets/css/snackbar.css') }}">
 @endpush
 
 @section('content')
@@ -42,7 +43,7 @@
                     <th>User</th>
                     <th>Role</th>
                     <th>Email</th>
-                    <th>Default Password</th>
+                    {{-- <th>Default Password</th> --}}
                     <th>Password Status</th>
                     <th>Actions</th>
                 </tr>
@@ -80,13 +81,13 @@
                             @endif
                         </td>
                         <td>{{ $user->email }}</td>
-                        <td>
+                        {{-- <td>
                             <span class="password-text d-none">{{ $user->default_password }}</span>
                             <span class="password-hidden">••••••••</span>
                             <button type="button" class="ms-2 btn btn-sm btn-link toggle-password">
                                 <i class="mdi mdi-eye"></i>
                             </button>
-                        </td>
+                        </td> --}}
                         <td>
                             @if ($user->has_changed_password)
                                 <span class="badge bg-label-secondary">Changed</span>
@@ -153,13 +154,13 @@
                         </div>
                     </div>
                     <p class="mb-0"><strong>Email:</strong> {{ $user->email }}</p>
-                    <p class="mb-0"><strong>Default Password:</strong>
+                    {{-- <p class="mb-0"><strong>Default Password:</strong>
                         <span class="password-text d-none">{{ $user->default_password }}</span>
                         <span class="password-hidden">••••••••</span>
                         <button type="button" class="ms-2 btn btn-sm btn-link toggle-password">
                             <i class="mdi mdi-eye"></i>
                         </button>
-                    </p>
+                    </p> --}}
                     <p class="mb-0"><strong>Password Status:</strong>
                         @if ($user->has_changed_password)
                             <span class="badge bg-label-secondary">Changed</span>

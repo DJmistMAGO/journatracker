@@ -142,7 +142,7 @@ Route::middleware('auth')->group(function () {
         });
 
     Route::controller(UserController::class)
-        ->middleware(['role:admin'])
+        ->middleware('admin')
         ->prefix('user-management')
         ->group(function () {
             Route::get('/', 'index')->name('user-management');
@@ -152,8 +152,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}', 'show')->name('user-management.show');
             Route::put('/{id}', 'update')->name('user-management.update');
             Route::delete('/{id}', 'destroy')->name('user-management.destroy');
-            Route::get('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
-            Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
+            Route::post('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
+            // Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
         });
 
     Route::controller(ProfileController::class)
