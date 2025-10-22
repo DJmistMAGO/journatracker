@@ -21,4 +21,4 @@
 			setTimeout(() => snackbar.classList.remove('show'), 4000);
 		}
 	});
-	</script>
+</script>

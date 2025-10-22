@@ -17,10 +17,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = \App\Models\User::with('roles')->get();
+        $users = User::with('roles')->get();
         $search = request()->query('search');
         if ($search) {
-            $users = \App\Models\User::where('first_name', 'like', '%' . $search . '%')
+            $users = User::where('first_name', 'like', '%' . $search . '%')
                 ->orWhere('email', 'like', '%' . $search . '%')
                 ->with('roles')
                 ->get();
@@ -80,6 +80,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $defaultPassword = 'P@ssw0rd'; // Set your default password here
         $user->password = bcrypt($defaultPassword);
+        $user->default_password = bcrypt($defaultPassword);
         $user->save();
 
         return redirect()
@@ -137,5 +138,16 @@ class UserController extends Controller
         return redirect()
             ->route('user-management')
             ->with('success', 'User deleted successfully.');
+    }
+
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'active' ? 'deactivated' : 'active';
+        $user->save();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'User status updated successfully!');
     }
 }
