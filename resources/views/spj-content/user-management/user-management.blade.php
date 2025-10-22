@@ -43,8 +43,8 @@
                     <th>User</th>
                     <th>Role</th>
                     <th>Email</th>
-                    {{-- <th>Default Password</th> --}}
                     <th>Password Status</th>
+                    <th>User Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -81,13 +81,6 @@
                             @endif
                         </td>
                         <td>{{ $user->email }}</td>
-                        {{-- <td>
-                            <span class="password-text d-none">{{ $user->default_password }}</span>
-                            <span class="password-hidden">••••••••</span>
-                            <button type="button" class="ms-2 btn btn-sm btn-link toggle-password">
-                                <i class="mdi mdi-eye"></i>
-                            </button>
-                        </td> --}}
                         <td>
                             @if ($user->has_changed_password)
                                 <span class="badge bg-label-secondary">Changed</span>
@@ -95,6 +88,13 @@
                                 <span class="badge bg-label-warning">Not Changed</span>
                             @endif
                         </td>
+						<td>
+							@if ($user->status === 'active')
+								<span class="badge bg-label-success">Active</span>
+							@else
+								<span class="badge bg-label-danger">Deactivated</span>
+							@endif
+						</td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
                                 <a href="{{ route('user-management.edit', $user->id) }}" class="btn btn-sm bg-success text-white">
@@ -108,14 +108,25 @@
                                         data-username="{{ $user->name }}">
                                     <i class="mdi mdi-lock-reset"></i>
                                 </button>
-                                <button type="button"
-                                        class="btn btn-sm btn-danger confirm-action"
-                                        data-action="{{ route('user-management.destroy', $user->id) }}"
-                                        data-type="delete"
-                                        data-header="bg-danger text-white"
-                                        data-username="{{ $user->name }}">
-                                    <i class="mdi mdi-delete-outline"></i>
-                                </button>
+								@if ($user->status === 'active')
+									<button type="button"
+										class="btn btn-sm btn-danger confirm-toggle"
+										data-action="{{ route('user-management.toggleStatus', $user->id) }}"
+										data-type="deactivate"
+										data-header="bg-danger text-white"
+										data-username="{{ $user->name }}">
+										<i class="mdi mdi-account-off-outline"></i>
+									</button>
+								@else
+									<button type="button"
+										class="btn btn-sm btn-success confirm-toggle"
+										data-action="{{ route('user-management.toggleStatus', $user->id) }}"
+										data-type="activate"
+										data-header="bg-success text-white"
+										data-username="{{ $user->name }}">
+										<i class="mdi mdi-account-check-outline"></i>
+									</button>
+								@endif
                             </div>
                         </td>
                     </tr>
@@ -154,13 +165,6 @@
                         </div>
                     </div>
                     <p class="mb-0"><strong>Email:</strong> {{ $user->email }}</p>
-                    {{-- <p class="mb-0"><strong>Default Password:</strong>
-                        <span class="password-text d-none">{{ $user->default_password }}</span>
-                        <span class="password-hidden">••••••••</span>
-                        <button type="button" class="ms-2 btn btn-sm btn-link toggle-password">
-                            <i class="mdi mdi-eye"></i>
-                        </button>
-                    </p> --}}
                     <p class="mb-0"><strong>Password Status:</strong>
                         @if ($user->has_changed_password)
                             <span class="badge bg-label-secondary">Changed</span>
@@ -180,14 +184,25 @@
                                 data-username="{{ $user->name }}">
                             <i class="mdi mdi-lock-reset me-1"></i> Reset Password
                         </button>
-                        <button type="button"
-                                class="btn btn-sm btn-danger flex-fill confirm-action"
-                                data-action="{{ route('user-management.destroy', $user->id) }}"
-                                data-type="delete"
-                                data-header="bg-danger text-white"
-                                data-username="{{ $user->name }}">
-                            <i class="mdi mdi-delete-outline me-1"></i> Delete
-                        </button>
+                        @if ($user->status === 'active')
+							<button type="button"
+								class="btn btn-sm btn-danger confirm-toggle"
+								data-action="{{ route('user-management.toggleStatus', $user->id) }}"
+								data-type="deactivate"
+								data-header="bg-danger text-white"
+								data-username="{{ $user->name }}">
+								<i class="mdi mdi-account-off-outline"></i>
+							</button>
+						@else
+							<button type="button"
+								class="btn btn-sm btn-success confirm-toggle"
+								data-action="{{ route('user-management.toggleStatus', $user->id) }}"
+								data-type="activate"
+								data-header="bg-success text-white"
+								data-username="{{ $user->name }}">
+								<i class="mdi mdi-account-check-outline"></i>
+							</button>
+						@endif
                     </div>
                 </div>
             </div>
@@ -198,29 +213,93 @@
 
 @include('_partials.confirm-modal')
 
+<!-- Activate User Modal -->
+<div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="activateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4 shadow">
+      <div class="modal-header bg-success text-white rounded-top-4">
+        <h5 class="modal-title fw-semibold" id="activateModalLabel">Activate User</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="activateForm" method="POST">
+        @csrf
+        @method('PATCH')
+        <div class="modal-body">
+          <p class="mb-0">
+            Are you sure you want to <span class="fw-semibold text-success">activate</span>
+            the account of <span id="activateUserName" class="fw-semibold"></span> and restore login access?
+          </p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-success rounded-pill px-3">
+            <i class="mdi mdi-account-check-outline me-1"></i> Activate
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Deactivate User Modal -->
+<div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4 shadow">
+      <div class="modal-header bg-danger text-white rounded-top-4">
+        <h5 class="modal-title fw-semibold" id="deactivateModalLabel">Deactivate User</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="deactivateForm" method="POST">
+        @csrf
+        @method('PATCH')
+        <div class="modal-body">
+          <p class="mb-0">
+            Are you sure you want to <span class="fw-semibold text-danger">deactivate</span>
+            the account of <span id="deactivateUserName" class="fw-semibold"></span> and prevent login access?
+          </p>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-danger rounded-pill px-3">
+            <i class="mdi mdi-account-off-outline me-1"></i> Deactivate
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
 @push('scripts')
 <script src="{{ asset('assets/js/loader.js') }}"></script>
-<script>
-document.querySelectorAll('.toggle-password').forEach(button => {
-    button.addEventListener('click', function () {
-        const td = this.closest('td') || this.closest('.card-body');
-        const hidden = td.querySelector('.password-hidden');
-        const text = td.querySelector('.password-text');
-        const icon = this.querySelector('i');
-
-        hidden.classList.toggle('d-none');
-        text.classList.toggle('d-none');
-
-        if (icon.classList.contains('mdi-eye')) {
-            icon.classList.remove('mdi-eye');
-            icon.classList.add('mdi-eye-off');
-        } else {
-            icon.classList.remove('mdi-eye-off');
-            icon.classList.add('mdi-eye');
-        }
-    });
-});
-</script>
 <script src="{{ asset('assets/js/confirm-modal.js') }}"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		document.querySelectorAll('.confirm-toggle').forEach(button => {
+			button.addEventListener('click', function () {
+			const action = this.getAttribute('data-action');
+			const username = this.getAttribute('data-username');
+			const type = this.getAttribute('data-type');
+
+			if (type === 'activate') {
+				document.getElementById('activateForm').action = action;
+				document.getElementById('activateUserName').textContent = username;
+				new bootstrap.Modal(document.getElementById('activateModal')).show();
+			} else if (type === 'deactivate') {
+				document.getElementById('deactivateForm').action = action;
+				document.getElementById('deactivateUserName').textContent = username;
+				new bootstrap.Modal(document.getElementById('deactivateModal')).show();
+			}
+			});
+		});
+	});
+</script>
 @endpush
 @endsection

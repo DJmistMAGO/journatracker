@@ -139,4 +139,15 @@ class UserController extends Controller
             ->route('user-management')
             ->with('success', 'User deleted successfully.');
     }
+
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'active' ? 'deactivated' : 'active';
+        $user->save();
+
+        return redirect()
+            ->route('user-management')
+            ->with('success', 'User status updated successfully!');
+    }
 }

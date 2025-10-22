@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('default_password')->nullable();
             $table->boolean('has_changed_password')->default(false);
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->enum('status', ['active', 'suspended', 'deactived'])->default('active');
+            $table->enum('status', ['active', 'suspended', 'deactivated'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });

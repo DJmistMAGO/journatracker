@@ -153,6 +153,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}', 'update')->name('user-management.update');
             Route::delete('/{id}', 'destroy')->name('user-management.destroy');
             Route::post('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
+            Route::patch('toggle-status/{id}', 'toggleStatus')->name('user-management.toggleStatus');
             // Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
         });
 
