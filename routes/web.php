@@ -101,7 +101,7 @@ Route::middleware('auth')->group(function () {
             Route::get('edit/{id}', 'edit')->name('article-management.edit');
             Route::get('show/{id}', 'show')->name('article-management.show');
             Route::put('update/{id}', 'update')->name('article-management.update');
-            // Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
+            Route::delete('delete/{id}', 'destroy')->name('article-management.destroy');
             Route::put('{id}/approve', 'approve')->name('article-management.approve');
             Route::put('{id}/disapprove', 'disapprove')->name('article-management.disapprove');
             Route::put('{id}/archive', 'archive')->name('article-management.archive');

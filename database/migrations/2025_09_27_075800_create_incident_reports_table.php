@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 			$table->string('student_name');
 			$table->string('student_id_image');
+			$table->string('email');
 			$table->string('incident_description');
 			$table->string('image_proof');
 			$table->date('date_submitted')->default(now());

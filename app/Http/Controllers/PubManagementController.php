@@ -9,210 +9,238 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StatusUpdateNotification;
 use App\Notifications\StatusChangedNotification;
+use Illuminate\Support\Facades\Auth;
 
 class PubManagementController extends Controller
 {
-    public function index(Request $request)
-    {
-        $search = $request->input('search');
-        $status = $request->input('status');
+	public function index(Request $request)
+	{
+		$authUser = Auth::user();
 
-        // Articles
-        $articles = Article::with('user')
-            ->whereIn('status', ['Draft', 'Approved', 'Scheduled', 'For Publish', 'Revision'])
-            ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
-            ->when($status, fn($query) => $query->where('status', $status))
-            ->orderByDesc('date_submitted')
-            ->get();
+		$search = $request->input('search');
+		$status = $request->input('status');
 
-        // Media
-        $media = Media::with('user')
-            ->whereIn('status', ['Draft', 'Approved', 'Scheduled', 'For Publish', 'Revision'])
-            ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
-            ->when($status, fn($query) => $query->where('status', $status))
-            ->orderByDesc('date_submitted')
-            ->get();
+		if ($authUser->hasRole('eic')) {
+			// Articles
+			$articles = Article::with('user')
+				->whereIn('status', ['Submitted', 'Resubmitted'])
+				->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+				->when($status, fn($query) => $query->where('status', $status))
+				->orderByDesc('date_submitted')
+				->get();
 
-        // Merge & sort by submission date
-        $items = $articles
-            ->concat($media)
-            ->sortByDesc('date_submitted')
-            ->values();
+			// Media
+			$media = Media::with('user')
+				->whereIn('status', ['Submitted', 'Resubmitted'])
+				->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+				->when($status, fn($query) => $query->where('status', $status))
+				->orderByDesc('date_submitted')
+				->get();
 
-        return view('spj-content.publication-management.index', compact('items'));
-    }
+			// Merge & sort by submission date
+			$items = $articles
+				->concat($media)
+				->sortByDesc('date_submitted')
+				->values();
+		} elseif ($authUser->hasRole('admin')) {
+			// Articles
+			$articles = Article::with('user')
+				->whereIn('status', ['For Publish', 'Scheduled'])
+				->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+				->when($status, fn($query) => $query->where('status', $status))
+				->orderByDesc('date_submitted')
+				->get();
 
-    public function show($type, $id)
-    {
-        $item = $this->getItemByType($type, $id);
+			// Media
+			$media = Media::with('user')
+				->whereIn('status', ['For Publish', 'Scheduled'])
+				->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
+				->when($status, fn($query) => $query->where('status', $status))
+				->orderByDesc('date_submitted')
+				->get();
 
-        return view('spj-content.publication-management.show', [
-            'item' => $item,
-            'type' => strtolower($type),
-        ]);
-    }
+			// Merge & sort by submission date
+			$items = $articles
+				->concat($media)
+				->sortByDesc('date_submitted')
+				->values();
+		}
 
-    public function updateStatus($type, $id, Request $request)
-    {
-        $item = $this->getItemByType($type, $id);
 
-        // Check if unpublish is requested via a special status
-        if ($request->has('unpublish')) {
-            if ($item->status === 'Published' || $item->status === 'Scheduled') {
-                $item->status = 'Draft'; // or 'Draft' if you prefer
-                $item->publish_at = null;
-                $item->date_publish = null;
-                $item->save();
 
-                return back()->with('success', ucfirst($type) . ' unpublished successfully.');
-            }
+		return view('spj-content.publication-management.index', compact('items'));
+	}
 
-            return back()->with('error', ucfirst($type) . ' cannot be unpublished now.');
-        }
+	public function show($type, $id)
+	{
+		$item = $this->getItemByType($type, $id);
 
-        // Validate for normal status updates
-        $validated = $request->validate([
-            'status' => 'required|in:publish_now,schedule_later,Revision,Rejected',
-            'date_publish' => 'nullable|date',
-            'time_publish' => 'nullable|date_format:H:i',
-            'remarks' => 'nullable|string|max:1000',
-        ]);
+		return view('spj-content.publication-management.show', [
+			'item' => $item,
+			'type' => strtolower($type),
+		]);
+	}
 
-        if ($validated['status'] === 'publish_now') {
-            $item->status = 'Published';
-            $item->date_publish = Carbon::now()->format('Y-m-d');
-            $item->publish_at = Carbon::now();
-            $item->remarks = null;
-        } elseif ($validated['status'] === 'schedule_later') {
-            $item->status = 'Scheduled';
-            $item->date_publish = $validated['date_publish'] ?? null;
-            $item->publish_at = $validated['time_publish']
-                ? Carbon::parse($validated['date_publish'] . ' ' . $validated['time_publish'])
-                : null;
-            $item->remarks = null;
-        } elseif (in_array($validated['status'], ['Revision', 'Rejected'])) {
-            $item->status = $validated['status'];
-            $item->remarks = $validated['remarks'] ?? null;
-            $item->date_publish = null;
-            $item->publish_at = null;
-        }
+	public function updateStatus($type, $id, Request $request)
+	{
+		$item = $this->getItemByType($type, $id);
 
-        $item->save();
+		// Check if unpublish is requested via a special status
+		if ($request->has('unpublish')) {
+			if ($item->status === 'Published' || $item->status === 'Scheduled') {
+				$item->status = 'Submitted'; // or 'Submitted' if you prefer
+				$item->publish_at = null;
+				$item->date_publish = null;
+				$item->save();
 
-        // Notify user (optional)
-        if ($item->user) {
-            $item->user->notify(new StatusChangedNotification($item));
-            if ($item->user->email) {
-                Mail::to($item->user->email)->queue(
-                    new StatusUpdateNotification(
-                        $item->user->penname ?? $item->user->name,
-                        $item->type,
-                        $item->title ?? 'Untitled',
-                        $item->status,
-                        $item->remarks,
-                        $item->date_publish,
-                        $item->publish_at
-                    )
-                );
-            }
-        }
+				return back()->with('success', ucfirst($type) . ' unpublished successfully.');
+			}
 
-        return back()->with('success', ucfirst($type) . ' status updated successfully.');
-    }
+			return back()->with('error', ucfirst($type) . ' cannot be unpublished now.');
+		}
 
-    /**
-     * Helper to fetch Article or Media by type
-     */
-    private function getItemByType($type, $id)
-    {
-        $type = strtolower(trim($type));
-        if ($type === 'article') {
-            return Article::with('user')->findOrFail($id);
-        } elseif ($type === 'media') {
-            return Media::with('user')->findOrFail($id);
-        } else {
-            abort(404, 'Invalid type');
-        }
-    }
+		// Validate for normal status updates
+		$validated = $request->validate([
+			'status' => 'required|in:publish_now,schedule_later,Revision,Rejected',
+			'date_publish' => 'nullable|date',
+			'time_publish' => 'nullable|date_format:H:i',
+			'remarks' => 'nullable|string|max:1000',
+		]);
 
-    public function unpublish($type, $id)
-    {
-        $item = $this->getItemByType($type, $id);
+		if ($validated['status'] === 'publish_now') {
+			$item->status = 'Published';
+			$item->date_publish = Carbon::now()->format('Y-m-d');
+			$item->publish_at = Carbon::now();
+			$item->remarks = null;
+		} elseif ($validated['status'] === 'schedule_later') {
+			$item->status = 'Scheduled';
+			$item->date_publish = $validated['date_publish'] ?? null;
+			$item->publish_at = $validated['time_publish']
+				? Carbon::parse($validated['date_publish'] . ' ' . $validated['time_publish'])
+				: null;
+			$item->remarks = null;
+		} elseif (in_array($validated['status'], ['Revision', 'Rejected'])) {
+			$item->status = $validated['status'];
+			$item->remarks = $validated['remarks'] ?? null;
+			$item->date_publish = null;
+			$item->publish_at = null;
+		}
 
-        // Only allow unpublishing if currently Published or Scheduled
-        if (in_array($item->status, ['Published', 'Scheduled'])) {
-            // Reset publish info
-            $item->status = 'Draft'; // or whatever default prior state should be
-            $item->publish_at = null;
-            $item->date_publish = null;
-            $item->remarks = null;
+		$item->save();
 
-            $item->save();
+		if ($item->user) {
+			$item->user->notify(new StatusChangedNotification($item));
+			if ($item->user->email) {
+				Mail::to($item->user->email)->queue(
+					new StatusUpdateNotification(
+						$item->user->penname ?? $item->user->name,
+						$item->type,
+						$item->title ?? 'Untitled',
+						$item->status,
+						$item->remarks,
+						$item->date_publish,
+						$item->publish_at
+					)
+				);
+			}
+		}
 
-            // // Notify user
-            // if ($item->user) {
-            //     $item->user->notify(new StatusChangedNotification($item));
+		return back()->with('success', ucfirst($type) . ' status updated successfully.');
+	}
 
-            //     if ($item->user->email) {
-            //         Mail::to($item->user->email)->queue(
-            //             new StatusUpdateNotification(
-            //                 $item->user->penname ?? $item->user->name,
-            //                 $item->type,
-            //                 $item->title ?? 'Untitled',
-            //                 $item->status,
-            //                 $item->remarks,
-            //                 $item->date_publish,
-            //                 $item->publish_at
-            //             )
-            //         );
-            //     }
-            // }
+	/**
+	 * Helper to fetch Article or Media by type
+	 */
+	private function getItemByType($type, $id)
+	{
+		$type = strtolower(trim($type));
+		if ($type === 'article') {
+			return Article::with('user')->findOrFail($id);
+		} elseif ($type === 'media') {
+			return Media::with('user')->findOrFail($id);
+		} else {
+			abort(404, 'Invalid type');
+		}
+	}
 
-            return back()->with('success', ucfirst($type) . ' has been unpublished successfully.');
-        }
+	public function unpublish($type, $id)
+	{
+		$item = $this->getItemByType($type, $id);
 
-        return back()->with('error', 'This ' . $type . ' cannot be unpublished now.');
-    }
+		// Only allow unpublishing if currently Published or Scheduled
+		if (in_array($item->status, ['Published', 'Scheduled'])) {
+			// Reset publish info
+			$item->status = 'Submitted'; // or whatever default prior state should be
+			$item->publish_at = null;
+			$item->date_publish = null;
+			$item->remarks = null;
 
-    /**
-     * Reschedule a scheduled article
-     */
-    public function reschedule(Request $request, $id)
-    {
-        $request->validate([
-            'publish_date' => 'required|date',
-            'publish_time' => 'required|date_format:H:i',
-        ]);
+			$item->save();
 
-        $article = Article::findOrFail($id);
+			// Notify user
+			if ($item->user) {
+				$item->user->notify(new StatusChangedNotification($item));
 
-        if ($article->status === 'Scheduled') {
-            $publishDateTime = Carbon::parse($request->publish_date . ' ' . $request->publish_time);
+				if ($item->user->email) {
+					Mail::to($item->user->email)->queue(
+						new StatusUpdateNotification(
+							$item->user->penname ?? $item->user->name,
+							$item->type,
+							$item->title ?? 'Untitled',
+							$item->status,
+							$item->remarks,
+							$item->date_publish,
+							$item->publish_at
+						)
+					);
+				}
+			}
 
-            $article->publish_at = $publishDateTime;
-            $article->save();
+			return back()->with('success', ucfirst($type) . ' has been unpublished successfully.');
+		}
 
-            return back()->with('success', 'Publishing rescheduled to ' . $publishDateTime->format('M d, Y h:i A'));
-        }
+		return back()->with('error', 'This ' . $type . ' cannot be unpublished now.');
+	}
 
-        return back()->with('error', 'This article cannot be rescheduled.');
-    }
+	/**
+	 * Reschedule a scheduled article
+	 */
+	public function reschedule(Request $request, $id)
+	{
+		$request->validate([
+			'publish_date' => 'required|date',
+			'publish_time' => 'required|date_format:H:i',
+		]);
 
-    public function editArticle($id)
-    {
-        $article = Article::findOrFail($id);
-        return view('spj-content.article-management.edit', [
-            'article' => $article,
-            'fromPublication' => true,
-        ]);
-    }
+		$article = Article::findOrFail($id);
 
-    public function editMedia($id)
-    {
-        $media = Media::findOrFail($id);
-        return view('spj-content.media-management.edit', [
-            'media' => $media,
-            'fromPublication' => true,
-        ]);
-    }
+		if ($article->status === 'Scheduled') {
+			$publishDateTime = Carbon::parse($request->publish_date . ' ' . $request->publish_time);
+
+			$article->publish_at = $publishDateTime;
+			$article->save();
+
+			return back()->with('success', 'Publishing rescheduled to ' . $publishDateTime->format('M d, Y h:i A'));
+		}
+
+		return back()->with('error', 'This article cannot be rescheduled.');
+	}
+
+	public function editArticle($id)
+	{
+		$article = Article::findOrFail($id);
+		return view('spj-content.article-management.edit', [
+			'article' => $article,
+			'fromPublication' => true,
+		]);
+	}
+
+	public function editMedia($id)
+	{
+		$media = Media::findOrFail($id);
+		return view('spj-content.media-management.edit', [
+			'media' => $media,
+			'fromPublication' => true,
+		]);
+	}
 }

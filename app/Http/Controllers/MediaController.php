@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusChangedNotification;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\StatusUpdateNotification;
 use App\Models\User;
 
 class MediaController extends Controller
@@ -24,7 +26,7 @@ class MediaController extends Controller
 
 		// Filtered $all query
 		$all = Media::where('user_id', $user_id)
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->when($search, function ($query, $search) {
 				$query->where('title', 'like', "%{$search}%");
 			})
@@ -37,25 +39,25 @@ class MediaController extends Controller
 		// Other category queries remain the same
 		$photojournalism = Media::where("user_id", $user_id)
 			->where('category', 'Photojournalism')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
 		$cartooning = Media::where('user_id', $user_id)
 			->where('category', 'Cartooning')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
 		$tv = Media::where('user_id', $user_id)
 			->where('category', 'TV Broadcasting')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
 		$radio = Media::where('user_id', $user_id)
 			->where('category', 'Radio Broadcasting')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
@@ -138,7 +140,7 @@ class MediaController extends Controller
 		]);
 
 		$media->type   = $media->type ?? 'Media';
-		$media->status = $media->status ?? 'Draft';
+		$media->status = $media->status ?? 'Submitted';
 
 		$media->author->notify(new StatusChangedNotification($media));
 
@@ -241,7 +243,7 @@ class MediaController extends Controller
 			'tags'           => $data['tags'],
 			'description'    => $data['description'] ?? null,
 			'image_path'     => $data['image_path'] ?? $media->image_path,
-			'status'         => 'Draft',
+			'status'         => 'Submitted',
 		];
 
 		if (isset($data['link'])) {
@@ -259,6 +261,20 @@ class MediaController extends Controller
 
 
 		if ($user_role == "eic") {
+			//email notification to author
+			Mail::to($media->user->email)->queue(
+				new StatusUpdateNotification(
+					$media->user->penname ?? $media->user->name,
+					$media->type,
+					$media->title ?? 'Untitled',
+					$media->status,
+					$media->remarks,
+					$media->date_publish,
+					$media->publish_at
+				)
+			);
+
+
 			return redirect()
 				->route('publication-management.index')
 				->with('success', 'Media updated successfully!');

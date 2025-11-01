@@ -40,7 +40,7 @@
             <div class="col-12 col-md-2">
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
-                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="Submitted" {{ request('status') == 'Submitted' ? 'selected' : '' }}>Submitted</option>
                     <option value="Revision" {{ request('status') == 'Revision' ? 'selected' : '' }}>Revision</option>
                 </select>
             </div>
@@ -71,9 +71,8 @@
                         <td class="d-none d-md-table-cell">{{ $article->date_submitted->format('F d, Y') }}</td>
                         <td>
                             <span class="badge
-                                @if($article->status == 'Draft') bg-label-secondary
-                                @elseif($article->status == 'Approved') bg-label-warning
-                                @elseif($article->status == 'Published') bg-label-success
+                                @if($article->status == 'Submitted') bg-label-primary
+                                @elseif($article->status == 'Revision') bg-label-danger
                                 @else bg-label-secondary @endif">
                                 {{ ucfirst($article->status) }}
                             </span>
@@ -88,7 +87,7 @@
                                 </a>
 
 								@role('student')
-									@if($article->status === 'Draft' || $article->status === 'Pending')
+									@if($article->status === 'Submitted' || $article->status === 'Revision')
 										<button type="button"
 												class="btn btn-sm btn-danger"
 												data-bs-toggle="modal"
@@ -123,8 +122,8 @@
                     <p class="mb-0"><strong>Date Created:</strong> {{ $article->date_submitted->format('F d, Y') }}</p>
                     <p class="mb-0"><strong>Status:</strong>
                         <span class="badge
-                            @if($article->status == 'Draft') bg-label-secondary
-                            @elseif($article->status == 'Approved') bg-label-warning
+                            @if($article->status == 'Submitted') bg-label-secondary
+                            @elseif($article->status == 'For Publish') bg-label-warning
                             @elseif($article->status == 'Published') bg-label-success
                             @else bg-label-secondary @endif">
                             {{ ucfirst($article->status) }}
