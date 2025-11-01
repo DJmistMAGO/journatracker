@@ -128,23 +128,22 @@ class PubManagementController extends Controller
 
 		$item->save();
 
-		// Notify user (optional)
-		// if ($item->user) {
-		// 	$item->user->notify(new StatusChangedNotification($item));
-		// 	if ($item->user->email) {
-		// 		Mail::to($item->user->email)->queue(
-		// 			new StatusUpdateNotification(
-		// 				$item->user->penname ?? $item->user->name,
-		// 				$item->type,
-		// 				$item->title ?? 'Untitled',
-		// 				$item->status,
-		// 				$item->remarks,
-		// 				$item->date_publish,
-		// 				$item->publish_at
-		// 			)
-		// 		);
-		// 	}
-		// }
+		if ($item->user) {
+			$item->user->notify(new StatusChangedNotification($item));
+			if ($item->user->email) {
+				Mail::to($item->user->email)->queue(
+					new StatusUpdateNotification(
+						$item->user->penname ?? $item->user->name,
+						$item->type,
+						$item->title ?? 'Untitled',
+						$item->status,
+						$item->remarks,
+						$item->date_publish,
+						$item->publish_at
+					)
+				);
+			}
+		}
 
 		return back()->with('success', ucfirst($type) . ' status updated successfully.');
 	}
@@ -178,24 +177,24 @@ class PubManagementController extends Controller
 
 			$item->save();
 
-			// // Notify user
-			// if ($item->user) {
-			//     $item->user->notify(new StatusChangedNotification($item));
+			// Notify user
+			if ($item->user) {
+				$item->user->notify(new StatusChangedNotification($item));
 
-			//     if ($item->user->email) {
-			//         Mail::to($item->user->email)->queue(
-			//             new StatusUpdateNotification(
-			//                 $item->user->penname ?? $item->user->name,
-			//                 $item->type,
-			//                 $item->title ?? 'Untitled',
-			//                 $item->status,
-			//                 $item->remarks,
-			//                 $item->date_publish,
-			//                 $item->publish_at
-			//             )
-			//         );
-			//     }
-			// }
+				if ($item->user->email) {
+					Mail::to($item->user->email)->queue(
+						new StatusUpdateNotification(
+							$item->user->penname ?? $item->user->name,
+							$item->type,
+							$item->title ?? 'Untitled',
+							$item->status,
+							$item->remarks,
+							$item->date_publish,
+							$item->publish_at
+						)
+					);
+				}
+			}
 
 			return back()->with('success', ucfirst($type) . ' has been unpublished successfully.');
 		}

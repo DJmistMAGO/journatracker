@@ -7,6 +7,8 @@ use App\Models\IncidentReport;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\IncidentReportNotification;
 use App\Notifications\StatusChangedNotification;
+use App\Mail\IncidentReportMailNotif;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 
 class IncidentReportController extends Controller
@@ -36,6 +38,7 @@ class IncidentReportController extends Controller
 		$data = $request->validate([
 			'student_name' => 'required|string|max:255',
 			'student_id_image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+			'email' => 'required|email|max:255',
 			'incident_description' => 'required|string',
 			'image_proof' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
 		]);
@@ -82,6 +85,17 @@ class IncidentReportController extends Controller
 		foreach ($usersToNotify as $user) {
 			$user->notify(new StatusChangedNotification($incident));
 		}
+
+		$email = $data['email'];
+		$studentName = $data['student_name'];
+		$status = 'Pending';
+		$description = $data['incident_description'];
+
+		Mail::to($email)->queue(new IncidentReportMailNotif(
+			$studentName,
+			$status,
+			$description
+		));
 
 		return redirect()
 			->route('welcome')

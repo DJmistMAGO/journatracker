@@ -10,6 +10,7 @@ class IncidentReport extends Model
 		'student_name',
 		'student_id_image',
 		'incident_description',
+		'email',
 		'image_proof',
 		'date_submitted',
 		'date_status',

@@ -20,7 +20,13 @@
 
         <div class="card-body">
             <p><strong>Status: {{ $incident->status }} </strong> as of
-                <strong>{{ $incident->date_status->format('F d, Y') }}</strong></p>
+                <strong>{{ $incident->date_status->format('F d, Y') }}
+
+				</strong>
+			</p>
+			<hr>
+            {{-- Incident description --}}
+            <p><strong>Email:</strong> {{ $incident->email }}</p>
             <hr>
             {{-- Incident description --}}
             <p><strong>Description:</strong> {{ $incident->incident_description }}</p>

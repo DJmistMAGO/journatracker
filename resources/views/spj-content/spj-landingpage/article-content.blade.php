@@ -216,6 +216,11 @@
                     <input class="form-control" type="file" name="student_id_image">
                 </div>
 
+				<div class="mb-2">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" placeholder="Email" />
+                </div>
+
                 <div class="mb-2">
                     <label class="form-label">Incident Description</label>
                     <textarea class="form-control h-px-75" name="incident_description" placeholder="Type here..."></textarea>
