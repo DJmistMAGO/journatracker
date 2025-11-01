@@ -96,6 +96,10 @@
             background-color: #d1fae5;
             color: #065f46;
         }
+        .status-for-publish {
+            background-color: #e0e7ff;
+            color: #3730a3;
+        }
         .publish-info {
             background-color: #ffffff;
             border-left: 4px solid #10b981;
@@ -200,6 +204,7 @@
                         @elseif($status === 'Revision') status-revision
                         @elseif($status === 'Rejected') status-rejected
                         @elseif($status === 'Approved') status-approved
+                        @elseif($status === 'For Publish') status-for-publish
                         @else status-pending
                         @endif">
                         {{ $status }}
@@ -232,6 +237,10 @@
             @if($status === 'Published')
                 <p class="message">
                     🎉 Congratulations! Your {{ $itemType }} will be visible to everyone on the scheduled date and time.
+                </p>
+            @elseif($status === 'For Publish')
+                <p class="message">
+                    📰 Your {{ $itemType }} is ready and queued for publishing. It will be live soon!
                 </p>
             @elseif($status === 'Approved')
                 <p class="message">

@@ -7,6 +7,8 @@ use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusChangedNotification;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\StatusUpdateNotification;
 use App\Models\User;
 
 class ArticleManagementController extends Controller
@@ -86,16 +88,16 @@ class ArticleManagementController extends Controller
 		// Save article and get the model instance
 		$article = Article::create($data);
 
-		// $article->type = $article->type ?? 'Article';
-		// $article->status = $article->status ?? 'Submitted';
+		$article->type = $article->type ?? 'Article';
+		$article->status = $article->status ?? 'Submitted';
 
-		// $article->author->notify(new StatusChangedNotification($article));
+		$article->author->notify(new StatusChangedNotification($article));
 
-		// // Get all users with role 'Admin' or 'EIC'
-		// $usersToNotify = User::role(['admin', 'eic'])->get();
-		// foreach ($usersToNotify as $user) {
-		// 	$user->notify(new StatusChangedNotification($article));
-		// }
+		// Get all users with role 'Admin' or 'EIC'
+		$usersToNotify = User::role(['admin', 'eic'])->get();
+		foreach ($usersToNotify as $user) {
+			$user->notify(new StatusChangedNotification($article));
+		}
 
 		return redirect()
 			->route('article-management')
@@ -157,11 +159,25 @@ class ArticleManagementController extends Controller
 
 		if ($user_role == "eic") {
 			$data['status'] = 'For Publish';
+
 		}
 
 		$article->update($data);
 
 		if ($user_role == "eic") {
+			//email notification to author
+			Mail::to($article->user->email)->queue(
+					new StatusUpdateNotification(
+						$article->user->penname ?? $article->user->name,
+						$article->type,
+						$article->title ?? 'Untitled',
+						$article->status,
+						$article->remarks,
+						$article->date_publish,
+						$article->publish_at
+					)
+				);
+
 			return redirect()
 				->route('publication-management.index')
 				->with('success', 'Article updated successfully!');
