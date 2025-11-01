@@ -24,7 +24,7 @@ class MediaController extends Controller
 
 		// Filtered $all query
 		$all = Media::where('user_id', $user_id)
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->when($search, function ($query, $search) {
 				$query->where('title', 'like', "%{$search}%");
 			})
@@ -37,25 +37,25 @@ class MediaController extends Controller
 		// Other category queries remain the same
 		$photojournalism = Media::where("user_id", $user_id)
 			->where('category', 'Photojournalism')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
 		$cartooning = Media::where('user_id', $user_id)
 			->where('category', 'Cartooning')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
 		$tv = Media::where('user_id', $user_id)
 			->where('category', 'TV Broadcasting')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
 		$radio = Media::where('user_id', $user_id)
 			->where('category', 'Radio Broadcasting')
-			->whereIn('status', ['Draft', 'Revision'])
+			->whereIn('status', ['Submitted', 'Revision'])
 			->latest()
 			->get();
 
@@ -138,7 +138,7 @@ class MediaController extends Controller
 		]);
 
 		$media->type   = $media->type ?? 'Media';
-		$media->status = $media->status ?? 'Draft';
+		$media->status = $media->status ?? 'Submitted';
 
 		$media->author->notify(new StatusChangedNotification($media));
 
@@ -241,7 +241,7 @@ class MediaController extends Controller
 			'tags'           => $data['tags'],
 			'description'    => $data['description'] ?? null,
 			'image_path'     => $data['image_path'] ?? $media->image_path,
-			'status'         => 'Draft',
+			'status'         => 'Submitted',
 		];
 
 		if (isset($data['link'])) {

@@ -36,7 +36,7 @@
                 </a>
             </li>
         @endrole
-
+		@unlessrole('admin|eic')
         <li class="menu-item {{ request()->is('article-management*') ? 'active' : '' }}">
             <a href="{{ url('/article-management') }}" class="menu-link">
                 <i class="menu-icon tf-icons mdi mdi-book-edit-outline"></i>
@@ -50,13 +50,7 @@
                 <div>Media Management</div>
             </a>
         </li>
-        {{--
-        <li class="menu-item {{ request()->is('editorial-scheduling*') ? 'active' : '' }}">
-            <a href="{{ url('/editorial-scheduling') }}" class="menu-link">
-            <i class="menu-icon tf-icons mdi mdi-book-clock-outline"></i>
-            <div>Editorial Scheduling</div>
-            </a>
-        </li> --}}
+		@endunlessrole
 
         <li class="menu-item {{ request()->is('archive*') ? 'active' : '' }}">
             <a href="{{ url('/archive') }}" class="menu-link">

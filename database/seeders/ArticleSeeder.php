@@ -24,7 +24,7 @@ class ArticleSeeder extends Seeder
                 'tags' => ['student', 'journalism'],
                 'date_submitted' => now(),
                 'date_publish' => null,
-                'status' => 'Draft',
+                'status' => 'Submitted',
                 'remarks' => null,
             ],
             [
@@ -36,7 +36,7 @@ class ArticleSeeder extends Seeder
                 'tags' => ['digital', 'media'],
                 'date_submitted' => now()->subDays(5),
                 'date_publish' => null,
-                'status' => 'Draft',
+                'status' => 'Submitted',
                 'remarks' => null,
             ],
         ];

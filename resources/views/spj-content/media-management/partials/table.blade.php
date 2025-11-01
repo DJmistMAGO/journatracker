@@ -11,7 +11,7 @@
             <div class="col-12 col-md-2">
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
-                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="Submitted" {{ request('status') == 'Submitted' ? 'selected' : '' }}>Submitted</option>
                     <option value="Revision" {{ request('status') == 'Revision' ? 'selected' : '' }}>Revision</option>
                 </select>
             </div>
@@ -40,9 +40,13 @@
                 <td>{{ $item->user->name ?? 'N/A' }}</td>
                 <td>{{ $item->category }}</td>
                 <td>
-                    <span class="badge {{ $item->status == 'Published' ? 'bg-label-success' : 'bg-label-secondary' }}">
-                        {{ ucfirst($item->status) }}
-                    </span>
+                    <span class="badge
+                                @if($item->status == 'Submitted') bg-label-primary
+                                @elseif($item->status == 'Approved') bg-label-warning
+                                @elseif($item->status == 'Published') bg-label-success
+                                @else bg-label-secondary @endif">
+                                {{ ucfirst($item->status) }}
+                            </span>
                 </td>
                 <td>
                     <div class="d-flex gap-2">

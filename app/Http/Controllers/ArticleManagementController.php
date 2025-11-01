@@ -20,16 +20,16 @@ class ArticleManagementController extends Controller
 		if ($authUser->hasRole('admin')) {
 			// Admin can view all articles, optionally filtered
 			$articles = Article::with('user')
-				->whereIn('status', ['Draft', 'Revision'])
+				->whereIn('status', ['Submitted', 'Revision'])
 				->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
 				->when($status, fn($query) => $query->where('status', $status))
 				->orderBy('created_at', 'desc')
 				->get();
 		} else {
-			// Non-admin users only see their own Draft/Revision articles
+			// Non-admin users only see their own Submitted/Revision articles
 			$articles = Article::with('user')
 				->where('user_id', $authUser->id)
-				->whereIn('status', ['Draft', 'Revision'])
+				->whereIn('status', ['Submitted', 'Revision'])
 				->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
 				->when($status, fn($query) => $query->where('status', $status))
 				->orderBy('created_at', 'desc')
@@ -87,7 +87,7 @@ class ArticleManagementController extends Controller
 		$article = Article::create($data);
 
 		$article->type = $article->type ?? 'Article';
-		$article->status = $article->status ?? 'Draft';
+		$article->status = $article->status ?? 'Submitted';
 
 		$article->author->notify(new StatusChangedNotification($article));
 
@@ -170,6 +170,22 @@ class ArticleManagementController extends Controller
 				->route('article-management')
 				->with('success', 'Article updated successfully!');
 		}
+	}
+
+	public function destroy($id)
+	{
+		$article = Article::findOrFail($id);
+
+		// Delete image if exists
+		if ($article->image_path && Storage::disk('public')->exists($article->image_path)) {
+			Storage::disk('public')->delete($article->image_path);
+		}
+
+		$article->delete();
+
+		return redirect()
+			->route('article-management')
+			->with('success', 'Article deleted successfully!');
 	}
 
 	public function approve($id)
