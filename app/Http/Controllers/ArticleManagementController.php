@@ -159,7 +159,6 @@ class ArticleManagementController extends Controller
 
 		if ($user_role == "eic") {
 			$data['status'] = 'For Publish';
-
 		}
 
 		$article->update($data);
@@ -167,16 +166,16 @@ class ArticleManagementController extends Controller
 		if ($user_role == "eic") {
 			//email notification to author
 			Mail::to($article->user->email)->queue(
-					new StatusUpdateNotification(
-						$article->user->penname ?? $article->user->name,
-						$article->type,
-						$article->title ?? 'Untitled',
-						$article->status,
-						$article->remarks,
-						$article->date_publish,
-						$article->publish_at
-					)
-				);
+				new StatusUpdateNotification(
+					$article->user->penname ?? $article->user->name,
+					$article->type,
+					$article->title ?? 'Untitled',
+					$article->status,
+					$article->remarks,
+					$article->date_publish,
+					$article->publish_at
+				)
+			);
 
 			return redirect()
 				->route('publication-management.index')

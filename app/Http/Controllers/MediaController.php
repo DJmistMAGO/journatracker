@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Notifications\StatusChangedNotification;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\StatusUpdateNotification;
 use App\Models\User;
 
 class MediaController extends Controller
@@ -259,6 +261,20 @@ class MediaController extends Controller
 
 
 		if ($user_role == "eic") {
+			//email notification to author
+			Mail::to($media->user->email)->queue(
+				new StatusUpdateNotification(
+					$media->user->penname ?? $media->user->name,
+					$media->type,
+					$media->title ?? 'Untitled',
+					$media->status,
+					$media->remarks,
+					$media->date_publish,
+					$media->publish_at
+				)
+			);
+
+
 			return redirect()
 				->route('publication-management.index')
 				->with('success', 'Media updated successfully!');
