@@ -42,8 +42,7 @@
                 <td>
                     <span class="badge
                                 @if($item->status == 'Submitted') bg-label-primary
-                                @elseif($item->status == 'Approved') bg-label-warning
-                                @elseif($item->status == 'Published') bg-label-success
+                                @elseif($item->status == 'Revision') bg-label-danger
                                 @else bg-label-secondary @endif">
                                 {{ ucfirst($item->status) }}
                             </span>

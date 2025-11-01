@@ -70,13 +70,11 @@
                         </td>
                         <td>
                             <span class="badge
-                                @if ($item->status === 'Draft') bg-secondary
-                                @elseif($item->status === 'Approved') bg-warning
-                                @elseif($item->status === 'Published') bg-success
-                                @elseif($item->status === 'Revision') bg-warning
-                                @elseif($item->status === 'Rejected') bg-danger
-                                @elseif($item->status === 'Scheduled') bg-primary
-                                @else bg-info @endif">
+                                @if ($item->status === 'Submitted') bg-label-primary
+                                @elseif($item->status === 'Resubmitted') bg-label-warning
+                                @elseif($item->status === 'For Publish') bg-label-primary
+                                @elseif($item->status === 'Scheduled') bg-label-info
+                                @else bg-label-info @endif">
 
                                 @if ($item->status === 'Scheduled' && $item->publish_at)
                                     {{ $item->status }} <br>
