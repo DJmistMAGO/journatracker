@@ -16,8 +16,8 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || !$request->user()->hasRole('admin')) {
-            abort(403, 'Access denied. Admins only.');
+        if (!Auth::check() || !$request->user()->hasRole(['admin', 'teacher'])) {
+            abort(403, 'Access denied. Admins and Teachers only.');
         }
 
         return $next($request);

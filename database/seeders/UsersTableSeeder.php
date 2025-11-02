@@ -11,34 +11,62 @@ class UsersTableSeeder extends Seeder
 {
     public function run(): void
     {
-        $roles = ['admin', 'eic', 'student'];
+        $roles = ['admin', 'teacher', 'student'];
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
         }
 
         // Create admin
-        $admin = User::create([
-            'first_name' => 'Admin',
-            'last_name' => 'User',
-            'penname' => 'Admin',
-            'email' => 'admin@example.com',
+        $admin1 = User::create([
+            'first_name' => 'Rona',
+            'last_name' => 'Gabrentina',
+            'penname' => 'Admin1',
+            'email' => 'admin1@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'English',
             'has_changed_password' => false,
         ]);
-        $admin->assignRole('admin');
+        $admin1->assignRole('admin');
 
-        // Create EIC
-        $eic = User::create([
-            'first_name' => 'Editor in Chief',
+        $admin2 = User::create([
+            'first_name' => 'Julie Ann',
+            'last_name' => 'Balisoro ',
+            'penname' => 'Admin2',
+            'email' => 'admin2@example.com',
+            'password' => Hash::make('password'),
+            'default_password' => 'password',
+            'subject_specialization' => 'Filipino',
+            'has_changed_password' => false,
+        ]);
+        $admin2->assignRole('admin');
+
+        // Create Teacher
+        $teacher = User::create([
+            'first_name' => 'Teacher',
             'last_name' => 'User',
             'penname' => 'EIC',
-            'email' => 'eic@example.com',
+            'email' => 'teacher@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'English',
+            'position' => 'Print Media',
             'has_changed_password' => false,
         ]);
-        $eic->assignRole('eic');
+        $teacher->assignRole('teacher');
+
+        $teacher2 = User::create([
+            'first_name' => 'Teacher2',
+            'last_name' => 'User',
+            'penname' => 'EIC',
+            'email' => 'teacher2@example.com',
+            'password' => Hash::make('password'),
+            'default_password' => 'password',
+            'subject_specialization' => 'Filipino',
+            'position' => 'TV Broadcasting',
+            'has_changed_password' => false,
+        ]);
+        $teacher2->assignRole('teacher');
 
         // Create Student
         $student = User::create([
@@ -48,6 +76,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'student@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'English',
+            'position' => 'Print Media',
             'has_changed_password' => false,
         ]);
         $student->assignRole('student');

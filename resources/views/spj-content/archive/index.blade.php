@@ -46,7 +46,7 @@
                 <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Date Published</th>
+                        <th>Date</th>
                         <th>Author</th>
                         <th class="d-none d-md-table-cell">Type</th>
                         <th class="d-none d-md-table-cell">Category</th>
@@ -60,7 +60,7 @@
                             <td class="text-truncate" style="max-width: 180px;" title="{{ $item->title }}">
                                 {{ $item->title }}
                             </td>
-                            <td>{{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->date)->format('M. d, Y') }}</td>
                             <td>{{ $item->user->name ?? 'N/A' }}</td>
                             <td class="d-none d-md-table-cell">{{ $item->type }}</td>
                             <td class="d-none d-md-table-cell">{{ $item->category }}</td>

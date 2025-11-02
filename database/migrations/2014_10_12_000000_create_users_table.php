@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('penname')->nullable();
             $table->string('email')->unique();
@@ -18,6 +19,8 @@ return new class extends Migration {
             $table->string('default_password')->nullable();
             $table->boolean('has_changed_password')->default(false);
             $table->string('profile_photo_path', 2048)->nullable();
+            $table->string('position')->nullable();
+            $table->string('subject_specialization');
             $table->enum('status', ['active', 'suspended', 'deactivated'])->default('active');
             $table->rememberToken();
             $table->timestamps();

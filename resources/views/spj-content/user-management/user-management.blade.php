@@ -16,7 +16,7 @@
 @endpush
 
 @section('content')
-@include('_partials.loader')
+{{-- @include('_partials.loader') --}}
 <div class="content-wrapper">
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ / </span> User Management</h4>
 
@@ -43,14 +43,14 @@
                     <th>User</th>
                     <th>Role</th>
                     <th>Email</th>
-                    <th>Password Status</th>
+                    <th>Position</th>
                     <th>User Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($users as $user)
-                    @if($user->id !== auth()->id())
+                    {{-- @if($user->id !== auth()->id()) --}}
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
@@ -74,19 +74,15 @@
                             @php $role = $user->roles->first()->name ?? 'student'; @endphp
                             @if ($role == 'admin')
                                 <span class="text-truncate"><i class="mdi mdi-laptop mdi-24px text-danger me-1"></i> Admin</span>
-                            @elseif ($role == 'eic')
-                                <span class="text-truncate"><i class="mdi mdi-pencil-outline mdi-24px text-warning me-1"></i> EIC</span>
+                            @elseif ($role == 'teacher')
+                                <span class="text-truncate"><i class="mdi mdi-pencil-outline mdi-24px text-warning me-1"></i> Teacher</span>
                             @else
                                 <span class="text-truncate"><i class="mdi mdi-account-cog mdi-24px text-info me-1"></i> Student</span>
                             @endif
                         </td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            @if ($user->has_changed_password)
-                                <span class="badge bg-label-secondary">Changed</span>
-                            @else
-                                <span class="badge bg-label-warning">Not Changed</span>
-                            @endif
+                            {{ $user->position ?? 'N/A' }}
                         </td>
 						<td>
 							@if ($user->status === 'active')
@@ -130,7 +126,7 @@
                             </div>
                         </td>
                     </tr>
-                    @endif
+                    {{-- @endif --}}
                 @endforeach
             </tbody>
         </table>
@@ -214,65 +210,65 @@
 @include('_partials.confirm-modal')
 
 <!-- Activate User Modal -->
-<div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="activateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 rounded-4 shadow">
-      <div class="modal-header bg-success text-white rounded-top-4">
-        <h5 class="modal-title fw-semibold" id="activateModalLabel">Activate User</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="activateForm" method="POST">
-        @csrf
-        @method('PATCH')
-        <div class="modal-body">
-          <p class="mb-0">
-            Are you sure you want to <span class="fw-semibold text-success">activate</span>
-            the account of <span id="activateUserName" class="fw-semibold"></span> and restore login access?
-          </p>
-        </div>
-        <div class="modal-footer border-0">
-          <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-success rounded-pill px-3">
-            <i class="mdi mdi-account-check-outline me-1"></i> Activate
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+	<div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="activateModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content border-0 rounded-4 shadow">
+		<div class="modal-header bg-success text-white rounded-top-4">
+			<h5 class="modal-title fw-semibold" id="activateModalLabel">Activate User</h5>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<form id="activateForm" method="POST">
+			@csrf
+			@method('PATCH')
+			<div class="modal-body">
+			<p class="mb-0">
+				Are you sure you want to <span class="fw-semibold text-success">activate</span>
+				the account of <span id="activateUserName" class="fw-semibold"></span> and restore login access?
+			</p>
+			</div>
+			<div class="modal-footer border-0">
+			<button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
+				Cancel
+			</button>
+			<button type="submit" class="btn btn-success rounded-pill px-3">
+				<i class="mdi mdi-account-check-outline me-1"></i> Activate
+			</button>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
 
 
 <!-- Deactivate User Modal -->
-<div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 rounded-4 shadow">
-      <div class="modal-header bg-danger text-white rounded-top-4">
-        <h5 class="modal-title fw-semibold" id="deactivateModalLabel">Deactivate User</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="deactivateForm" method="POST">
-        @csrf
-        @method('PATCH')
-        <div class="modal-body">
-          <p class="mb-0">
-            Are you sure you want to <span class="fw-semibold text-danger">deactivate</span>
-            the account of <span id="deactivateUserName" class="fw-semibold"></span> and prevent login access?
-          </p>
-        </div>
-        <div class="modal-footer border-0">
-          <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-danger rounded-pill px-3">
-            <i class="mdi mdi-account-off-outline me-1"></i> Deactivate
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+	<div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content border-0 rounded-4 shadow">
+		<div class="modal-header bg-danger text-white rounded-top-4">
+			<h5 class="modal-title fw-semibold" id="deactivateModalLabel">Deactivate User</h5>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<form id="deactivateForm" method="POST">
+			@csrf
+			@method('PATCH')
+			<div class="modal-body">
+			<p class="mb-0">
+				Are you sure you want to <span class="fw-semibold text-danger">deactivate</span>
+				the account of <span id="deactivateUserName" class="fw-semibold"></span> and prevent login access?
+			</p>
+			</div>
+			<div class="modal-footer border-0">
+			<button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
+				Cancel
+			</button>
+			<button type="submit" class="btn btn-danger rounded-pill px-3">
+				<i class="mdi mdi-account-off-outline me-1"></i> Deactivate
+			</button>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
 
 
 

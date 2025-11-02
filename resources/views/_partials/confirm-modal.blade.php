@@ -9,6 +9,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                 <form id="confirmModalForm" method="POST" class="d-inline">
+					@method('POST')
                     @csrf
                     <input type="hidden" name="_method" id="confirmModalMethod">
                     <button type="submit" id="confirmModalBtn" class="btn"></button>
