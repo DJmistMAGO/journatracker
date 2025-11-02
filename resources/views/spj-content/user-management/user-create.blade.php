@@ -22,14 +22,14 @@
 	<form action="{{ route('user-management.store') }}" method="POST">
 		@csrf
 		<div class="row">
-			<!-- Personal Information Card -->
+
 			<div class="col-lg-8 mb-3">
 				<div class="card h-100">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Personal Information</h5>
 					</div>
 					<div class="card-body">
-						<!-- First Name -->
+
 						<div class="row">
 							<div class="col-md-5 mb-3">
 								<div class="form-floating form-floating-outline">
@@ -45,7 +45,7 @@
 								</div>
 							</div>
 
-							<!-- Last Name -->
+
 							<div class="col-md-4 mb-3">
 								<div class="form-floating form-floating-outline">
 									<input class="form-control @error('last_name') is-invalid @enderror" type="text" id="lastName" name="last_name" value="{{ old('last_name') }}" placeholder="Enter your last name" required autocomplete="none" />
@@ -53,7 +53,7 @@
 								</div>
 							</div>
 
-							<!-- Pen Name -->
+
 							<div class="mb-3">
 								<div class="form-floating form-floating-outline">
 									<input class="form-control @error('penname') is-invalid @enderror" type="text" id="penName" name="penname" value="{{ old('penname') }}"  placeholder="Enter pen name (optional)" autocomplete="none" />
@@ -61,7 +61,7 @@
 								</div>
 							</div>
 
-							<!-- Email -->
+
 							<div class="mb-0">
 								<div class="form-floating form-floating-outline">
 									<input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{ old('email') }}"
@@ -73,41 +73,42 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="col-lg-4 mb-3">
 				<div class="card h-100">
 					<div class="card-header">
 						<h5 class="card-title mb-0">Role & Position</h5>
 					</div>
-
 					<div class="card-body">
-
-						{{-- ROLE SELECTION --}}
+						{{-- USER ROLE --}}
 						<div class="mb-3">
 							<div class="form-floating form-floating-outline">
 								<select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
 									<option value="" disabled {{ old('role') ? '' : 'selected' }}>Choose a role...</option>
 
-									{{-- If logged-in user is Admin --}}
 									@if(Auth::user()->hasRole('admin'))
 										<option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
 										<option value="teacher" {{ old('role') == 'teacher' ? 'selected' : '' }}>Teacher</option>
 									@endif
 
-									{{-- If logged-in user is Teacher --}}
 									@if(Auth::user()->hasRole('teacher'))
-										<option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
+										<option value="student" selected>Student</option>
 									@endif
 								</select>
 								<label for="role">User Role <span class="text-danger">*</span></label>
 							</div>
 						</div>
 
-						{{-- POSITION SELECTION --}}
+						{{-- USER POSITION --}}
 						<div class="mb-3">
 							<div class="form-floating form-floating-outline">
-								<select class="form-select @error('position') is-invalid @enderror" id="position" name="position" @if(Auth::user()->hasRole('admin') && old('role') === 'admin') disabled title="Position not required for Admin accounts" @endif required >
-									<option value="" disabled {{ old('position') ? '' : 'selected' }}>Choose a position...</option>
+								<select
+									class="form-select @error('position') is-invalid @enderror"
+									id="position"
+									name="position"
+									@if(Auth::user()->hasRole('teacher')) disabled @endif
+									@if(Auth::user()->hasRole('admin')) required @endif
+								>
+									<option value="" disabled selected>Choose a position...</option>
 									<option value="Print Media" {{ old('position') == 'Print Media' ? 'selected' : '' }}>Print Media</option>
 									<option value="Advanced Print Media" {{ old('position') == 'Advanced Print Media' ? 'selected' : '' }}>Advanced Print Media</option>
 									<option value="Radio Broadcasting" {{ old('position') == 'Radio Broadcasting' ? 'selected' : '' }}>Radio Broadcasting</option>
@@ -117,22 +118,32 @@
 							</div>
 						</div>
 
-						{{-- LANGUAGE SELECTION --}}
 						<div class="mb-0">
 							<div class="form-floating form-floating-outline">
-								<select class="form-select @error('subject_specialization') is-invalid @enderror" id="subject_specialization" name="subject_specialization" required>
-									<option value="" disabled {{ old('subject_specialization') ? '' : 'selected' }}>Choose a subject_specialization...</option>
+								<select
+									class="form-select @error('subject_specialization') is-invalid @enderror"
+									id="subject_specialization"
+									name="subject_specialization"
+									@if(Auth::user()->hasRole('admin')) required @endif
+									@if(Auth::user()->hasRole('teacher')) disabled @endif
+								>
+									<option value="" disabled selected>Choose a subject specialization...</option>
 									<option value="English" {{ old('subject_specialization') == 'English' ? 'selected' : '' }}>English</option>
 									<option value="Filipino" {{ old('subject_specialization') == 'Filipino' ? 'selected' : '' }}>Filipino</option>
 								</select>
 								<label for="subject_specialization">User Language <span class="text-danger">*</span></label>
 							</div>
 						</div>
-
 					</div>
 				</div>
 			</div>
 		</div>
+
+		@if(Auth::user()->hasRole('teacher'))
+			<input type="hidden" name="role" value="student">
+			<input type="hidden" name="position" value="{{ Auth::user()->position }}">
+			<input type="hidden" name="subject_specialization" value="{{ Auth::user()->subject_specialization }}">
+		@endif
 
 		<button type="submit" class="btn btn-success">Create User</button>
 		<a href="{{ route('user-management') }}" class="btn btn-secondary">Cancel</a>
@@ -144,18 +155,30 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			const roleSelect = document.getElementById('role');
 			const positionSelect = document.getElementById('position');
+			const subjectSelect = document.getElementById('subject_specialization');
 
-			function togglePosition() {
+			const isTeacher = {{ Auth::user()->hasRole('teacher') ? 'true' : 'false' }};
+
+			function toggleFields() {
+				if (isTeacher) {
+					return;
+				}
+
 				if (roleSelect.value === 'admin') {
 					positionSelect.disabled = true;
-					positionSelect.value = ''; // clear selection
+					positionSelect.value = '';
+					subjectSelect.disabled = false;
+					subjectSelect.value = '';
 				} else {
 					positionSelect.disabled = false;
+					subjectSelect.disabled = false;
 				}
 			}
 
-			roleSelect.addEventListener('change', togglePosition);
-			togglePosition(); // run on page load in case of old input
+			if (!isTeacher) {
+				roleSelect.addEventListener('change', toggleFields);
+				toggleFields();
+			}
 		});
 	</script>
 @endpush
