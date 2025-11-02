@@ -210,65 +210,65 @@
 @include('_partials.confirm-modal')
 
 <!-- Activate User Modal -->
-<div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="activateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 rounded-4 shadow">
-      <div class="modal-header bg-success text-white rounded-top-4">
-        <h5 class="modal-title fw-semibold" id="activateModalLabel">Activate User</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="activateForm" method="POST">
-        @csrf
-        @method('PATCH')
-        <div class="modal-body">
-          <p class="mb-0">
-            Are you sure you want to <span class="fw-semibold text-success">activate</span>
-            the account of <span id="activateUserName" class="fw-semibold"></span> and restore login access?
-          </p>
-        </div>
-        <div class="modal-footer border-0">
-          <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-success rounded-pill px-3">
-            <i class="mdi mdi-account-check-outline me-1"></i> Activate
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+	<div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="activateModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content border-0 rounded-4 shadow">
+		<div class="modal-header bg-success text-white rounded-top-4">
+			<h5 class="modal-title fw-semibold" id="activateModalLabel">Activate User</h5>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<form id="activateForm" method="POST">
+			@csrf
+			@method('PATCH')
+			<div class="modal-body">
+			<p class="mb-0">
+				Are you sure you want to <span class="fw-semibold text-success">activate</span>
+				the account of <span id="activateUserName" class="fw-semibold"></span> and restore login access?
+			</p>
+			</div>
+			<div class="modal-footer border-0">
+			<button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
+				Cancel
+			</button>
+			<button type="submit" class="btn btn-success rounded-pill px-3">
+				<i class="mdi mdi-account-check-outline me-1"></i> Activate
+			</button>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
 
 
 <!-- Deactivate User Modal -->
-<div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 rounded-4 shadow">
-      <div class="modal-header bg-danger text-white rounded-top-4">
-        <h5 class="modal-title fw-semibold" id="deactivateModalLabel">Deactivate User</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="deactivateForm" method="POST">
-        @csrf
-        @method('PATCH')
-        <div class="modal-body">
-          <p class="mb-0">
-            Are you sure you want to <span class="fw-semibold text-danger">deactivate</span>
-            the account of <span id="deactivateUserName" class="fw-semibold"></span> and prevent login access?
-          </p>
-        </div>
-        <div class="modal-footer border-0">
-          <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-danger rounded-pill px-3">
-            <i class="mdi mdi-account-off-outline me-1"></i> Deactivate
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+	<div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content border-0 rounded-4 shadow">
+		<div class="modal-header bg-danger text-white rounded-top-4">
+			<h5 class="modal-title fw-semibold" id="deactivateModalLabel">Deactivate User</h5>
+			<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+		</div>
+		<form id="deactivateForm" method="POST">
+			@csrf
+			@method('PATCH')
+			<div class="modal-body">
+			<p class="mb-0">
+				Are you sure you want to <span class="fw-semibold text-danger">deactivate</span>
+				the account of <span id="deactivateUserName" class="fw-semibold"></span> and prevent login access?
+			</p>
+			</div>
+			<div class="modal-footer border-0">
+			<button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">
+				Cancel
+			</button>
+			<button type="submit" class="btn btn-danger rounded-pill px-3">
+				<i class="mdi mdi-account-off-outline me-1"></i> Deactivate
+			</button>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
 
 
 

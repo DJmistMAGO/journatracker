@@ -89,7 +89,24 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $authUser = Auth::user();
+        $user = User::with('roles')->findOrFail($id);
+
+        if ($authUser->hasRole('teacher')) {
+            if ($user->hasRole('admin') || $user->hasRole('teacher')) {
+                abort(403, 'Access denied. Teachers cannot edit Admin or other Teacher accounts.');
+            }
+        }
+
+        if ($authUser->hasRole('teacher')) {
+            if (
+                $authUser->position !== $user->position ||
+                $authUser->subject_specialization !== $user->subject_specialization
+            ) {
+                abort(403, 'Access denied. This student is not under your scope.');
+            }
+        }
+
         $roles = Role::all();
         return view('spj-content.user-management.user-edit', compact('user', 'roles'));
     }
@@ -146,12 +163,12 @@ class UserController extends Controller
             ->with('success', 'User updated successfully.');
     }
 
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-        dd($user);
-        return view('spj-content.user-managament.show', compact('user'));
-    }
+    // public function show($id)
+    // {
+    //     $user = User::findOrFail($id);
+    //     // dd($user);
+    //     return view('spj-content.user-managament.show', compact('user'));
+    // }
 
     public function destroy($id)
     {
