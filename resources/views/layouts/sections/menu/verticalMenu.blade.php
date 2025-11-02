@@ -67,14 +67,14 @@
 			</li>
 		@endunlessrole
 
-        @role('admin')
+        @unlessrole('student')
             <li class="menu-item {{ request()->is('user-management*') ? 'active' : '' }}">
                 <a href="{{ url('/user-management') }}" class="menu-link">
                     <i class="menu-icon tf-icons mdi mdi-account-cog"></i>
                     <div>User Management</div>
                 </a>
             </li>
-        @endrole
+        @endunlessrole
 
         <li class="menu-item {{ request()->is(['settings', 'notifications']) ? 'active' : '' }}">
             <a href="{{ url('/settings') }}" class="menu-link">

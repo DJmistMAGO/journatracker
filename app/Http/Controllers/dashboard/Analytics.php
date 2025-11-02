@@ -20,10 +20,10 @@ class Analytics extends Controller
         $user = Auth::user();
 
         $notifications = $user
-                ->notifications()
-                ->where('type', '!=', IncidentReportNotification::class)
-                ->orderBy('created_at', 'desc')
-                ->paginate(5);
+            ->notifications()
+            ->where('type', '!=', IncidentReportNotification::class)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
 
         if ($user->isRole('admin')) {
             // Admin sees everything
@@ -67,7 +67,7 @@ class Analytics extends Controller
 
             // Students don't see other users' analytics
             $usersCount = $adminsCount = $editorsCount = $writersCount = $activeUsersCount = null;
-        } elseif ($user->isRole('eic')) {
+        } elseif ($user->isRole('teacher')) {
             $articles = Article::all();
             $media = Media::all();
             $users = User::all();

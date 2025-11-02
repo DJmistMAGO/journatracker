@@ -142,7 +142,7 @@ Route::middleware('auth')->group(function () {
         });
 
     Route::controller(UserController::class)
-        ->middleware('admin')
+        ->middleware('admin_or_teacher')
         ->prefix('user-management')
         ->group(function () {
             Route::get('/', 'index')->name('user-management');

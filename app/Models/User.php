@@ -15,6 +15,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'first_name',
+        'middle_name',
         'last_name',
         'penname',
         'email',
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'profile_photo_path',
         'status',
         'position',
+        'subject_specialization',
     ];
 
     protected $hidden = ['password', 'remember_token', 'default_password'];

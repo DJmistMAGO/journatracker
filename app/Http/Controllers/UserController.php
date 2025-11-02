@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\SendUserCredentials;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Traits\HasRoles;
@@ -17,14 +18,26 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+        $query = User::with('roles');
+
+        // If the logged-in user is a teacher, show only students
+        if (Auth::user()->hasRole('teacher')) {
+            $query->whereHas('roles', function ($q) {
+                $q->where('name', 'student');
+            });
+        }
+
+        // Apply search filter if provided
         $search = request()->query('search');
         if ($search) {
-            $users = User::where('first_name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', '%' . $search . '%')
-                ->with('roles')
-                ->get();
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
         }
+
+        $users = $query->orderBy('first_name')->get();
 
         return view('spj-content.user-management.user-management', compact('users'));
     }
