@@ -16,7 +16,7 @@ class MediaSeeder extends Seeder
 	{
 		$mediaData = [
 			[
-				'user_id'     => 3,
+				'user_id'     => 5,
 				'title'       => 'Campus Photo of the Year',
 				'description' => 'A winning photo capturing campus life.',
 				'image_path'  => 'media/photo1.jpg',
@@ -29,7 +29,7 @@ class MediaSeeder extends Seeder
 				'remarks'     => null,
 			],
 			[
-				'user_id'     => 3,
+				'user_id'     => 5,
 				'title'       => 'Creativity, strategy, and storytelling were at their finest...',
 				'description' => 'From compelling visuals to powerful messages...',
 				'image_path'  => null,

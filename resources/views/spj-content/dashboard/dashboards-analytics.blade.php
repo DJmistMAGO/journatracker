@@ -92,8 +92,8 @@
 					<div class="row g-3">
 						<x-dashboard-stat title="Published Articles" :count="$articlesPublishedCount" icon="mdi-file-document-outline" color="primary"/>
 						<x-dashboard-stat title="Media" :count="$mediaPublishedCount" icon="mdi-camera" color="success"/>
-						<x-dashboard-stat title="Drafts" :count="$draftCount" icon="mdi-pencil" color="warning"/>
-						<x-dashboard-stat title="Archived" :count="$articlesArchivedCount" icon="mdi-archive" color="secondary"/>
+						<x-dashboard-stat title="Submitted" :count="$draftCount" icon="mdi-pencil" color="warning"/>
+						<x-dashboard-stat title="Scheduled" :count="$articlesScheduledCount" icon="mdi-archive" color="secondary"/>
 					</div>
 				</div>
 			</div>
@@ -121,12 +121,12 @@
 
 						<div class="d-flex align-items-center gap-3 mt-2">
 							<span class="badge bg-warning">{{ $articlesDraftCount }}</span>
-							<p class="mb-0">Drafts</p>
+							<p class="mb-0">Submitted</p>
 						</div>
 
 						<div class="d-flex align-items-center gap-3 mt-2">
-							<span class="badge bg-secondary">{{ $articlesArchivedCount }}</span>
-							<p class="mb-0">Archived</p>
+							<span class="badge bg-secondary">{{ $articlesScheduledCount }}</span>
+							<p class="mb-0">Scheduled</p>
 						</div>
 
 						<div class="d-grid mt-3">
@@ -159,12 +159,12 @@
 
 						<div class="d-flex align-items-center gap-3 mt-2">
 							<span class="badge bg-warning">{{ $mediaDraftCount }}</span>
-							<p class="mb-0">Drafts</p>
+							<p class="mb-0">Submitted</p>
 						</div>
 
 						<div class="d-flex align-items-center gap-3 mt-2">
-							<span class="badge bg-secondary">{{ $mediaArchivedCount }}</span>
-							<p class="mb-0">Archived</p>
+							<span class="badge bg-secondary">{{ $mediaScheduledCount }}</span>
+							<p class="mb-0">Scheduled</p>
 						</div>
 
 						<div class="d-grid mt-3">
@@ -289,8 +289,8 @@
 					type: 'donut',
 					height: 250
 				},
-				labels: ['Published', 'Draft', 'Archived'],
-				series: [{{ $articlesPublishedCount }}, {{ $articlesDraftCount }}, {{ $articlesArchivedCount }}],
+				labels: ['Published', 'Submitted', 'Scheduled'],
+				series: [{{ $articlesPublishedCount }}, {{ $articlesDraftCount }}, {{ $articlesScheduledCount }}],
 				colors: ['#28a745', '#ffc107', '#6c757d']
 			};
 			new ApexCharts(document.querySelector("#publicationOverviewChart"), articleOptions).render();
@@ -301,8 +301,8 @@
 					type: 'donut',
 					height: 250
 				},
-				labels: ['Published', 'Draft', 'Archived'],
-				series: [{{ $mediaPublishedCount }}, {{ $mediaDraftCount }}, {{ $mediaArchivedCount }}],
+				labels: ['Published', 'Submitted', 'Scheduled'],
+				series: [{{ $mediaPublishedCount }}, {{ $mediaDraftCount }}, {{ $mediaScheduledCount }}],
 				colors: ['#17a2b8', '#ffc107', '#6c757d']
 			};
 			new ApexCharts(document.querySelector("#mediaOverviewChart"), mediaOptions).render();

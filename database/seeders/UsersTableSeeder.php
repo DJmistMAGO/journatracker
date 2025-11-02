@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'admin1@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'English',
             'has_changed_password' => false,
         ]);
         $admin1->assignRole('admin');
@@ -35,6 +36,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'admin2@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'Filipino',
             'has_changed_password' => false,
         ]);
         $admin2->assignRole('admin');
@@ -47,9 +49,24 @@ class UsersTableSeeder extends Seeder
             'email' => 'teacher@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'English',
+            'position' => 'Print Media',
             'has_changed_password' => false,
         ]);
         $teacher->assignRole('teacher');
+
+        $teacher2 = User::create([
+            'first_name' => 'Teacher2',
+            'last_name' => 'User',
+            'penname' => 'EIC',
+            'email' => 'teacher2@example.com',
+            'password' => Hash::make('password'),
+            'default_password' => 'password',
+            'subject_specialization' => 'Filipino',
+            'position' => 'TV Broadcasting',
+            'has_changed_password' => false,
+        ]);
+        $teacher2->assignRole('teacher');
 
         // Create Student
         $student = User::create([
@@ -59,6 +76,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'student@example.com',
             'password' => Hash::make('password'),
             'default_password' => 'password',
+            'subject_specialization' => 'English',
+            'position' => 'Print Media',
             'has_changed_password' => false,
         ]);
         $student->assignRole('student');

@@ -16,55 +16,59 @@ class PubManagementController extends Controller
     public function index(Request $request)
     {
         $authUser = Auth::user();
+        $search = request('search');
+        $status = request('status');
 
-        $search = $request->input('search');
-        $status = $request->input('status');
+        $subjectSpecialization = $authUser->subject_specialization;
 
         if ($authUser->hasRole('teacher')) {
-            // Articles
+            $position = $authUser->position;
+
             $articles = Article::with('user')
+                ->whereHas('user', function ($query) use ($position, $subjectSpecialization) {
+                    $query->where('position', $position)->where('subject_specialization', $subjectSpecialization);
+                })
                 ->whereIn('status', ['Submitted', 'Resubmitted'])
                 ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
                 ->when($status, fn($query) => $query->where('status', $status))
                 ->orderByDesc('date_submitted')
                 ->get();
 
-            // Media
             $media = Media::with('user')
+                ->whereHas('user', function ($query) use ($position, $subjectSpecialization) {
+                    $query->where('position', $position)->where('subject_specialization', $subjectSpecialization);
+                })
                 ->whereIn('status', ['Submitted', 'Resubmitted'])
                 ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
                 ->when($status, fn($query) => $query->where('status', $status))
                 ->orderByDesc('date_submitted')
                 ->get();
-
-            // Merge & sort by submission date
-            $items = $articles
-                ->concat($media)
-                ->sortByDesc('date_submitted')
-                ->values();
         } elseif ($authUser->hasRole('admin')) {
-            // Articles
             $articles = Article::with('user')
+                ->whereHas('user', function ($query) use ($subjectSpecialization) {
+                    $query->where('subject_specialization', $subjectSpecialization);
+                })
                 ->whereIn('status', ['For Publish', 'Scheduled'])
                 ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
                 ->when($status, fn($query) => $query->where('status', $status))
                 ->orderByDesc('date_submitted')
                 ->get();
 
-            // Media
             $media = Media::with('user')
+                ->whereHas('user', function ($query) use ($subjectSpecialization) {
+                    $query->where('subject_specialization', $subjectSpecialization);
+                })
                 ->whereIn('status', ['For Publish', 'Scheduled'])
                 ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
                 ->when($status, fn($query) => $query->where('status', $status))
                 ->orderByDesc('date_submitted')
                 ->get();
-
-            // Merge & sort by submission date
-            $items = $articles
-                ->concat($media)
-                ->sortByDesc('date_submitted')
-                ->values();
         }
+
+        $items = $articles
+            ->concat($media)
+            ->sortByDesc('date_submitted')
+            ->values();
 
         return view('spj-content.publication-management.index', compact('items'));
     }

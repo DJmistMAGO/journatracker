@@ -36,20 +36,19 @@
                 </a>
             </li>
         @endrole
-		@unlessrole('admin|eic')
-        <li class="menu-item {{ request()->is('article-management*') ? 'active' : '' }}">
-            <a href="{{ url('/article-management') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-book-edit-outline"></i>
-                <div>Article Management</div>
-            </a>
-        </li>
-
-        <li class="menu-item {{ request()->is('media-management*') ? 'active' : '' }}">
-            <a href="{{ url('/media-management') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-folder-play-outline"></i>
-                <div>Media Management</div>
-            </a>
-        </li>
+		@unlessrole('admin|teacher')
+			<li class="menu-item {{ request()->is('article-management*') ? 'active' : '' }}">
+				<a href="{{ url('/article-management') }}" class="menu-link">
+					<i class="menu-icon tf-icons mdi mdi-book-edit-outline"></i>
+					<div>Article Management</div>
+				</a>
+			</li>
+			<li class="menu-item {{ request()->is('media-management*') ? 'active' : '' }}">
+				<a href="{{ url('/media-management') }}" class="menu-link">
+					<i class="menu-icon tf-icons mdi mdi-folder-play-outline"></i>
+					<div>Media Management</div>
+				</a>
+			</li>
 		@endunlessrole
 
         <li class="menu-item {{ request()->is('archive*') ? 'active' : '' }}">
