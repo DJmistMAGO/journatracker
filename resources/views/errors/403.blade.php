@@ -288,7 +288,7 @@
     <h2>ACCESS DENIED</h2>
     <p>This content is classified and restricted to authorized personnel only. You do not have permission to view this page.</p>
 
-    <a href="javascript:history.back()" class="btn-home">← Return to Safety</a>
+    <a href="{{ url('/') }}" class="btn-home">← Return to Safety</a>
 </div>
 
 </body>

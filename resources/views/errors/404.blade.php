@@ -1165,7 +1165,7 @@ html, body, .wrapper {
   <div class="text-container">
     <h2>Page Not Found</h2>
     <p>Oops! The page you're looking for doesn't exist. It may have been removed or never existed.</p>
-    <a href="{{ url('/') }}" class="btn-home">Back to Homepage</a>
+    <a href=" {{ url('/') }}" class="btn-home">Go back</a>
   </div>
 </body>
 </html>

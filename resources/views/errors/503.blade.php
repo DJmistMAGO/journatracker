@@ -48,6 +48,6 @@
 </div>
 <h1>503</h1>
 <p>Our site is currently undergoing maintenance.<br>Please check back in a few moments.</p>
-<a href="{{ url('/') }}" class="btn-home">Back to Homepage</a>
+<a href="{{ url('/') }}" class="btn-home">Go Back</a>
 </body>
 </html>
