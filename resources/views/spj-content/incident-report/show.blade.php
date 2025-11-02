@@ -14,7 +14,7 @@
                 on <strong>{{ $incident->date_submitted->format('F d, Y') }}</strong>
             </h5>
             <a href="{{ route('incident-report') }}" class="btn btn-primary btn-sm">
-                <i class="mdi mdi-arrow-left me-1"></i> Back to List
+                <i class="mdi mdi-arrow-left me-1"></i> Back
             </a>
         </div>
 

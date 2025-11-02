@@ -117,6 +117,18 @@ class IncidentReportController extends Controller
 		$incident->remarks = $data['remarks'];
 		$incident->save();
 
+		$email = $incident->email;
+		$studentName = $incident->student_name;
+		$status = $data['status'];
+		$description = $data['remarks'];
+
+		Mail::to($email)->queue(new IncidentReportMailNotif(
+			$studentName,
+			$status,
+			$description
+		));
+
+
 		return redirect()
 			->back()
 			->with('success', 'Incident status updated successfully.');

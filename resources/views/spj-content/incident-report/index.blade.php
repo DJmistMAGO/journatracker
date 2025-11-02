@@ -51,7 +51,19 @@
                             <td>{{ $incident->student_name }}</td>
                             <td>{{ $incident->date_submitted->format('F j, Y')}}</td>
                             <td>
-                                <span class="badge bg-label-success me-1">{{ $incident->status }}</span>
+                                <span class="badge
+								@if($incident->status == 'Pending')
+									bg-label-warning
+								@elseif($incident->status == 'Under Review')
+									bg-label-info
+								@elseif($incident->status == 'Resolved')
+									bg-label-primary
+								@elseif($incident->status == 'Rejected')
+									bg-label-danger
+								@endif
+								me-1">
+									{{ $incident->status }}
+								</span>
                             </td>
                             <td>{{ $incident->date_status ? $incident->date_status->format('F j, Y') : 'N/A' }}</td>
                             <td>
