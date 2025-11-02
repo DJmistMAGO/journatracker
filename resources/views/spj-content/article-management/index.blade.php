@@ -68,7 +68,7 @@
                             {{ $article->title }}
                         </td>
                         <td class="d-none d-md-table-cell">{{ $article->user->name ?? 'Unknown' }}</td>
-                        <td class="d-none d-md-table-cell">{{ $article->date_submitted->format('F d, Y') }}</td>
+                        <td class="d-none d-md-table-cell">{{ $article->date_submitted->format('M. d, Y') }}</td>
                         <td>
                             <span class="badge
                                 @if($article->status == 'Submitted') bg-label-primary
