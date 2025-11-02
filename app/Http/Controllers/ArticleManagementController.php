@@ -162,6 +162,10 @@ class ArticleManagementController extends Controller
 			$data['status'] = 'For Publish';
 		}
 
+		if($article->status == 'Revision') {
+			$data['status'] = 'Resubmitted';
+		}
+
 		// Update article - Rich Text Laravel will automatically handle the description field
 		$article->update($data);
 

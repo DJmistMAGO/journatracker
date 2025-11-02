@@ -65,7 +65,6 @@
             padding: 1rem;
             background-color: #f8f9fa;
             border-radius: 0.375rem;
-            border: 1px solid #e0e0e0;
             line-height: 1.8;
         }
 

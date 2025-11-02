@@ -71,6 +71,18 @@ class PubManagementController extends Controller
 		return view('spj-content.publication-management.index', compact('items'));
 	}
 
+		private function getItemByType($type, $id)
+	{
+		$type = strtolower(trim($type));
+		if ($type === 'article') {
+			return Article::with('user')->findOrFail($id);
+		} elseif ($type === 'media') {
+			return Media::with('user')->findOrFail($id);
+		} else {
+			abort(404, 'Invalid type');
+		}
+	}
+
 	public function show($type, $id)
 	{
 		$item = $this->getItemByType($type, $id);
@@ -151,17 +163,7 @@ class PubManagementController extends Controller
 	/**
 	 * Helper to fetch Article or Media by type
 	 */
-	private function getItemByType($type, $id)
-	{
-		$type = strtolower(trim($type));
-		if ($type === 'article') {
-			return Article::with('user')->findOrFail($id);
-		} elseif ($type === 'media') {
-			return Media::with('user')->findOrFail($id);
-		} else {
-			abort(404, 'Invalid type');
-		}
-	}
+
 
 	public function unpublish($type, $id)
 	{

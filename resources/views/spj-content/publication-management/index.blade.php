@@ -33,8 +33,17 @@
             <div class="col-12 col-md-2">
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
-                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="Scheduled" {{ request('status') == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
+
+					@role('eic')
+                    <option value="Submitted" {{ request('status') == 'Submitted' ? 'selected' : '' }}>Submitted</option>
+                    <option value="Resubmitted" {{ request('status') == 'Resubmitted' ? 'selected' : '' }}>Resubmitted</option>
+					@endrole
+
+					@role('admin')
+					<option value="For Publish" {{ request('status') == 'For Publish' ? 'selected' : '' }}>For Publish</option>
+					<option value="Scheduled" {{ request('status') == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
+					@endrole
+
                 </select>
             </div>
 

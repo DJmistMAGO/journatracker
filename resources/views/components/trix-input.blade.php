@@ -29,7 +29,7 @@
                 display: none !important;
             }
 
-			.trix-toolbar .trix-button-group {
+			.trix-button-group {
 				margin-bottom: 0 !important;
 			}
 
