@@ -163,12 +163,12 @@ class UserController extends Controller
             ->with('success', 'User updated successfully.');
     }
 
-    public function show($id)
-    {
-        $user = User::findOrFail($id);
-        dd($user);
-        return view('spj-content.user-managament.show', compact('user'));
-    }
+    // public function show($id)
+    // {
+    //     $user = User::findOrFail($id);
+    //     // dd($user);
+    //     return view('spj-content.user-managament.show', compact('user'));
+    // }
 
     public function destroy($id)
     {

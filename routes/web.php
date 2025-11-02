@@ -149,10 +149,10 @@ Route::middleware('auth')->group(function () {
             Route::get('/create', 'create')->name('user-management.create');
             Route::post('/', 'store')->name('user-management.store');
             Route::get('/{id}/edit', 'edit')->name('user-management.edit');
-            Route::get('/{id}', 'show')->name('user-management.show');
+            // Route::get('/{id}', 'show')->name('user-management.show');
             Route::put('/{id}', 'update')->name('user-management.update');
             Route::delete('/{id}', 'destroy')->name('user-management.destroy');
-            Route::post('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
+            Route::patch('/reset-password/{id}', 'resetPassword')->name('user-management.reset-password');
             Route::patch('toggle-status/{id}', 'toggleStatus')->name('user-management.toggleStatus');
             // Route::post('/reset-password/{id}', 'updatePassword')->name('user-management.update-password');
         });
