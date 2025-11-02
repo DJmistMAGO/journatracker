@@ -27,8 +27,8 @@
                                 style="max-height: 250px;">
                         @endif
                     </div>
-                    <input class="form-control mt-2" type="file" name="image_path" id="articleImage"
-                        accept="image/*" onchange="previewImage(event)">
+                    <input class="form-control mt-2" type="file" name="image_path" id="articleImage" accept="image/*"
+                        onchange="previewImage(event)">
                 </div>
 
                 <div class="row mb-3">
@@ -41,7 +41,7 @@
 
                     <!-- Category -->
                     <div class="col-12 col-md-3">
-                        <label for="categooptionry" class="form-label">Category</label>
+                        <label for="category" class="form-label">Category</label>
                         <select class="form-select" id="category" name="category" required>
                             <option disabled {{ old('category') ? '' : 'selected' }}>-- Select Category --</option>
                             <option value="News" {{ old('category') == 'News' ? 'selected' : '' }}>News</option>
@@ -60,15 +60,20 @@
                         <label for="articleDate" class="form-label">Date</label>
                         <input type="date" class="form-control" id="articleDate"
                             value="{{ old('date_submitted', date('Y-m-d')) }}" name="date_submitted" required>
-
                     </div>
                 </div>
 
                 <!-- Content -->
                 <div class="mb-3">
-                    <label for="articleContent" class="form-label">Content</label>
-                    <textarea class="form-control" id="articleContent" name="description" rows="5"
-                        placeholder="Write your content here..." required>{{ old('description') }}</textarea>
+                    <label for="description" class="form-label">Article Content</label>
+                    <x-trix-input
+                        id="description"
+                        name="description"
+                        :value="old('description', '')"
+                    />
+                    @error('description')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <!-- Tags -->
@@ -155,12 +160,6 @@
             });
             document.getElementById('tagsField').value = JSON.stringify(tags);
         }
-
-        // Set today's date only if no old value exists
-        //   const dateInput = document.getElementById('articleDate');
-        //   if (!dateInput.value) {
-        //     dateInput.value = new Date().toISOString().split('T')[0];
-        //   }
     </script>
 
 @endsection

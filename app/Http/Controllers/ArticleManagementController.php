@@ -53,7 +53,7 @@ class ArticleManagementController extends Controller
 		$data = $request->validate([
 			'title' => 'required|string|max:255',
 			'image_path' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-			'description' => 'required|string',
+			'description' => 'required|string', // This will now store rich text content
 			'date_submitted' => 'required|date',
 			'category' => 'required|string|max:100',
 			'tags' => 'nullable|string', // tags come as JSON string
@@ -85,7 +85,7 @@ class ArticleManagementController extends Controller
 		// Default type
 		$data['type'] = 'Article';
 
-		// Save article and get the model instance
+		// Save article - Rich Text Laravel will automatically handle the description field
 		$article = Article::create($data);
 
 		$article->type = $article->type ?? 'Article';
@@ -107,15 +107,16 @@ class ArticleManagementController extends Controller
 	public function show($id)
 	{
 		$article = Article::with('user')->findOrFail($id);
-		// dd($article);
+		// The rich text content will be automatically loaded via the HasRichText trait
 		return view('spj-content.article-management.show', compact('article'));
 	}
 
 	public function edit($id)
-	{
-		$article = Article::with('user')->findOrFail($id);
-		return view('spj-content.article-management.edit', compact('article'));
-	}
+{
+    $article = Article::with('user')->findOrFail($id);
+
+    return view('spj-content.article-management.edit', compact('article'));
+}
 
 	public function update(Request $request, $id)
 	{
@@ -124,7 +125,7 @@ class ArticleManagementController extends Controller
 		$data = $request->validate([
 			'title' => 'required|string|max:255',
 			'image_path' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-			'description' => 'required|string',
+			'description' => 'required|string', // Rich text content
 			'date_submitted' => 'required|date',
 			'category' => 'required|string|max:100',
 			'tags' => 'nullable|string', // tags come as JSON string
@@ -161,6 +162,7 @@ class ArticleManagementController extends Controller
 			$data['status'] = 'For Publish';
 		}
 
+		// Update article - Rich Text Laravel will automatically handle the description field
 		$article->update($data);
 
 		if ($user_role == "eic") {
@@ -196,6 +198,7 @@ class ArticleManagementController extends Controller
 			Storage::disk('public')->delete($article->image_path);
 		}
 
+		// Rich Text content will be automatically deleted via the HasRichText trait
 		$article->delete();
 
 		return redirect()

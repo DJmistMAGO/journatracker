@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,32 +13,30 @@ return new class extends Migration {
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table
-                ->foreignId('user_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
             $table->string('title');
-            $table->longText('description');
+            // description field removed - now handled by rich_texts table via HasRichText trait
             $table->string('image_path')->nullable();
             $table->string('type')->default('Article');
             $table->string('category');
             $table->json('tags')->nullable();
             $table->date('date_submitted');
             $table->string('date_publish')->nullable();
-            $table
-                ->enum('status', ['Submitted', 'Resubmitted', 'Scheduled', 'Published', 'Revision', 'Rejected', 'For Publish'])
-                ->default('Submitted');
+            $table->enum('status', [
+                'Submitted',
+                'Resubmitted',
+                'Scheduled',
+                'Published',
+                'Revision',
+                'Rejected',
+                'For Publish'
+            ])->default('Submitted');
             $table->string('remarks')->nullable();
             $table->timestamp('publish_at')->nullable();
             $table->timestamps();
         });
-    }
-
-    //function for view
-    public function show($id)
-    {
-        $article = \App\Models\Article::findOrFail($id);
-        return view('spj-content.publication-management.show', compact('article'));
     }
 
     /**
