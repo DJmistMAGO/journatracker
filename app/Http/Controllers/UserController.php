@@ -20,11 +20,15 @@ class UserController extends Controller
     {
         $query = User::with('roles');
 
-        // If the logged-in user is a teacher, show only students
+        // If the logged-in user is a teacher, show only students with same position and subject specialization
         if (Auth::user()->hasRole('teacher')) {
-            $query->whereHas('roles', function ($q) {
-                $q->where('name', 'student');
-            });
+            $teacher = Auth::user();
+            $query
+                ->whereHas('roles', function ($q) {
+                    $q->where('name', 'student');
+                })
+                ->where('position', $teacher->position)
+                ->where('subject_specialization', $teacher->subject_specialization);
         }
 
         // Apply search filter if provided
@@ -52,11 +56,13 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'penname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'role' => 'required|string|max:255',
             'position' => 'nullable|string|max:255',
+            'subject_specialization' => 'required|string|max:255',
         ]);
 
         // Create a random password
@@ -107,18 +113,22 @@ class UserController extends Controller
 
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'penname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
             'position' => 'nullable|string|max:255',
+            'subject_specialization' => 'required|string|max:255',
         ]);
 
         $user->first_name = $data['first_name'];
+        $user->middle_name = $data['middle_name'];
         $user->last_name = $data['last_name'];
         $user->penname = $data['penname'];
         $user->email = $data['email'];
         $user->position = $data['position'];
+        $user->subject_specialization = $data['subject_specialization'];
         if (!empty($data['password'])) {
             $user->password = bcrypt($data['password']);
         }

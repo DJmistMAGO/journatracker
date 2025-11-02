@@ -5,10 +5,10 @@
 @push('styles')
 	<style>
 		select:disabled {
-	cursor: not-allowed;
-	background-color: #f8f9fa;
-	color: #6c757d;
-}
+			cursor: not-allowed;
+			background-color: #f8f9fa;
+			color: #6c757d;
+		}
 	</style>
 @endpush
 
@@ -33,16 +33,7 @@
 						<div class="row">
 							<div class="col-md-5 mb-3">
 								<div class="form-floating form-floating-outline">
-									<input
-										class="form-control @error('first_name') is-invalid @enderror"
-										type="text"
-										id="firstName"
-										name="first_name"
-										value="{{ old('first_name') }}"
-										placeholder="Enter your first name"
-										required
-										autofocus autocomplete="none"
-									/>
+									<input class="form-control @error('first_name') is-invalid @enderror" type="text" id="firstName" name="first_name" value="{{ old('first_name') }}" placeholder="Enter your first name" required autofocus autocomplete="none" />
 									<label for="firstName">First Name <span class="text-danger">*</span></label>
 								</div>
 							</div>
@@ -57,15 +48,7 @@
 							<!-- Last Name -->
 							<div class="col-md-4 mb-3">
 								<div class="form-floating form-floating-outline">
-									<input
-										class="form-control @error('last_name') is-invalid @enderror"
-										type="text"
-										id="lastName"
-										name="last_name"
-										value="{{ old('last_name') }}"
-										placeholder="Enter your last name"
-										required autocomplete="none"
-									/>
+									<input class="form-control @error('last_name') is-invalid @enderror" type="text" id="lastName" name="last_name" value="{{ old('last_name') }}" placeholder="Enter your last name" required autocomplete="none" />
 									<label for="lastName">Last Name <span class="text-danger">*</span></label>
 								</div>
 							</div>
@@ -73,14 +56,7 @@
 							<!-- Pen Name -->
 							<div class="mb-3">
 								<div class="form-floating form-floating-outline">
-									<input
-										class="form-control @error('penname') is-invalid @enderror"
-										type="text"
-										id="penName"
-										name="penname"
-										value="{{ old('penname') }}"
-										placeholder="Enter pen name (optional)" autocomplete="none"
-									/>
+									<input class="form-control @error('penname') is-invalid @enderror" type="text" id="penName" name="penname" value="{{ old('penname') }}"  placeholder="Enter pen name (optional)" autocomplete="none" />
 									<label for="penName">Pen Name <small class="text-muted">(Optional)</small></label>
 								</div>
 							</div>
@@ -88,15 +64,8 @@
 							<!-- Email -->
 							<div class="mb-0">
 								<div class="form-floating form-floating-outline">
-									<input
-										class="form-control @error('email') is-invalid @enderror"
-										type="email"
-										id="email"
-										name="email"
-										value="{{ old('email') }}"
-										placeholder="example@email.com"
-										required autocomplete="none"
-									/>
+									<input class="form-control @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{ old('email') }}"
+										placeholder="example@email.com" required autocomplete="none" />
 									<label for="email">Email Address <span class="text-danger">*</span></label>
 								</div>
 							</div>
@@ -151,12 +120,12 @@
 						{{-- LANGUAGE SELECTION --}}
 						<div class="mb-0">
 							<div class="form-floating form-floating-outline">
-								<select class="form-select @error('language') is-invalid @enderror" id="language" name="language" required>
-									<option value="" disabled {{ old('language') ? '' : 'selected' }}>Choose a language...</option>
-									<option value="English" {{ old('language') == 'English' ? 'selected' : '' }}>English</option>
-									<option value="Filipino" {{ old('language') == 'Filipino' ? 'selected' : '' }}>Filipino</option>
+								<select class="form-select @error('subject_specialization') is-invalid @enderror" id="subject_specialization" name="subject_specialization" required>
+									<option value="" disabled {{ old('subject_specialization') ? '' : 'selected' }}>Choose a subject_specialization...</option>
+									<option value="English" {{ old('subject_specialization') == 'English' ? 'selected' : '' }}>English</option>
+									<option value="Filipino" {{ old('subject_specialization') == 'Filipino' ? 'selected' : '' }}>Filipino</option>
 								</select>
-								<label for="language">User Language <span class="text-danger">*</span></label>
+								<label for="subject_specialization">User Language <span class="text-danger">*</span></label>
 							</div>
 						</div>
 
