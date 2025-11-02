@@ -37,20 +37,52 @@ class StatusChangedNotification extends Notification
 	 */
 	public function toDatabase($notifiable)
 	{
-		return [
-			'type' => $this->item->type ?? 'Incident Report',
-			'id' => $this->item->id,
-			'status' => $this->item->status ?? null,
-			'message' => ($this->item->type === 'Incident Report')
-				? "An Incident Report has been Submitted."
-				: (
-					$notifiable->hasAnyRole(['admin', 'eic'])
-					? "{$this->item->author->name} submitted {$this->item->type} for Publication."
-					: "Your {$this->item->type} has been {$this->item->status} for Publication."
-				),
-			'created_at' => now(),
-		];
+		$type = ucfirst(strtolower($this->item->type));
+		$status = $this->item->status;
+		$author = $this->item->author->name;
+		$message = '';
+
+		if ($notifiable->hasRole('student')) {
+			if ($status == 'Submitted') {
+				$message = "You have submitted your {$type} for review.";
+			} else if ($status == 'Resubmitted') {
+				$message = "You have resubmitted your {$type}.";
+			} else if ($status == 'For Publish') {
+				$message = "Your {$type} is now marked for publication.";
+			} else if ($status == 'Published') {
+				$message = "Your {$type} has been published!";
+			} else if ($status == 'Revision') {
+				$message = "Your {$type} requires revision.";
+			} else if ($status == 'Rejected') {
+				$message = "Your {$type} has been rejected.";
+			} else if ($status == 'Scheduled') {
+				$message = "Your {$type} has been scheduled for publication.";
+			}
+		}
+
+		if ($notifiable->hasRole('eic')) {
+			if ($status == 'Submitted') {
+				$message = "{$author} has submitted a new {$type} for review.";
+			} else if ($status == 'Resubmitted') {
+				$message = "{$author} has resubmitted their {$type}.";
+			}
+		}
+
+		if ($notifiable->hasRole('admin')) {
+			if ($status == 'For Publish') {
+				$message = "The EIC has marked {$author}'s {$type} for publication.";
+			}
+
+			return [
+				'type' => $type,
+				'id' => $this->item->id,
+				'status' => $status,
+				'message' => $message,
+				'created_at' => now(),
+			];
+		}
 	}
+
 
 	public function toBroadcast($notifiable)
 	{
