@@ -33,7 +33,7 @@
             <div class="col-12 col-md-2">
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
-                    <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
+                    <option value="Submitted" {{ request('status') == 'Submitted' ? 'selected' : '' }}>Submitted</option>
                     <option value="Scheduled" {{ request('status') == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
                 </select>
             </div>
@@ -66,7 +66,7 @@
                         <td class="d-none d-md-table-cell">{{ $item->type }}</td>
                         <td>{{ $item->user->name ?? 'N/A' }}</td>
                         <td class="d-none d-md-table-cell">
-                            {{ $item->date_submitted ? \Carbon\Carbon::parse($item->date_submitted)->format('Y-m-d') : '-' }}
+                            {{ $item->date_submitted ? \Carbon\Carbon::parse($item->date_submitted)->format('M. d, Y') : '-' }}
                         </td>
                         <td>
                             <span class="badge

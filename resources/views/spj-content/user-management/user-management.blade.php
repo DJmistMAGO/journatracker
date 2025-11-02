@@ -16,7 +16,7 @@
 @endpush
 
 @section('content')
-@include('_partials.loader')
+{{-- @include('_partials.loader') --}}
 <div class="content-wrapper">
     <h4 class="py-3 mb-4"><span class="text-muted fw-light">SPJ / </span> User Management</h4>
 
@@ -43,14 +43,14 @@
                     <th>User</th>
                     <th>Role</th>
                     <th>Email</th>
-                    <th>Password Status</th>
+                    <th>Position</th>
                     <th>User Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($users as $user)
-                    @if($user->id !== auth()->id())
+                    {{-- @if($user->id !== auth()->id()) --}}
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
@@ -74,19 +74,15 @@
                             @php $role = $user->roles->first()->name ?? 'student'; @endphp
                             @if ($role == 'admin')
                                 <span class="text-truncate"><i class="mdi mdi-laptop mdi-24px text-danger me-1"></i> Admin</span>
-                            @elseif ($role == 'eic')
-                                <span class="text-truncate"><i class="mdi mdi-pencil-outline mdi-24px text-warning me-1"></i> EIC</span>
+                            @elseif ($role == 'teacher')
+                                <span class="text-truncate"><i class="mdi mdi-pencil-outline mdi-24px text-warning me-1"></i> Teacher</span>
                             @else
                                 <span class="text-truncate"><i class="mdi mdi-account-cog mdi-24px text-info me-1"></i> Student</span>
                             @endif
                         </td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            @if ($user->has_changed_password)
-                                <span class="badge bg-label-secondary">Changed</span>
-                            @else
-                                <span class="badge bg-label-warning">Not Changed</span>
-                            @endif
+                            {{ $user->position ?? 'N/A' }}
                         </td>
 						<td>
 							@if ($user->status === 'active')
@@ -130,7 +126,7 @@
                             </div>
                         </td>
                     </tr>
-                    @endif
+                    {{-- @endif --}}
                 @endforeach
             </tbody>
         </table>

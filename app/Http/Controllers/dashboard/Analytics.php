@@ -20,10 +20,10 @@ class Analytics extends Controller
         $user = Auth::user();
 
         $notifications = $user
-                ->notifications()
-                ->where('type', '!=', IncidentReportNotification::class)
-                ->orderBy('created_at', 'desc')
-                ->paginate(5);
+            ->notifications()
+            ->where('type', '!=', IncidentReportNotification::class)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
 
         if ($user->isRole('admin')) {
             // Admin sees everything
@@ -33,20 +33,21 @@ class Analytics extends Controller
 
             $articlesCount = $articles->count();
             $articlesPublishedCount = $articles->where('status', 'Published')->count();
-            $articlesDraftCount = $articles->where('status', 'Draft')->count();
-            $articlesArchivedCount = $articles->where('status', 'Archived')->count();
+            $articlesDraftCount = $articles->where('status', 'Submitted')->count();
+            $articlesScheduledCount = $articles->where('status', 'Scheduled')->count();
 
             $mediaCount = $media->count();
             $mediaPublishedCount = $media->where('status', 'Published')->count();
-            $mediaDraftCount = $media->where('status', 'Draft')->count();
-            $mediaArchivedCount = $media->where('status', 'Archived')->count();
+            $mediaDraftCount = $media->where('status', 'Submitted')->count();
+            $mediaScheduledCount = $media->where('status', 'Scheduled')->count();
 
             $usersCount = $users->count();
             $adminsCount = $users->where('role', 'admin')->count();
-            $editorsCount = $users->where('role', 'eic')->count();
+            $editorsCount = $users->where('role', 'teacher')->count();
             $writersCount = $users->where('role', 'student')->count();
 
-            $draftCount = $articles->where('status', 'Draft')->count() + $media->where('status', 'Draft')->count();
+            $draftCount =
+                $articles->where('status', 'Submitted')->count() + $media->where('status', 'Submitted')->count();
 
             $activeUsersCount = $users->where('status', 'active')->count();
         } elseif ($user->isRole('student')) {
@@ -56,38 +57,40 @@ class Analytics extends Controller
 
             $articlesCount = $articles->count();
             $articlesPublishedCount = $articles->where('status', 'Published')->count();
-            $articlesDraftCount = $articles->where('status', 'Draft')->count();
-            $articlesArchivedCount = $articles->where('status', 'Archived')->count();
+            $articlesDraftCount = $articles->where('status', 'Submitted')->count();
+            $articlesScheduledCount = $articles->where('status', 'Scheduled')->count();
 
             $mediaCount = $media->count();
             $mediaPublishedCount = $media->where('status', 'Published')->count();
-            $mediaDraftCount = $media->where('status', 'Draft')->count();
-            $mediaArchivedCount = $media->where('status', 'Archived')->count();
-            $draftCount = $articles->where('status', 'Draft')->count() + $media->where('status', 'Draft')->count();
+            $mediaDraftCount = $media->where('status', 'Submitted')->count();
+            $mediaScheduledCount = $media->where('status', 'Scheduled')->count();
+            $draftCount =
+                $articles->where('status', 'Submitted')->count() + $media->where('status', 'Submitted')->count();
 
             // Students don't see other users' analytics
             $usersCount = $adminsCount = $editorsCount = $writersCount = $activeUsersCount = null;
-        } elseif ($user->isRole('eic')) {
+        } elseif ($user->isRole('teacher')) {
             $articles = Article::all();
             $media = Media::all();
             $users = User::all();
 
             $articlesCount = $articles->count();
             $articlesPublishedCount = $articles->where('status', 'Published')->count();
-            $articlesDraftCount = $articles->where('status', 'Draft')->count();
-            $articlesArchivedCount = $articles->where('status', 'Archived')->count();
+            $articlesDraftCount = $articles->where('status', 'Submitted')->count();
+            $articlesScheduledCount = $articles->where('status', 'Scheduled')->count();
 
             $mediaCount = $media->count();
             $mediaPublishedCount = $media->where('status', 'Published')->count();
-            $mediaDraftCount = $media->where('status', 'Draft')->count();
-            $mediaArchivedCount = $media->where('status', 'Archived')->count();
+            $mediaDraftCount = $media->where('status', 'Submitted')->count();
+            $mediaScheduledCount = $media->where('status', 'Scheduled')->count();
 
             $usersCount = $users->count();
             $adminsCount = $users->where('role', 'admin')->count();
-            $editorsCount = $users->where('role', 'eic')->count();
+            $editorsCount = $users->where('role', 'teacher')->count();
             $writersCount = $users->where('role', 'student')->count();
 
-            $draftCount = $articles->where('status', 'Draft')->count() + $media->where('status', 'Draft')->count();
+            $draftCount =
+                $articles->where('status', 'Submitted')->count() + $media->where('status', 'Submitted')->count();
 
             $activeUsersCount = $users->where('status', 'active')->count();
         }
@@ -98,11 +101,11 @@ class Analytics extends Controller
                 'articlesCount',
                 'articlesPublishedCount',
                 'articlesDraftCount',
-                'articlesArchivedCount',
+                'articlesScheduledCount',
                 'mediaCount',
                 'mediaPublishedCount',
                 'mediaDraftCount',
-                'mediaArchivedCount',
+                'mediaScheduledCount',
                 'usersCount',
                 'adminsCount',
                 'editorsCount',

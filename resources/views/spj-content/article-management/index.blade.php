@@ -19,11 +19,11 @@
 <div class="card">
     <div class="card-title d-flex justify-content-between align-items-center ps-0 p-3">
         <h5 class="card-header mb-0">Article List</h5>
-        @unlessrole('admin')
+		@role('student')
             <a href="{{ route('article-management.create') }}" class="btn btn-success btn-md">
                 <i class="mdi mdi-text-box-plus-outline me-1"></i> Submit Article
             </a>
-        @endunlessrole
+        @endrole
     </div>
 
     {{-- Table for larger screens --}}
@@ -68,7 +68,7 @@
                             {{ $article->title }}
                         </td>
                         <td class="d-none d-md-table-cell">{{ $article->user->name ?? 'Unknown' }}</td>
-                        <td class="d-none d-md-table-cell">{{ $article->date_submitted->format('F d, Y') }}</td>
+                        <td class="d-none d-md-table-cell">{{ $article->date_submitted->format('M. d, Y') }}</td>
                         <td>
                             <span class="badge
                                 @if($article->status == 'Submitted') bg-label-primary

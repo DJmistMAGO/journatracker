@@ -70,14 +70,19 @@
 
 						<div class="col-md-8">
 							<div class="row gy-4">
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<input class="form-control" type="text" id="firstName" name="first_name" value="{{ old('first_name', $user->first_name) }}" autofocus />
 										<label for="firstName">First Name</label>
 									</div>
 								</div>
-
-								<div class="col-md-6">
+								<div class="col-md-4">
+									<div class="form-floating form-floating-outline">
+										<input class="form-control" type="text" id="middleName" name="middle_name" value="{{ old('middle_name', $user->middle_name) }}" />
+										<label for="middleName">Middle Name</label>
+									</div>
+								</div>
+								<div class="col-md-4">
 									<div class="form-floating form-floating-outline">
 										<input class="form-control" type="text" id="lastName" name="last_name" value="{{ old('last_name', $user->last_name) }}" />
 										<label for="lastName">Last Name</label>

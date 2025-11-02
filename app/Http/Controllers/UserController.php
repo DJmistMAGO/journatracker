@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Mail\SendUserCredentials;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Traits\HasRoles;
@@ -17,14 +18,30 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+        $query = User::with('roles');
+
+        // If the logged-in user is a teacher, show only students with same position and subject specialization
+        if (Auth::user()->hasRole('teacher')) {
+            $teacher = Auth::user();
+            $query
+                ->whereHas('roles', function ($q) {
+                    $q->where('name', 'student');
+                })
+                ->where('position', $teacher->position)
+                ->where('subject_specialization', $teacher->subject_specialization);
+        }
+
+        // Apply search filter if provided
         $search = request()->query('search');
         if ($search) {
-            $users = User::where('first_name', 'like', '%' . $search . '%')
-                ->orWhere('email', 'like', '%' . $search . '%')
-                ->with('roles')
-                ->get();
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
         }
+
+        $users = $query->orderBy('first_name')->get();
 
         return view('spj-content.user-management.user-management', compact('users'));
     }
@@ -39,11 +56,13 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'penname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'role' => 'required|string|max:255',
             'position' => 'nullable|string|max:255',
+            'subject_specialization' => 'required|string|max:255',
         ]);
 
         // Create a random password
@@ -94,18 +113,22 @@ class UserController extends Controller
 
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'penname' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
             'position' => 'nullable|string|max:255',
+            'subject_specialization' => 'required|string|max:255',
         ]);
 
         $user->first_name = $data['first_name'];
+        $user->middle_name = $data['middle_name'];
         $user->last_name = $data['last_name'];
         $user->penname = $data['penname'];
         $user->email = $data['email'];
         $user->position = $data['position'];
+        $user->subject_specialization = $data['subject_specialization'];
         if (!empty($data['password'])) {
             $user->password = bcrypt($data['password']);
         }

@@ -22,6 +22,7 @@ class ProfileController extends Controller
         // dd($request->all());
         $request->validate([
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'penname' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email,' . Auth::id(),
@@ -31,6 +32,7 @@ class ProfileController extends Controller
 
         $user = User::find(Auth::id());
         $user->first_name = $request->first_name;
+        $user->middle_name = $request->middle_name;
         $user->last_name = $request->last_name;
         $user->penname = $request->penname;
         $user->password = $request->password ? bcrypt($request->password) : $user->password;
@@ -59,21 +61,21 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return back()->with('success', 'Profile updated!');
+        return back()->with('success', 'Profile details updated!');
     }
 
-    public function uploadProfilePicture(Request $request)
-    {
-        $request->validate([
-            'profile_picture' => 'required|image|mimes:jpg,jpeg,png,gif|max:800', // max 800KB
-        ]);
+    // public function uploadProfilePicture(Request $request)
+    // {
+    //     $request->validate([
+    //         'profile_picture' => 'required|image|mimes:jpg,jpeg,png,gif|max:800', // max 800KB
+    //     ]);
 
-        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+    //     $path = $request->file('profile_picture')->store('profile_pictures', 'public');
 
-        $user = User::find(Auth::id());
-        $user->profile_picture = $path;
-        $user->save();
+    //     $user = User::find(Auth::id());
+    //     $user->profile_picture = $path;
+    //     $user->save();
 
-        return back()->with('success', 'Profile picture updated!');
-    }
+    //     return back()->with('success', 'Profile picture updated!');
+    // }
 }

@@ -36,7 +36,7 @@
             @forelse($items as $item)
             <tr>
                 <td>{{ Str::limit($item->title, 30, '...') }}</td>
-                <td>{{ $item->date_submitted }}</td>
+                <td>{{ $item->date_submitted->format('M. d, Y') }}</td>
                 <td>{{ $item->user->name ?? 'N/A' }}</td>
                 <td>{{ $item->category }}</td>
                 <td>
