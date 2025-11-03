@@ -28,7 +28,7 @@ class IncidentReportNotification extends Notification
             'status' => $this->item->status,
             'type' => $this->item->type,
             'message' => 'An incident report has been submitted.',
-            'can_view' => $notifiable->hasRole(['admin', 'eic']),
+            'can_view' => $notifiable->hasRole(['admin', 'teacher']),
         ];
     }
 }

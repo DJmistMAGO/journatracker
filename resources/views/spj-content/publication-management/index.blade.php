@@ -35,7 +35,7 @@
                         <select name="status" class="form-select">
                             <option value="">All Statuses</option>
 
-                            @role('eic')
+                            @role('teacher')
                                 <option value="Submitted" {{ request('status') == 'Submitted' ? 'selected' : '' }}>Submitted
                                 </option>
                                 <option value="Resubmitted" {{ request('status') == 'Resubmitted' ? 'selected' : '' }}>

@@ -135,14 +135,17 @@
 
                             @if ($item->type === 'Article')
                                 <figure class="mb-4 text-center">
-                                    <img src="{{ asset('/storage/' . $item->image_path) }}" alt="Article Image"
-                                        class="img-fluid rounded shadow-sm">
+                                    <img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : asset('assets/img/spj/no-image.jpg') }}"
+										alt="{{ $item->title }}"
+										class="img-fluid rounded shadow-sm"
+										onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
+
                                 </figure>
                             @elseif ($item->type === 'Media')
                                 @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
                                     @if ($item->image_path)
                                         <div class="text-center my-3">
-                                            <img src="{{ asset('storage/' . $item->image_path) }}"
+                                            <img src="{{ asset('storage/' . $item->image_path) ?? asset('assets/img/spj/no-image.jpg') }}"
                                                 alt="{{ $item->title }}" class="img-fluid rounded shadow-sm"
                                                 style="max-height: 400px;">
                                         </div>
@@ -166,7 +169,7 @@
                             @endif
 
                             <section class="article-body mb-5">
-                                {{ $item->description }}
+                                {!! $item->description !!}
                             </section>
 
                             <div class="mb-4">
