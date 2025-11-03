@@ -125,7 +125,7 @@
 
         <div class="footer">
 			{{-- add image logo here --}}
-			<img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="{{ config('app.name') }} Logo" style="height: 40px; margin-bottom: 10px;">
+			{{-- <img src="{{ asset('assets/img/spj/spj_logo.png') }}" alt="{{ config('app.name') }} Logo" style="height: 40px; margin-bottom: 10px;"> --}}
             <p style="margin: 0 0 10px 0;">&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
             <p style="margin: 0; font-size: 12px;">
                 This is an automated message. Please do not reply to this email.
