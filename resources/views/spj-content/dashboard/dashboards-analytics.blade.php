@@ -41,14 +41,14 @@
 				@endrole
 
 				@role('teacher')
-					<h4 class="text-primary mb-1">{{ $articlesCount }}</h4>
+					<h4 class="text-primary mb-1">{{ $articlesCount + $mediaCount }}</h4>
 					<p class="mb-2 pb-1">
 						<span class="fw-medium">
-							{{ $articlesPublishedCount }} published articles
-							({{ $articlesCount > 0 ? round(($articlesPublishedCount / $articlesCount) * 100, 2) : 0 }}%)
+							{{ $articlesPublishedCount + $mediaPublishedCount }} published articles and media
+							{{-- ({{ $articlesCount > 0 ? round(($articlesPublishedCount  + $mediaPublishedCount / $articlesCount) * 100, ) : 0 }}%) --}}
 						</span>
 					</p>
-					<a href="{{ route('article-management') }}" class="btn btn-sm btn-primary">View Articles</a>
+					<a href="{{ route('archive') }}" class="btn btn-sm btn-primary">View Articles</a>
 				@endrole
 
 				@role('student')
@@ -56,7 +56,7 @@
 					<p class="mb-2 pb-1">
 						<span class="fw-medium">
 							{{ $articlesPublishedCount }} published articles
-							({{ $articlesCount > 0 ? round(($articlesPublishedCount / $articlesCount) * 100, 2) : 0 }}%)
+							{{-- ({{ $articlesCount > 0 ? round(($articlesPublishedCount / $articlesCount) * 100, 2) : 0 }}%) --}}
 						</span>
 					</p>
 					<a href="{{ route('article-management') }}" class="btn btn-sm btn-primary">View My Articles</a>

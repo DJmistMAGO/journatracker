@@ -200,19 +200,18 @@
 									<div class="position-relative" style="height: 250px; overflow: hidden;">
 										@if($item->type === 'Article')
 											{{-- Article Image --}}
-											<img src="{{ asset('storage/' . $item->image_path) ?? asset('assets/img/spj/no-image.jpg') }}"
-												class="card-img-top"
+											<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : asset('assets/img/spj/no-image.jpg') }}"
 												alt="{{ $item->title }}"
-												style="height: 250px; object-fit: cover;"
+												class="img-fluid rounded shadow-sm"
 												onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
+
 										@elseif($item->type === 'Media')
 											{{-- Photojournalism / Cartooning --}}
 											@if(in_array($item->category, ['Photojournalism', 'Cartooning']))
-												<img src="{{ asset('storage/' . $item->image_path) ?? asset('assets/img/spj/no-image.jpg') }} }}"
-													class="w-100 h-100"
-													style="object-fit: cover;"
-													alt="{{ $item->title }}"
-													onerror="this.onerror=null;this.src={{ asset('assets/img/spj/no-image.jpg') }}">
+											<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : asset('assets/img/spj/no-image.jpg') }}"
+												alt="{{ $item->title }}"
+												class="img-fluid rounded shadow-sm"
+												onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
 											@endif
 
 											{{-- TV / Radio --}}
