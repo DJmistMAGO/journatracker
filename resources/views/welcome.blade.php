@@ -107,11 +107,6 @@
 @include('_partials.loader')
 @include('layouts.sections.navbar.public-navbar')
 	<div class="landing-page text-white">
-		{{-- <div class="container">
-			<h1 class="display-4 text-primary fw-bold">Welcome to the Student Press Journal</h1>
-			<p class="lead mb-4 text-black">Your source for student journalism, media, and creative works.  </p>
-			<a href="#latestArticles" class="btn btn-theme btn-lg rounded-pill px-4 py-2">Explore Articles</a>
-		</div> --}}
 		<main class="container-xxl my-5">
 			@php
 				$featured = $items->first();
@@ -132,11 +127,11 @@
 					<div class="card w-100 shadow-sm border-0 rounded-4 overflow-hidden">
 						{{-- Featured image --}}
 						<div class="position-relative">
-							<img src="{{ $featured->image_path ? asset('storage/' . $featured->image_path) : 'https://picsum.photos/600/400' }}"
+							<img src="{{ $featured->image_path ? asset('storage/' . $featured->image_path) : asset('assets/img/spj/no-image.jpg') }}"
 								class="card-img-top"
 								alt="{{ $featured->title }}"
 								style="height: 250px; object-fit: cover;"
-								onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+								onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
 
 							{{-- Optional overlay for effect --}}
 							<div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-bottom opacity-25"></div>
@@ -193,7 +188,7 @@
 
 					@endif
 
-					@if($items->count() >= 1)
+					@if($items->count() >= 2)
 
 					<h2 class="mt-5 mb-3 text-white" id="latestArticles">Latest Articles</h2>
 					<div class="row g-4">
@@ -205,19 +200,19 @@
 									<div class="position-relative" style="height: 250px; overflow: hidden;">
 										@if($item->type === 'Article')
 											{{-- Article Image --}}
-											<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://picsum.photos/600/400' }}"
-												class="w-100 h-100"
-												style="object-fit: cover;"
+											<img src="{{ asset('storage/' . $item->image_path) ?? asset('assets/img/spj/no-image.jpg') }}"
+												class="card-img-top"
 												alt="{{ $item->title }}"
-												onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+												style="height: 250px; object-fit: cover;"
+												onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
 										@elseif($item->type === 'Media')
 											{{-- Photojournalism / Cartooning --}}
 											@if(in_array($item->category, ['Photojournalism', 'Cartooning']))
-												<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://picsum.photos/600/400' }}"
+												<img src="{{ asset('storage/' . $item->image_path) ?? asset('assets/img/spj/no-image.jpg') }} }}"
 													class="w-100 h-100"
 													style="object-fit: cover;"
 													alt="{{ $item->title }}"
-													onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+													onerror="this.onerror=null;this.src={{ asset('assets/img/spj/no-image.jpg') }}">
 											@endif
 
 											{{-- TV / Radio --}}

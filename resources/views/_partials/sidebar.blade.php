@@ -81,7 +81,7 @@
     </div> --}}
 
     {{-- Share Buttons --}}
-    <div class="card border-0 shadow-sm mb-4 text-center p-3">
+    {{-- <div class="card border-0 shadow-sm mb-4 text-center p-3">
         <div class="card-body">
             <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
             <div class="d-flex justify-content-center gap-2">
@@ -102,5 +102,5 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> --}}
 

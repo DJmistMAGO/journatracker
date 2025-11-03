@@ -10,17 +10,14 @@ use App\Models\User;
 use Database\Seeders\MediaSeeder;
 use Database\Seeders\ArticleSeeder;
 
-
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-		$this->call([UsersTableSeeder::class]);
+        $this->call([UsersTableSeeder::class]);
         // //Create Media
         // $this->call(MediaSeeder::class);
         // //Create Articles
         // $this->call(ArticleSeeder::class);
-
-
     }
 }

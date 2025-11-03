@@ -61,7 +61,7 @@
         </div>
         {{-- Card Footer --}}
         <div class="card-footer d-flex justify-content-end align-items-center">
-			@role('admin|eic')
+			@role('admin|teacher')
             @if ($incident->status !== 'Resolved')
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#statusModal">
                     Manage Status

@@ -40,7 +40,7 @@
 					<a href="{{ route('user-management') }}" class="btn btn-sm btn-primary">View Users</a>
 				@endrole
 
-				@role('eic')
+				@role('teacher')
 					<h4 class="text-primary mb-1">{{ $articlesCount }}</h4>
 					<p class="mb-2 pb-1">
 						<span class="fw-medium">

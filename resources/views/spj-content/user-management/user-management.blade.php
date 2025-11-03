@@ -153,8 +153,8 @@
                             @php $role = $user->roles->first()->name ?? 'student'; @endphp
                             @if ($role == 'admin')
                                 <span class="text-truncate"><i class="mdi mdi-laptop mdi-20px text-danger me-1"></i> Admin</span>
-                            @elseif ($role == 'eic')
-                                <span class="text-truncate"><i class="mdi mdi-pencil-outline mdi-20px text-warning me-1"></i> EIC</span>
+                            @elseif ($role == 'teacher')
+                                <span class="text-truncate"><i class="mdi mdi-pencil-outline mdi-20px text-warning me-1"></i> Teacher</span>
                             @else
                                 <span class="text-truncate"><i class="mdi mdi-account-cog mdi-20px text-info me-1"></i> Student</span>
                             @endif

@@ -28,7 +28,7 @@ class PubManagementController extends Controller
                 ->whereHas('user', function ($query) use ($position, $subjectSpecialization) {
                     $query->where('position', $position)->where('subject_specialization', $subjectSpecialization);
                 })
-                ->whereIn('status', ['Submitted', 'Resubmitted'])
+                ->whereIn('status', ['Submitted', 'Resubmitted', 'For Publish', 'Scheduled'])
                 ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
                 ->when($status, fn($query) => $query->where('status', $status))
                 ->orderByDesc('date_submitted')
@@ -38,7 +38,7 @@ class PubManagementController extends Controller
                 ->whereHas('user', function ($query) use ($position, $subjectSpecialization) {
                     $query->where('position', $position)->where('subject_specialization', $subjectSpecialization);
                 })
-                ->whereIn('status', ['Submitted', 'Resubmitted'])
+                ->whereIn('status', ['Submitted', 'Resubmitted', 'For Publish', 'Scheduled'])
                 ->when($search, fn($query) => $query->where('title', 'like', "%{$search}%"))
                 ->when($status, fn($query) => $query->where('status', $status))
                 ->orderByDesc('date_submitted')
@@ -83,18 +83,17 @@ class PubManagementController extends Controller
         ]);
     }
 
-		private function getItemByType($type, $id)
-	{
-		$type = strtolower(trim($type));
-		if ($type === 'article') {
-			return Article::with('user')->findOrFail($id);
-		} elseif ($type === 'media') {
-			return Media::with('user')->findOrFail($id);
-		} else {
-			abort(404, 'Invalid type');
-		}
-	}
-
+    private function getItemByType($type, $id)
+    {
+        $type = strtolower(trim($type));
+        if ($type === 'article') {
+            return Article::with('user')->findOrFail($id);
+        } elseif ($type === 'media') {
+            return Media::with('user')->findOrFail($id);
+        } else {
+            abort(404, 'Invalid type');
+        }
+    }
 
     public function updateStatus($type, $id, Request $request)
     {
@@ -144,7 +143,6 @@ class PubManagementController extends Controller
         $item->save();
 
         if ($item->user) {
-			
             $item->user->notify(new StatusChangedNotification($item));
 
             if ($item->user->email) {

@@ -97,6 +97,8 @@
                             @endforeach
                         @endif
                     </div>
+					<span class="form-text">Press Enter or click "Add Tag" to add a tag.</span>
+
                 </div>
 
                 <!-- Hidden input to store tags as JSON -->

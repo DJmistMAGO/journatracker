@@ -70,7 +70,7 @@
 									} else {
 										$href = '#';
 									}
-								} elseif (auth()->user()->hasAnyRole(['admin', 'eic'])) {
+								} elseif (auth()->user()->hasAnyRole(['admin', 'teacher'])) {
 									if ($type === 'Incident Report') {
 										$href = route('incident-report.show', $id); // Admin/EIC incident report route
 									} elseif ($type) {
