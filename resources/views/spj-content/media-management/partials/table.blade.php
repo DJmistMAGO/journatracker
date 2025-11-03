@@ -1,14 +1,13 @@
 {{-- Desktop Table --}}
-<div class="table-responsive d-none d-sm-block">
-	<form method="GET" action="{{ route('media-management') }}" class="row px-3 mb-3 align-items-center col-12">
+<form method="GET" action="{{ route('media-management') }}" class="row px-3 mb-3 align-items-center col-12">
             <!-- Search Input -->
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-3 m-1">
                 <input type="text" name="search" class="form-control" placeholder="Search title..."
                     value="{{ request('search') }}">
             </div>
 
             <!-- Status Filter -->
-            <div class="col-12 col-md-2">
+            <div class="col-12 col-md-2 m-1">
                 <select name="status" class="form-select">
                     <option value="">All Statuses</option>
                     <option value="Submitted" {{ request('status') == 'Submitted' ? 'selected' : '' }}>Submitted</option>
@@ -17,10 +16,11 @@
             </div>
 
             <!-- Filter Button -->
-            <div class="col-12 col-md-2 d-grid">
+            <div class="col-12 col-md-2 d-grid m-1">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
         </form>
+<div class="table-responsive d-none d-sm-block">
     <table class="table mb-0">
         <thead>
             <tr>

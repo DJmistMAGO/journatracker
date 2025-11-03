@@ -18,6 +18,7 @@ class ArchiveController extends Controller
         $auth_id = $user->id;
         $user_role = $user->getRoleNames()->first();
 
+
         $search = $request->input('search'); // search input
         $status = $request->input('status'); // status filter from select input
 
