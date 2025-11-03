@@ -76,7 +76,11 @@
                 <!-- Description -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Description (Optional)</label>
-                    <textarea class="form-control" name="description" id="description" rows="3">{{ old('description') }}</textarea>
+                    <x-trix-input
+                        id="description"
+                        name="description"
+                        :value="old('description', '')"
+                    />
                 </div>
 
 
@@ -85,9 +89,10 @@
                 <div class="mb-3">
                     <label for="tagInput" class="form-label">Tags</label>
                     <div class="input-group">
-                        <input type="text" id="tagInput" class="form-control" placeholder="Type a tag">
+                        <input type="text" id="tagInput" class="form-control" placeholder="Type a tag" required>
                         <button type="button" class="btn btn-outline-primary" onclick="handleAddTag()">Add Tag</button>
                     </div>
+					<span class="form-text">Press Enter or click "Add Tag" to add a tag.</span>
                     <div id="tagsContainer" class="mt-2">
 						@if (old('tags'))
 							@php

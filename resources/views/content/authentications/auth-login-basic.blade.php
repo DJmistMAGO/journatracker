@@ -4,6 +4,15 @@
 
 @section('page-style')
 <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-auth.css')}}">
+<style>
+	body {
+		background-image: linear-gradient(rgba(255, 255, 255, 0.597), rgba(14, 60, 10, 0.864)), url('{{ asset('assets/img/spj/snhsbg.jpg') }}');
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		background-size: cover;
+		background-position: top;
+	}
+</style>
 @endsection
 
 @section('content')

@@ -37,7 +37,7 @@ class User extends Authenticatable
 
     public function getNameAttribute()
     {
-        return trim("{$this->first_name} {$this->last_name}");
+        return trim("{$this->first_name} {$this->middlename} {$this->last_name}");
     }
 
     public function isRole($role)

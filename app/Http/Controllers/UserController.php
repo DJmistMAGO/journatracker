@@ -41,7 +41,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->orderBy('first_name')->get();
+        $users = $query->orderBy('created_at')->get();
 
         return view('spj-content.user-management.user-management', compact('users'));
     }

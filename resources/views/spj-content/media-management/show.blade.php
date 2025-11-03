@@ -11,7 +11,7 @@
                 </div>
                 <div class="back-button">
                     <a href="{{ route('media-management') }}" class="btn btn-primary btn-sm">
-                        <i class="mdi mdi-arrow-left me-1"></i> Back to List
+                        <i class="mdi mdi-arrow-left me-1"></i> Back
                     </a>
                 </div>
             </div>
@@ -19,7 +19,8 @@
 					<div class="card-body">
 						<p><strong>Status:</strong> {{ ucfirst(str_replace('_', ' ', $media->status)) }}</p>
 						<p><strong>Category:</strong> {{ ucfirst(str_replace('_', ' ', $media->category)) }}</p>
-						<p><strong>Description:</strong> {{ $media->description ?? 'No description provided.' }}</p>
+						<p><strong>Description:</strong> {!! $media->description ?? 'No description provided.' !!}</p>
+						{{-- <div></div> --}}
 
 						<p><strong>Date:</strong> {{ \Carbon\Carbon::parse($media->date_submitted)->format('M d, Y') }}</p>
 
