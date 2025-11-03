@@ -42,6 +42,7 @@ class StatusChangedNotification extends Notification
 		$author = $this->item->author->name;
 		$message = '';
 
+
 		if ($notifiable->hasRole('student')) {
 			if ($status == 'Submitted') {
 				$message = "You have submitted your {$type} for review.";
@@ -60,27 +61,30 @@ class StatusChangedNotification extends Notification
 			}
 		}
 
-		if ($notifiable->hasRole('eic')) {
-			if ($status == 'Submitted') {
-				$message = "{$author} has submitted a new {$type} for review.";
-			} else if ($status == 'Resubmitted') {
-				$message = "{$author} has resubmitted their {$type}.";
+		if ($status == 'Submitted' || $status == 'Resubmitted') {
+			if ($notifiable->hasRole('teacher')) {
+				if ($status == 'Submitted') {
+					$message = "{$author} has submitted a new {$type} for review.";
+				} else if ($status == 'Resubmitted') {
+					$message = "{$author} has resubmitted their {$type}.";
+				}
 			}
 		}
 
-		if ($notifiable->hasRole('admin')) {
-			if ($status == 'For Publish') {
-				$message = "The EIC has marked {$author}'s {$type} for publication.";
+		if ($status == 'For Publish') {
+			if ($notifiable->hasRole('admin')) {
+				$message = "{$type} by {$author} is marked for publication.";
 			}
-
-			return [
-				'type' => $type,
-				'id' => $this->item->id,
-				'status' => $status,
-				'message' => $message,
-				'created_at' => now(),
-			];
 		}
+
+		// Return the same structure for all roles
+		return [
+			'type' => $type,
+			'id' => $this->item->id,
+			'status' => $status,
+			'message' => $message,
+			'created_at' => now(),
+		];
 	}
 
 

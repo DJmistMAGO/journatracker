@@ -144,7 +144,9 @@ class PubManagementController extends Controller
         $item->save();
 
         if ($item->user) {
+			
             $item->user->notify(new StatusChangedNotification($item));
+
             if ($item->user->email) {
                 Mail::to($item->user->email)->queue(
                     new StatusUpdateNotification(

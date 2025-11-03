@@ -156,7 +156,7 @@
                 @endif
             @endrole
 
-            @role('eic')
+            @role('teacher')
                 @if ($item->status == 'Submitted' || $item->status == 'Resubmitted')
                     <div class="card-footer bg-light border-0">
                         @if ($item->type == 'Article')

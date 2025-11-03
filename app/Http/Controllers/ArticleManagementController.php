@@ -88,15 +88,19 @@ class ArticleManagementController extends Controller
 		// Save article - Rich Text Laravel will automatically handle the description field
 		$article = Article::create($data);
 
+		// Ensure type and status are set
 		$article->type = $article->type ?? 'Article';
 		$article->status = $article->status ?? 'Submitted';
+		$article->save(); // Save after setting defaults
 
+		// Notify the author (student)
 		$article->author->notify(new StatusChangedNotification($article));
 
-		// Get all users with role 'Admin' or 'EIC'
-		$usersToNotify = User::role(['admin', 'eic'])->get();
-		foreach ($usersToNotify as $user) {
-			$user->notify(new StatusChangedNotification($article));
+		if ($article->status == 'Submitted') {
+			$usersToNotify = User::role(['teacher'])->get();
+			foreach ($usersToNotify as $user) {
+				$user->notify(new StatusChangedNotification($article));
+			}
 		}
 
 		return redirect()
@@ -112,11 +116,11 @@ class ArticleManagementController extends Controller
 	}
 
 	public function edit($id)
-{
-    $article = Article::with('user')->findOrFail($id);
+	{
+		$article = Article::with('user')->findOrFail($id);
 
-    return view('spj-content.article-management.edit', compact('article'));
-}
+		return view('spj-content.article-management.edit', compact('article'));
+	}
 
 	public function update(Request $request, $id)
 	{
@@ -158,18 +162,33 @@ class ArticleManagementController extends Controller
 		$user = Auth::user();
 		$user_role = $user->getRoleNames()->first();
 
-		if ($user_role == "eic") {
+		if ($user_role == "teacher") {
 			$data['status'] = 'For Publish';
 		}
 
-		if($article->status == 'Revision') {
+		if ($article->status == 'Revision') {
 			$data['status'] = 'Resubmitted';
 		}
 
-		// Update article - Rich Text Laravel will automatically handle the description field
 		$article->update($data);
 
-		if ($user_role == "eic") {
+		$article->author->notify(new StatusChangedNotification($article));
+
+		if ($article->status == 'Resubmitted') {
+			$usersToNotify = User::role(['teacher'])->get();
+			foreach ($usersToNotify as $user) {
+				$user->notify(new StatusChangedNotification($article));
+			}
+		}
+
+		if ($article->status == 'For Publish') {
+			$usersToNotify = User::role(['admin'])->get();
+			foreach ($usersToNotify as $user) {
+				$user->notify(new StatusChangedNotification($article));
+			}
+		}
+
+		if ($user_role == "teacher") {
 			//email notification to author
 			Mail::to($article->user->email)->queue(
 				new StatusUpdateNotification(
@@ -187,6 +206,7 @@ class ArticleManagementController extends Controller
 				->route('publication-management.index')
 				->with('success', 'Article updated successfully!');
 		} else {
+
 			return redirect()
 				->route('article-management')
 				->with('success', 'Article updated successfully!');
