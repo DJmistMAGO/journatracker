@@ -24,6 +24,15 @@ html, body, .wrapper {
   align-items: center;
 }
 
+body {
+		background-image: linear-gradient(rgba(69, 63, 63, 0.197), rgba(10, 48, 10, 0.566)), url('{{ asset('assets/img/bg-login.jpg') }}');
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		background-size: cover;
+		background-position: top;
+		color: white;
+	}
+
 * {
   box-sizing: border-box;
 }
@@ -586,21 +595,21 @@ html, body, .wrapper {
   text-align: center;
   margin-top: 40px;
   max-width: 600px;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 
 .text-container h2 {
   font-family: 'Roboto', sans-serif;
   font-size: 32px;
   font-weight: 700;
-  color: #333;
-  margin-bottom: 15px;
+  color: #ffffff;
+  margin-bottom: 5px;
 }
 
 .text-container p {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-size: 18px;
-  color: #666;
+  color: #ffffff;
   line-height: 1.6;
   margin-bottom: 30px;
 }
@@ -1162,8 +1171,8 @@ html, body, .wrapper {
     </div>
   </div>
 
-  <div class="text-container">
-    <h2>Page Not Found</h2>
+  <div class="text-container" style="text-color: white;">
+    <h2 class="text-white">Page Not Found</h2>
     <p>Oops! The page you're looking for doesn't exist. It may have been removed or never existed.</p>
     <a href=" {{ url('/') }}" class="btn-home">Go back</a>
   </div>

@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-auth.css')}}">
 <style>
 	body {
-		background-image: linear-gradient(rgba(255, 255, 255, 0.597), rgba(14, 60, 10, 0.864)), url('{{ asset('assets/img/spj/snhsbg.jpg') }}');
+		background-image: linear-gradient(rgba(251, 255, 0, 0.197), rgba(8, 106, 8, 0.566)), url('{{ asset('assets/img/bg-login.jpg') }}');
 		background-repeat: no-repeat;
 		background-attachment: fixed;
 		background-size: cover;
@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-<div class="position-relative" style="background-image: url('{{ asset('assets/img/bg-login.jpg') }}'); background-size: cover; background-position: center; height: 100vh;">
+<div class="position-relative">
     <div class="authentication-wrapper authentication-basic container-p-y">
         <div class="authentication-inner py-4">
         <div class="card p-2">
