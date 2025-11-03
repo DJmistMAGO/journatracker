@@ -50,7 +50,7 @@
                         <th>Author</th>
                         <th class="d-none d-md-table-cell">Type</th>
                         <th class="d-none d-md-table-cell">Category</th>
-						<th class="d-none d-md-table-cell">Category</th>
+						<th class="d-none d-md-table-cell">Status</th>
                         <th class="d-none d-md-table-cell text-center">Views</th>
                         <th>Actions</th>
                     </tr>
