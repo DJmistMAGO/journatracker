@@ -33,18 +33,29 @@ class StatusChangedNotification extends Notification
 	}
 
 	/**
-	 * Get the mail representation of the notification.
+	 * Get the database representation of the notification.
 	 */
 	public function toDatabase($notifiable)
 	{
-		$type = ucfirst(strtolower($this->item->type));
-		$status = $this->item->status;
-		$author = $this->item->author->name ?? '';
+		$type = ucfirst(strtolower($this->item->type ?? 'Unknown'));
+		$status = $this->item->status ?? 'Unknown';
+
+		// Get author name - for incident reports use student_name, for articles use author
+		$author = null;
+		if (isset($this->item->student_name)) {
+			// For Incident Reports
+			$author = $this->item->student_name;
+		} elseif (method_exists($this->item, 'author') && $this->item->author) {
+			// For Articles/Media
+			$author = $this->item->author->name;
+		}
+		$author = $author ?? 'Unknown';
+
 		$message = '';
 
-
-		if ($type == 'incident report') {
-			if ($notifiable->hasRole(['admin', 'teacher'])) {
+		// Handle Incident Reports
+		if (strtolower($type) === 'incident report') {
+			if ($notifiable->hasAnyRole(['admin', 'teacher'])) {
 				if ($status == 'Pending') {
 					$message = "A new {$type} has been submitted by {$author} and is pending your review.";
 				} else if ($status == 'Under Review') {
@@ -55,7 +66,9 @@ class StatusChangedNotification extends Notification
 					$message = "The {$type} submitted by {$author} has been rejected.";
 				}
 			}
-
+		}
+		// Handle Articles/Media
+		else {
 			if ($notifiable->hasRole('student')) {
 				if ($status == 'Submitted') {
 					$message = "You have submitted your {$type} for review.";
@@ -74,31 +87,29 @@ class StatusChangedNotification extends Notification
 				}
 			}
 
-			if ($status == 'Submitted' || $status == 'Resubmitted') {
-				if ($notifiable->hasRole('teacher')) {
-					if ($status == 'Submitted') {
-						$message = "{$author} has submitted a new {$type} for review.";
-					} else if ($status == 'Resubmitted') {
-						$message = "{$author} has resubmitted their {$type}.";
-					}
+			if ($notifiable->hasRole('eic')) {
+				if ($status == 'Submitted') {
+					$message = "{$author} has submitted a new {$type} for review.";
+				} else if ($status == 'Resubmitted') {
+					$message = "{$author} has resubmitted their {$type}.";
 				}
 			}
 
-			if ($status == 'For Publish') {
-				if ($notifiable->hasRole('admin')) {
-					$message = "{$type} by {$author} is marked for publication.";
+			if ($notifiable->hasRole('admin')) {
+				if ($status == 'For Publish') {
+					$message = "The EIC has marked {$author}'s {$type} for publication.";
 				}
 			}
-
-			// Return the same structure for all roles
-			return [
-				'type' => $type,
-				'id' => $this->item->id,
-				'status' => $status,
-				'message' => $message,
-				'created_at' => now(),
-			];
 		}
+
+		// Return the same structure for all types
+		return [
+			'type' => $type,
+			'id' => $this->item->id,
+			'status' => $status,
+			'message' => $message,
+			'created_at' => now(),
+		];
 	}
 
 	public function toBroadcast($notifiable)

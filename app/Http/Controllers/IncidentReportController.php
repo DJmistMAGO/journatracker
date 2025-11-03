@@ -79,7 +79,9 @@ class IncidentReportController extends Controller
 
 		$incident = IncidentReport::create($data);
 
+		// Set type and status as attributes (not saved to DB)
 		$incident->type = 'Incident Report';
+		$incident->status = $incident->status ?? 'Pending';
 
 		$usersToNotify = User::role(['admin', 'teacher'])->get();
 
@@ -92,11 +94,11 @@ class IncidentReportController extends Controller
 		$status = 'Pending';
 		$description = $data['incident_description'];
 
-		// Mail::to($email)->queue(new IncidentReportMailNotif(
-		// 	$studentName,
-		// 	$status,
-		// 	$description
-		// ));
+		Mail::to($email)->queue(new IncidentReportMailNotif(
+			$studentName,
+			$status,
+			$description
+		));
 
 		return redirect()
 			->route('welcome')
@@ -123,11 +125,11 @@ class IncidentReportController extends Controller
 		$status = $data['status'];
 		$description = $data['remarks'];
 
-		// Mail::to($email)->queue(new IncidentReportMailNotif(
-		// 	$studentName,
-		// 	$status,
-		// 	$description
-		// ));
+		Mail::to($email)->queue(new IncidentReportMailNotif(
+			$studentName,
+			$status,
+			$description
+		));
 
 
 		return redirect()
