@@ -89,7 +89,7 @@
                 <div class="mb-3">
                     <label for="tagInput" class="form-label">Tags</label>
                     <div class="input-group">
-                        <input type="text" id="tagInput" class="form-control" placeholder="Type a tag" required>
+                        <input type="text" id="tagInput" class="form-control" placeholder="Type a tag">
                         <button type="button" class="btn btn-outline-primary" onclick="handleAddTag()">Add Tag</button>
                     </div>
 					<span class="form-text">Press Enter or click "Add Tag" to add a tag.</span>

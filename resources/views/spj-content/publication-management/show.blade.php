@@ -40,7 +40,7 @@
                         {{ ucfirst($item->status) }}
                     </span>
 
-                    <a href="{{ route('publication-management.index') }}"
+                    <a href="{{ url()->previous() }}"
                         class="btn btn-sm px-3 py-2 text-white fw-semibold btn-primary" style="border-radius: 50px;">
                         <i class="mdi mdi-arrow-left me-1"></i> Back
                     </a>

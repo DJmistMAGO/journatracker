@@ -142,6 +142,10 @@ class PubManagementController extends Controller
 
         $item->save();
 
+		if ($item->status == 'Scheduled') {
+			$item->publish_at = Carbon::parse($validated['date_publish'] . ' ' . $validated['time_publish']);
+        }
+
         if ($item->user) {
             $item->user->notify(new StatusChangedNotification($item));
 
@@ -154,8 +158,11 @@ class PubManagementController extends Controller
                         $item->status,
                         $item->remarks,
                         $item->date_publish,
-                        $item->publish_at
+                        $item->time_publish,
+                        $item->publish_at,
+
                     )
+
                 );
             }
         }

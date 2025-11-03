@@ -20,6 +20,7 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
     public $remarks;
     public $datePublish;
     public $timePublish;
+	public $publish_at;
 
     public function __construct(
         $userName,
@@ -28,7 +29,8 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
         $status,
         $remarks = null,
         $datePublish = null,
-        $timePublish = null
+        $timePublish = null,
+		$publish_at = null
     ) {
         $this->userName = $userName;
         $this->itemType = $itemType;
@@ -37,6 +39,8 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
         $this->remarks = $remarks;
         $this->datePublish = $datePublish;
         $this->timePublish = $timePublish;
+		$this->publish_at = $publish_at;
+		
     }
 
     public function envelope(): Envelope
@@ -47,6 +51,7 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
+
             view: 'spj-content.publication-management.email.email-status',
             with: [
                 'userName' => $this->userName,
@@ -56,6 +61,7 @@ class StatusUpdateNotification extends Mailable implements ShouldQueue
                 'remarks' => $this->remarks,
                 'datePublish' => $this->datePublish,
                 'timePublish' => $this->timePublish,
+				'publish_at' => $this->publish_at,
             ]
         );
     }
