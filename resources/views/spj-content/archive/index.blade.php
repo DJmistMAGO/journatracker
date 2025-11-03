@@ -50,6 +50,7 @@
                         <th>Author</th>
                         <th class="d-none d-md-table-cell">Type</th>
                         <th class="d-none d-md-table-cell">Category</th>
+						<th class="d-none d-md-table-cell">Category</th>
                         <th class="d-none d-md-table-cell text-center">Views</th>
                         <th>Actions</th>
                     </tr>
@@ -64,6 +65,7 @@
                             <td>{{ $item->user->name ?? 'N/A' }}</td>
                             <td class="d-none d-md-table-cell">{{ $item->type }}</td>
                             <td class="d-none d-md-table-cell">{{ $item->category }}</td>
+							<td class="d-none d-md-table-cell">{{ $item->status }}</td>
                             <td class="d-none d-md-table-cell text-center">{{ $item->publication->views ?? 0 }}</td>
                             <td class="text-nowrap">
                                 {{-- View --}}
