@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Tonysm\RichTextLaravel\Models\Traits\HasRichText;
 use App\Models\PubManagement;
 
 class Article extends Model
 {
-	use HasFactory;
+	use HasFactory, HasRichText;
+
 	protected $fillable = [
 		'user_id',
 		'title',
-		'description',
+		'description', // Keep this - the trait handles it
 		'image_path',
 		'category',
 		'tags',
@@ -28,6 +30,17 @@ class Article extends Model
 		'date_publish'   => 'date',
 	];
 
+	// Define which fields should use rich text storage
+	protected $richTextFields = [
+		'description',
+	];
+
+	// Define attributes for rich text fields (required by the package)
+	protected $richTextAttributes = [
+		'description',
+	];
+
+	// REMOVE the getDescriptionAttribute method - it conflicts with the trait!
 
 	// Each article belongs to a user
 	public function user()
@@ -41,7 +54,7 @@ class Article extends Model
 	}
 
 	public function author()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+	{
+		return $this->belongsTo(User::class, 'user_id');
+	}
 }

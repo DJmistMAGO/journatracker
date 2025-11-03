@@ -83,6 +83,19 @@ class PubManagementController extends Controller
         ]);
     }
 
+		private function getItemByType($type, $id)
+	{
+		$type = strtolower(trim($type));
+		if ($type === 'article') {
+			return Article::with('user')->findOrFail($id);
+		} elseif ($type === 'media') {
+			return Media::with('user')->findOrFail($id);
+		} else {
+			abort(404, 'Invalid type');
+		}
+	}
+
+
     public function updateStatus($type, $id, Request $request)
     {
         $item = $this->getItemByType($type, $id);
@@ -131,7 +144,9 @@ class PubManagementController extends Controller
         $item->save();
 
         if ($item->user) {
+			
             $item->user->notify(new StatusChangedNotification($item));
+
             if ($item->user->email) {
                 Mail::to($item->user->email)->queue(
                     new StatusUpdateNotification(
@@ -148,21 +163,6 @@ class PubManagementController extends Controller
         }
 
         return back()->with('success', ucfirst($type) . ' status updated successfully.');
-    }
-
-    /**
-     * Helper to fetch Article or Media by type
-     */
-    private function getItemByType($type, $id)
-    {
-        $type = strtolower(trim($type));
-        if ($type === 'article') {
-            return Article::with('user')->findOrFail($id);
-        } elseif ($type === 'media') {
-            return Media::with('user')->findOrFail($id);
-        } else {
-            abort(404, 'Invalid type');
-        }
     }
 
     public function unpublish($type, $id)

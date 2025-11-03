@@ -79,8 +79,8 @@
                     @endif
 
                     <div class="border-start border-4 ps-3 mb-4" style="border-color: #80AF81;">
-                        <div class="lh-lg" style="color: #1A5319;">
-                            {!! nl2br(e($item->description)) !!}
+                        <div class="trix-content">
+                            {!! $item->description !!}
                         </div>
                     </div>
                 @endif
@@ -156,7 +156,7 @@
                 @endif
             @endrole
 
-            @role('eic')
+            @role('teacher')
                 @if ($item->status == 'Submitted' || $item->status == 'Resubmitted')
                     <div class="card-footer bg-light border-0">
                         @if ($item->type == 'Article')

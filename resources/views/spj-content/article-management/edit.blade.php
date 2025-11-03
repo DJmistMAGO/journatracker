@@ -47,12 +47,12 @@
                         <label for="category" class="form-label">Category</label>
                         <select class="form-select" id="category" name="category" required>
                             <option disabled>-- Select Category --</option>
-                            <option value="News" {{ $article->category == 'News' ? 'selected' : '' }}>News</option>
-                            <option value="Features" {{ $article->category == 'Features' ? 'selected' : '' }}>Features
-                            </option>
-                            <option value="Editorial" {{ $article->category == 'Editorial' ? 'selected' : '' }}>Editorial
-                            </option>
-                            <option value="Sports" {{ $article->category == 'Sports' ? 'selected' : '' }}>Sports</option>
+                            <option value="News" {{ old('category', $article->category) == 'News' ? 'selected' : '' }}>News</option>
+                            <option value="Features" {{ old('category', $article->category) == 'Features' ? 'selected' : '' }}>Features</option>
+                            <option value="Editorial" {{ old('category', $article->category) == 'Editorial' ? 'selected' : '' }}>Editorial</option>
+                            <option value="Sports" {{ old('category', $article->category) == 'Sports' ? 'selected' : '' }}>Sports</option>
+                            <option value="Column" {{ old('category', $article->category) == 'Column' ? 'selected' : '' }}>Column</option>
+                            <option value="Sci-Tech" {{ old('category', $article->category) == 'Sci-Tech' ? 'selected' : '' }}>Sci-Tech</option>
                         </select>
                     </div>
 
@@ -60,15 +60,21 @@
                     <div class="col-12 col-md-3">
                         <label for="articleDate" class="form-label">Date</label>
                         <input type="date" class="form-control" id="articleDate" name="date_submitted"
-                            value="{{ old('date_submitted', $article->date_submitted->format('Y-m-d')) }}" required>
+                            value="{{ old('date_submitted', $article->date_submitted?->format('Y-m-d')) }}" required>
                     </div>
                 </div>
 
-                <!-- Content -->
+                <!-- Content (Rich Text Editor) -->
                 <div class="mb-3">
-                    <label for="articleContent" class="form-label">Content</label>
-                    <textarea class="form-control" id="articleContent" name="description" rows="5"
-                        placeholder="Write your content here..." required>{{ old('description', $article->description) }}</textarea>
+                    <label for="description" class="form-label">Article Content</label>
+                    <x-trix-input
+                        id="description"
+                        name="description"
+                        :value="old('description', (string) $article->description)"
+                    />
+                    @error('description')
+                        <div class="text-danger small mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <!-- Tags -->
@@ -79,8 +85,11 @@
                         <button type="button" class="btn btn-outline-primary" onclick="handleAddTag()">Add Tag</button>
                     </div>
                     <div id="tagsContainer" class="mt-2">
-                        @if (!empty($article->tags))
-                            @foreach ($article->tags as $tag)
+                        @php
+                            $existingTags = old('tags') ? json_decode(old('tags'), true) : $article->tags;
+                        @endphp
+                        @if (!empty($existingTags))
+                            @foreach ($existingTags as $tag)
                                 <span class="badge bg-secondary me-2 mb-2">
                                     {{ $tag }}
                                     <button type="button" class="btn-close btn-close-white btn-sm ms-1"
@@ -94,7 +103,7 @@
                 <input type="hidden" name="tags" id="tagsField">
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Update Article</button>
                     <a href="{{ url()->previous() }}" class="btn btn-danger">Cancel</a>
                 </div>
             </form>

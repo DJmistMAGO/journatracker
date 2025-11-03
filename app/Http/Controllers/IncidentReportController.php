@@ -81,7 +81,8 @@ class IncidentReportController extends Controller
 
 		$incident->type = 'Incident Report';
 
-		$usersToNotify = User::role(['admin', 'eic'])->get();
+		$usersToNotify = User::role(['admin', 'teacher'])->get();
+
 		foreach ($usersToNotify as $user) {
 			$user->notify(new StatusChangedNotification($incident));
 		}
@@ -91,11 +92,11 @@ class IncidentReportController extends Controller
 		$status = 'Pending';
 		$description = $data['incident_description'];
 
-		Mail::to($email)->queue(new IncidentReportMailNotif(
-			$studentName,
-			$status,
-			$description
-		));
+		// Mail::to($email)->queue(new IncidentReportMailNotif(
+		// 	$studentName,
+		// 	$status,
+		// 	$description
+		// ));
 
 		return redirect()
 			->route('welcome')
@@ -116,6 +117,18 @@ class IncidentReportController extends Controller
 		$incident->date_status = $data['date_status'];
 		$incident->remarks = $data['remarks'];
 		$incident->save();
+
+		$email = $incident->email;
+		$studentName = $incident->student_name;
+		$status = $data['status'];
+		$description = $data['remarks'];
+
+		// Mail::to($email)->queue(new IncidentReportMailNotif(
+		// 	$studentName,
+		// 	$status,
+		// 	$description
+		// ));
+
 
 		return redirect()
 			->back()
