@@ -120,8 +120,8 @@
 
 							<div class="mt-4">
 								<button type="submit" class="btn btn-primary me-2">Save changes</button>
-								<button type="reset" class="btn btn-outline-danger">
-									<i class="mdi mdi-reload me-1"></i> Reset
+								<button type="reset" class="btn btn-outline-secondary">
+									<i class="mdi mdi-reload me-1"></i> Cancel
 								</button>
 							</div>
 						</div>
