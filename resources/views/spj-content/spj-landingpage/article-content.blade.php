@@ -203,77 +203,74 @@
                 </article>
 				<aside class="col-lg-4">
 					<div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Report A Problem</h5>
-            <form action="{{ route('incident-report.store-report') }}" method="POST" enctype="multipart/form-data" onsubmit="prepareTags()">
-                @csrf
-                @include('_partials.errors')
-                @include('_partials.success')
+						<div class="card-body">
+							<h5 class="fw-bold mb-3" style="color: var(--theme-color)">Report A Problem</h5>
+							<form action="{{ route('incident-report.store-report') }}" method="POST" enctype="multipart/form-data" onsubmit="prepareTags()">
+								@csrf
+								@include('_partials.errors')
+								@include('_partials.success')
 
-                <div class="mb-2">
-                    <label class="form-label">Name of Reporter</label>
-                    <input type="text" class="form-control" name="student_name" placeholder="Name of Reporter" />
-                </div>
+								<div class="mb-2">
+									<label class="form-label">Name of Reporter</label>
+									<input type="text" class="form-control" name="student_name" placeholder="Name of Reporter" />
+								</div>
 
-                <div class="mb-2">
-                    <label class="form-label">Upload Your Student I.D.</label>
-                    <input class="form-control" type="file" name="student_id_image">
-                </div>
+								<div class="mb-2">
+									<label class="form-label">Upload Your Student I.D.</label>
+									<input class="form-control" type="file" name="student_id_image">
+								</div>
 
-				<div class="mb-2">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" placeholder="Email" />
-                </div>
+								<div class="mb-2">
+									<label class="form-label">Email</label>
+									<input type="email" class="form-control" name="email" placeholder="Email" />
+								</div>
 
-                <div class="mb-2">
-                    <label class="form-label">Incident Description</label>
-                    <textarea class="form-control h-px-75" name="incident_description" placeholder="Type here..."></textarea>
-                </div>
+								<div class="mb-2">
+									<label class="form-label">Incident Description</label>
+									<textarea class="form-control h-px-75" name="incident_description" placeholder="Type here..."></textarea>
+								</div>
 
-                <div class="mb-3">
-                    <label class="form-label">Upload Proof of the Incident</label>
-                    <input class="form-control" type="file" name="image_proof">
-                </div>
+								<div class="mb-3">
+									<label class="form-label">Upload Proof of the Incident</label>
+									<input class="form-control" type="file" name="image_proof">
+								</div>
 
-                <button type="submit" class="btn btn-theme w-100">Submit Report</button>
-            </form>
-        </div>
-    </div>
+								<button type="submit" class="btn btn-theme w-100">Submit Report</button>
+							</form>
+						</div>
+    				</div>
 
-    <div class="card border-0 shadow-sm mb-4 text-center p-3">
-        <div class="card-body">
-            <h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
-            <div class="d-flex justify-content-center gap-2">
-                <a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
-                    onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
-                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
-                    <i class="mdi mdi-facebook"></i>
-                </a>
-                <a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
-                    onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
-                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
-                    <i class="mdi mdi-twitter"></i>
-                </a>
-                <a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
-                    onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
-                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
-                    <i class="mdi mdi-linkedin"></i>
-                </a>
-            </div>
-        </div>
+					<div class="card border-0 shadow-sm mb-4 text-center p-3">
+						<div class="card-body">
+							<h5 class="fw-bold mb-3" style="color: var(--theme-color)">Share This</h5>
+							<div class="d-flex justify-content-center gap-2">
+								<a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
+									onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
+									onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
+									<i class="mdi mdi-facebook"></i>
+								</a>
+								<a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
+									onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
+									onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
+									<i class="mdi mdi-twitter"></i>
+								</a>
+								<a href="#" class="btn btn-outline-theme btn-icon btn-sm rounded-circle p-2"
+									onmouseover="this.style.backgroundColor='var(--theme-color)'; this.style.color='#fff';"
+									onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--theme-color)';">
+									<i class="mdi mdi-linkedin"></i>
+								</a>
+							</div>
+						</div>
+            		</div>
 				</aside>
-            </div>
-    </div>
-    </main>
-    </div>
+    		</div>
+    	</div>
+	</main>
 
     @include('layouts.sections.footer.footer')
 
     @push('scripts')
         <script src="{{ asset('assets/js/loader.js') }}"></script>
         <script src="{{ asset('assets/js/updateTime.js') }}"></script>
-
-        </script>
-        </div>
     @endpush
 @endsection
