@@ -145,9 +145,10 @@
                                 @if (in_array($item->category, ['Photojournalism', 'Cartooning']))
                                     @if ($item->image_path)
                                         <div class="text-center my-3">
-                                            <img src="{{ asset('storage/' . $item->image_path) ?? asset('assets/img/spj/no-image.jpg') }}"
-                                                alt="{{ $item->title }}" class="img-fluid rounded shadow-sm"
-                                                style="max-height: 400px;">
+                                            <img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : asset('assets/img/spj/no-image.jpg') }}"
+										alt="{{ $item->title }}"
+										class="img-fluid rounded shadow-sm"
+										onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
                                         </div>
                                     @else
                                         <p class="text-center">No image available.</p>

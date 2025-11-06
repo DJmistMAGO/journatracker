@@ -120,10 +120,10 @@
 							{{-- Image or Video --}}
 							@if ($item->type === 'Article' || ($item->type === 'Media' && in_array($item->category, ['Photojournalism', 'Cartooning'])))
 								<div class="position-relative">
-									<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : 'https://picsum.photos/600/400' }}"
-										 class="card-img-top"
-										 alt="{{ $item->title }}"
-										 onerror="this.onerror=null;this.src='https://picsum.photos/600/400';">
+									<img src="{{ $item->image_path ? asset('storage/' . $item->image_path) : asset('assets/img/spj/no-image.jpg') }}"
+										alt="{{ $item->title }}"
+										class="img-fluid rounded shadow-sm"
+										onerror="this.onerror=null;this.src='{{ asset('assets/img/spj/no-image.jpg') }}';">
 									<div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient-to-bottom opacity-25"></div>
 								</div>
 							@elseif ($item->type === 'Media' && in_array($item->category, ['TV Broadcasting', 'Radio Broadcasting']) && $item->link)
@@ -174,7 +174,7 @@
 								</div>
 
 								{{-- Excerpt --}}
-								<p class="card-text mb-3">{{ \Illuminate\Support\Str::words($item->description, 15, '...') }}</p>
+								<p class="card-text mb-3">{!! \Illuminate\Support\Str::words($item->description, 15, '...') !!}</p>
 
 								{{-- Read More + Views --}}
 								<div class="d-flex align-items-center justify-content-between mt-auto">
