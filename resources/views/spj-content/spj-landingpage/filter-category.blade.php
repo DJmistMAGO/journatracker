@@ -174,7 +174,7 @@
 								</div>
 
 								{{-- Excerpt --}}
-								<p class="card-text mb-3">{!! \Illuminate\Support\Str::words($item->description, 15, '...') !!}</p>
+								{{-- <p class="card-text mb-3">{!! \Illuminate\Support\Str::words($item->description, 15, '...') !!}</p> --}}
 
 								{{-- Read More + Views --}}
 								<div class="d-flex align-items-center justify-content-between mt-auto">
