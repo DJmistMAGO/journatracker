@@ -205,12 +205,6 @@
 					@endforelse
 				</div>
 
-				{{-- Pagination --}}
-				{{-- <div class="row mt-5">
-					<div class="col-12 d-flex justify-content-center">
-						{{ $items->links() }}
-					</div>
-				</div> --}}
 			</article>
 
 			{{-- Sidebar --}}
@@ -225,7 +219,7 @@
 
 @push('scripts')
 	<script src="{{ asset('assets/js/loader.js') }}"></script>
-	<script src="{{ asset('assets/js/updateTime.js') }}"></script> </script>
+	<script src="{{ asset('assets/js/updateTime.js') }}"></script>
 @endpush
 
 @endsection
