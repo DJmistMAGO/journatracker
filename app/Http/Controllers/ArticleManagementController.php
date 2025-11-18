@@ -10,6 +10,7 @@ use App\Notifications\StatusChangedNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StatusUpdateNotification;
 use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArticleManagementController extends Controller
 {
@@ -37,6 +38,16 @@ class ArticleManagementController extends Controller
 				->orderBy('created_at', 'desc')
 				->get();
 		}
+
+		// Manual Pagination
+        $perPage = 5;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $articles->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $articles = new LengthAwarePaginator($currentItems, $articles->count(), $perPage, $currentPage, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
 
 		return view('spj-content.article-management.index', compact('articles'));
 	}

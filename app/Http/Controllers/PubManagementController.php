@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\StatusUpdateNotification;
 use App\Notifications\StatusChangedNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PubManagementController extends Controller
 {
@@ -69,6 +70,18 @@ class PubManagementController extends Controller
             ->concat($media)
             ->sortByDesc('date_submitted')
             ->values();
+
+
+		// Manual Pagination
+        $perPage = 5;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $items->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $items = new LengthAwarePaginator($currentItems, $items->count(), $perPage, $currentPage, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
+
 
         return view('spj-content.publication-management.index', compact('items'));
     }

@@ -114,6 +114,38 @@
             </table>
         </div>
 
+		{{-- Materio-style pagination --}}
+		<nav aria-label="Page navigation" class="d-flex justify-content-center mt-2">
+			<ul class="pagination pagination-sm">
+
+				{{-- Previous Page Link --}}
+				@if ($articles->onFirstPage())
+					<li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+				@else
+					<li class="page-item">
+						<a class="page-link" href="{{ $articles->previousPageUrl() }}" rel="prev">&laquo;</a>
+					</li>
+				@endif
+
+				{{-- Pagination Numbers --}}
+				@foreach ($articles->getUrlRange(1, $articles->lastPage()) as $page => $url)
+					<li class="page-item {{ $articles->currentPage() == $page ? 'active' : '' }}">
+						<a class="page-link" href="{{ $url }}">{{ $page }}</a>
+					</li>
+				@endforeach
+
+				{{-- Next Page Link --}}
+				@if ($articles->hasMorePages())
+					<li class="page-item">
+						<a class="page-link" href="{{ $articles->nextPageUrl() }}" rel="next">&raquo;</a>
+					</li>
+				@else
+					<li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+				@endif
+
+			</ul>
+		</nav>
+
         {{-- Card layout for mobile --}}
         <div class="d-block d-sm-none">
             @forelse($articles as $article)
