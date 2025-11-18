@@ -109,8 +109,8 @@
 									@if(Auth::user()->hasRole('admin')) required @endif
 								>
 									<option value="" disabled selected>Choose a position...</option>
-									<option value="Print Media" {{ old('position') == 'Print Media' ? 'selected' : '' }}>Print Media</option>
-									<option value="Advanced Print Media" {{ old('position') == 'Advanced Print Media' ? 'selected' : '' }}>Advanced Print Media</option>
+									<option value="Photojournalism" {{ old('position') == 'Photojournalism' ? 'selected' : '' }}>Photojournalism</option>
+									<option value="Cartooning" {{ old('position') == 'Cartooning' ? 'selected' : '' }}>Cartooning</option>
 									<option value="Radio Broadcasting" {{ old('position') == 'Radio Broadcasting' ? 'selected' : '' }}>Radio Broadcasting</option>
 									<option value="TV Broadcasting" {{ old('position') == 'TV Broadcasting' ? 'selected' : '' }}>TV Broadcasting</option>
 								</select>

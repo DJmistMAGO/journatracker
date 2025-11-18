@@ -93,9 +93,21 @@
 						</td>
                         <td>
                             <div class="d-flex align-items-center gap-2">
-                                <a href="{{ route('user-management.edit', $user->id) }}" class="btn btn-sm bg-success text-white">
-                                    <i class="mdi mdi-pencil-outline"></i>
-                                </a>
+								@role('admin')
+									@if ($user->hasRole('admin') || $user->hasRole('teacher'))
+										<a href="{{ route('user-management.edit', $user->id) }}" class="btn btn-sm bg-success text-white">
+											<i class="mdi mdi-pencil-outline"></i>
+										</a>
+									@endif
+								@endrole
+
+								@role('teacher')
+									@if ($user->hasRole('student'))
+										<a href="{{ route('user-management.edit', $user->id) }}" class="btn btn-sm bg-success text-white">
+											<i class="mdi mdi-pencil-outline"></i>
+										</a>
+									@endif
+								@endrole
                                 <button type="button"
                                         class="btn btn-sm btn-warning confirm-action"
                                         data-action="{{ route('user-management.reset-password', $user->id) }}"
@@ -130,7 +142,41 @@
                 @endforeach
             </tbody>
         </table>
+		<nav aria-label="Page navigation" class="d-flex justify-content-center mt-2">
+			<ul class="pagination pagination-sm">
+
+				{{-- Previous Page Link --}}
+				@if ($users->onFirstPage())
+					<li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+				@else
+					<li class="page-item">
+						<a class="page-link" href="{{ $users->previousPageUrl() }}" rel="prev">&laquo;</a>
+					</li>
+				@endif
+
+				{{-- Pagination Numbers --}}
+				@foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+					<li class="page-item {{ $users->currentPage() == $page ? 'active' : '' }}">
+						<a class="page-link" href="{{ $url }}">{{ $page }}</a>
+					</li>
+				@endforeach
+
+				{{-- Next Page Link --}}
+				@if ($users->hasMorePages())
+					<li class="page-item">
+						<a class="page-link" href="{{ $users->nextPageUrl() }}" rel="next">&raquo;</a>
+					</li>
+				@else
+					<li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+				@endif
+
+			</ul>
+		</nav>
     </div>
+
+	{{-- Materio-style pagination --}}
+
+
 
     {{-- Card layout for mobile --}}
     <div class="d-block d-sm-none">

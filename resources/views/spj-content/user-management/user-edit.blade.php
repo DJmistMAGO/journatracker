@@ -129,8 +129,8 @@
 									@endif required>
 
 									<option value="" disabled>Choose a position...</option>
-									<option value="Print Media" {{ old('position', $user->position) == 'Print Media' ? 'selected' : '' }}>Print Media</option>
-									<option value="Advanced Print Media" {{ old('position', $user->position) == 'Advanced Print Media' ? 'selected' : '' }}>Advanced Print Media</option>
+									<option value="Photojournalism" {{ old('position', $user->position) == 'Photojournalism' ? 'selected' : '' }}>Photojournalism</option>
+									<option value="Cartooning" {{ old('position', $user->position) == 'Cartooning' ? 'selected' : '' }}>Cartooning</option>
 									<option value="Radio Broadcasting" {{ old('position', $user->position) == 'Radio Broadcasting' ? 'selected' : '' }}>Radio Broadcasting</option>
 									<option value="TV Broadcasting" {{ old('position', $user->position) == 'TV Broadcasting' ? 'selected' : '' }}>TV Broadcasting</option>
 								</select>
