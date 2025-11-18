@@ -29,17 +29,20 @@ Route::middleware('guest')->group(function () {
             ->orderBy('date_publish', 'desc')
             ->get();
 
-        // Merge articles and media collections
+        // Merge articles and media
         $items = $articles
             ->concat($media)
             ->sortByDesc('date_publish')
             ->values();
 
+        // Featured = newest published item
+        $featured = $items->first();
+
+        // Tags
         $articleTags = $articles
             ->pluck('tags')
             ->flatten()
             ->unique();
-
         $mediaTags = $media
             ->pluck('tags')
             ->flatten()
@@ -50,7 +53,7 @@ Route::middleware('guest')->group(function () {
             ->unique()
             ->take(10);
 
-        return view('welcome', compact('items', 'tags'));
+        return view('welcome', compact('items', 'tags', 'featured'));
     })->name('welcome');
 
     Route::get('/category/{category}', [FilterCategoryController::class, 'viewCategory'])->name('category.view');

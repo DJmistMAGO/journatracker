@@ -9,6 +9,8 @@ use App\Models\PubManagement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class ArchiveController extends Controller
 {
@@ -18,20 +20,19 @@ class ArchiveController extends Controller
         $auth_id = $user->id;
         $user_role = $user->getRoleNames()->first();
 
+        $search = $request->input('search');
+        $status = $request->input('status');
 
-        $search = $request->input('search'); // search input
-        $status = $request->input('status'); // status filter from select input
+        // Teacher filters
+        $teacherPosition = $user->position ?? null;
+        $teacherSubject = $user->subject_specialization ?? null;
 
-        // Default allowed statuses
         $allowedStatuses = ['Published', 'Rejected'];
 
-        if ($status && in_array($status, $allowedStatuses)) {
-            $filterStatus = [$status];
-        } else {
-            $filterStatus = $allowedStatuses; // fallback to both if none selected
-        }
+        $filterStatus = $status && in_array($status, $allowedStatuses) ? [$status] : $allowedStatuses;
 
-        if ($user_role === 'admin' || $user_role === 'teacher') {
+        if ($user_role === 'admin') {
+            // Admin sees all, no restrictions
             $articles = Article::with('user')
                 ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
                 ->whereIn('status', $filterStatus)
@@ -43,7 +44,27 @@ class ArchiveController extends Controller
                 ->whereIn('status', $filterStatus)
                 ->orderBy('date_publish', 'desc')
                 ->get();
+        } elseif ($user_role === 'teacher') {
+            // Teachers ONLY see items where student has same position AND subject specialization
+            $articles = Article::with('user')
+                ->whereHas('user', function ($q) use ($teacherPosition, $teacherSubject) {
+                    $q->where('position', $teacherPosition)->where('subject_specialization', $teacherSubject);
+                })
+                ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+                ->whereIn('status', $filterStatus)
+                ->orderBy('date_publish', 'desc')
+                ->get();
+
+            $media = Media::with('user')
+                ->whereHas('user', function ($q) use ($teacherPosition, $teacherSubject) {
+                    $q->where('position', $teacherPosition)->where('subject_specialization', $teacherSubject);
+                })
+                ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
+                ->whereIn('status', $filterStatus)
+                ->orderBy('date_publish', 'desc')
+                ->get();
         } else {
+            // Students only see their own entries
             $articles = Article::with('user')
                 ->where('user_id', $auth_id)
                 ->when($search, fn($q) => $q->where('title', 'like', "%{$search}%"))
@@ -59,11 +80,21 @@ class ArchiveController extends Controller
                 ->get();
         }
 
-        // Merge articles and media
-        $items = $articles
+        // Merge & sort
+        $merged = $articles
             ->concat($media)
             ->sortByDesc('date_publish')
             ->values();
+
+        // Manual Pagination
+        $perPage = 5;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $items = new LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+        ]);
 
         return view('spj-content.archive.index', compact('items'));
     }
